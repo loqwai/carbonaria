@@ -3,47 +3,58 @@ use bevy::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(HelloPlugin)
+        .add_plugin(GamePlugin)
         .run();
 }
 
-fn add_people(mut commands: Commands) {
-    commands
-        .spawn()
-        .insert(Person)
-        .insert(Name("Elaina Proctor".to_string()));
-    commands
-        .spawn()
-        .insert(Person)
-        .insert(Name("Renzo Hume".to_string()));
-    commands
-        .spawn()
-        .insert(Person)
-        .insert(Name("Zayna Nieves".to_string()));
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut player: ResMut<Player>) {
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+
+    let entity = commands
+        .spawn_bundle(SpriteBundle {
+            texture: asset_server.load("player.png"),
+            ..Default::default()
+        })
+        .id();
+
+    player.entity = Some(entity);
 }
 
-fn greet_people(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
-    if timer.0.tick(time.delta()).just_finished() {
-        for name in query.iter() {
-            println!("hello {}!", name.0);
-        }
+fn move_player(
+    keyboard_input: Res<Input<KeyCode>>,
+    player: Res<Player>,
+    mut transforms: Query<&mut Transform>,
+) {
+    let mut transform = transforms.get_mut(player.entity.unwrap()).unwrap();
+
+    let player_speed = 5.0;
+
+    if keyboard_input.pressed(KeyCode::A) {
+        transform.translation[0] -= player_speed;
+    }
+    if keyboard_input.pressed(KeyCode::D) {
+        transform.translation[0] += player_speed;
+    }
+
+    if keyboard_input.pressed(KeyCode::W) {
+        transform.translation[1] += player_speed;
+    }
+    if keyboard_input.pressed(KeyCode::S) {
+        transform.translation[1] -= player_speed;
     }
 }
 
-#[derive(Component)]
-struct Person;
+#[derive(Default)]
+struct Player {
+    entity: Option<Entity>,
+}
 
-#[derive(Component)]
-struct Name(String);
+struct GamePlugin;
 
-pub struct HelloPlugin;
-
-impl Plugin for HelloPlugin {
+impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(GreetTimer(Timer::from_seconds(2.0, true)))
-            .add_startup_system(add_people)
-            .add_system(greet_people);
+        app.init_resource::<Player>()
+            .add_startup_system(setup)
+            .add_system(move_player);
     }
 }
-
-struct GreetTimer(Timer);
