@@ -1,6 +1,6 @@
 use bevy::{input::Input, prelude::*};
 
-use crate::resources::Player;
+use crate::resources::PlayerResource;
 
 #[derive(Debug, Error)]
 enum MovePlayerError {
@@ -10,17 +10,17 @@ enum MovePlayerError {
 
 pub fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    player: Res<Player>,
+    player: Res<PlayerResource>,
     transforms: Query<&mut Transform>,
 ) {
     if let Err(e) = fallible_move_player(keyboard_input, player, transforms) {
-        println!("Error moving player: {}", e);
+        panic!("Error moving player: {}", e);
     }
 }
 
 fn fallible_move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    player: Res<Player>,
+    player: Res<PlayerResource>,
     mut transforms: Query<&mut Transform>,
 ) -> Result<(), MovePlayerError> {
     let entity = player
