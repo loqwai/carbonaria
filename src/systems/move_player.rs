@@ -8,7 +8,7 @@ enum MovePlayerError {
     QuerySingleError(QuerySingleError),
 }
 
-pub fn move_player(keyboard_input: Res<Input<KeyCode>>, query: Query<(&Player, &mut Velocity)>) {
+pub fn move_player(keyboard_input: Res<Input<KeyCode>>, query: Query<&mut Velocity, With<Player>>) {
     if let Err(e) = fallible_move_player(keyboard_input, query) {
         panic!("Error moving player: {}", e);
     }
@@ -16,9 +16,9 @@ pub fn move_player(keyboard_input: Res<Input<KeyCode>>, query: Query<(&Player, &
 
 fn fallible_move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<(&Player, &mut Velocity)>,
+    mut query: Query<&mut Velocity, With<Player>>,
 ) -> Result<(), MovePlayerError> {
-    let (_, mut velocity) = query.get_single_mut()?;
+    let mut velocity = query.get_single_mut()?;
 
     let player_speed = 5.0;
 
