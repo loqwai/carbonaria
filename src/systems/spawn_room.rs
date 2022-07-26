@@ -1,8 +1,8 @@
 use std::f32::consts::PI;
 
-use bevy::{prelude::*, sprite::SpriteBundle};
+use bevy::prelude::*;
 
-use crate::{bundles::WallBundle, components::HitBox};
+use crate::bundles::{WallBundle, WallTexture};
 
 type Position = (f32, f32);
 
@@ -39,94 +39,46 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>) {
     }
 }
 
-fn horizontal_wall(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
-    WallBundle {
-        hitbox: HitBox::new(64.0, 32.0),
-        sprite_bundle: SpriteBundle {
-            texture: asset_server.load("wall-straight.png"),
-            transform: Transform {
-                // rotation: Quat::from_rotation_z(PI / 2.0),
-                translation: Vec3::new(x, y, 0.0),
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        ..Default::default()
-    }
+fn horizontal_wall(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
+    straight_wall(asset_server, position, 0.0)
 }
 
-fn vertical_wall(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
-    WallBundle {
-        hitbox: HitBox::new(32.0, 64.0),
-        sprite_bundle: SpriteBundle {
-            texture: asset_server.load("wall-straight.png"),
-            transform: Transform {
-                rotation: Quat::from_rotation_z(PI / 2.0),
-                translation: Vec3::new(x, y, 0.0),
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        ..Default::default()
-    }
+fn vertical_wall(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
+    straight_wall(asset_server, position, PI / 2.0)
 }
 
-fn top_left_corner(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
-    WallBundle {
-        sprite_bundle: SpriteBundle {
-            texture: asset_server.load("wall-corner.png"),
-            transform: Transform {
-                rotation: Quat::from_rotation_z(PI),
-                translation: Vec3::new(x, y, 0.0),
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        ..Default::default()
-    }
+fn straight_wall(asset_server: &Res<AssetServer>, position: Position, rotation: f32) -> WallBundle {
+    WallBundle::new(
+        asset_server,
+        WallTexture::Straight,
+        position,
+        rotation,
+        Vec3::new(32.0, 16.0, 0.0), // same for both vertical & horizontal because the rotate value above
+    )
 }
 
-fn top_right_corner(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
-    WallBundle {
-        sprite_bundle: SpriteBundle {
-            texture: asset_server.load("wall-corner.png"),
-            transform: Transform {
-                rotation: Quat::from_rotation_z(PI / 2.0),
-                translation: Vec3::new(x, y, 0.0),
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        ..Default::default()
-    }
+fn top_left_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
+    corner_wall(asset_server, position, PI)
 }
 
-fn bottom_right_corner(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
-    WallBundle {
-        sprite_bundle: SpriteBundle {
-            texture: asset_server.load("wall-corner.png"),
-            transform: Transform {
-                rotation: Quat::from_rotation_z(0.0),
-                translation: Vec3::new(x, y, 0.0),
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        ..Default::default()
-    }
+fn top_right_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
+    corner_wall(asset_server, position, PI / 2.0)
 }
 
-fn bottom_left_corner(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
-    WallBundle {
-        sprite_bundle: SpriteBundle {
-            texture: asset_server.load("wall-corner.png"),
-            transform: Transform {
-                rotation: Quat::from_rotation_z(PI / -2.0),
-                translation: Vec3::new(x, y, 0.0),
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        ..Default::default()
-    }
+fn bottom_right_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
+    corner_wall(asset_server, position, 0.0)
+}
+
+fn bottom_left_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
+    corner_wall(asset_server, position, PI / -2.0)
+}
+
+fn corner_wall(asset_server: &Res<AssetServer>, position: Position, rotation: f32) -> WallBundle {
+    WallBundle::new(
+        asset_server,
+        WallTexture::Corner,
+        position,
+        rotation,
+        Vec3::new(16.0, 16.0, 0.0),
+    )
 }
