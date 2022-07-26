@@ -1,14 +1,15 @@
 use bevy::{
-    prelude::{AssetServer, Bundle, Res},
+    math::Vec3,
+    prelude::{AssetServer, Bundle, Res, Transform},
     sprite::SpriteBundle,
 };
 use heron::{CollisionShape, RigidBody, Velocity};
 
-use crate::components::Player;
+use crate::components::Mob;
 
 #[derive(Bundle)]
-pub struct PlayerBundle {
-    pub player: Player,
+pub struct MobBundle {
+    pub mob: Mob,
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub velocity: Velocity,
@@ -17,11 +18,17 @@ pub struct PlayerBundle {
     pub sprite_bundle: SpriteBundle,
 }
 
-impl PlayerBundle {
-    pub fn new(asset_server: Res<AssetServer>) -> PlayerBundle {
-        PlayerBundle {
+type Position = (f32, f32);
+
+impl MobBundle {
+    pub fn new(asset_server: Res<AssetServer>, (x, y): Position) -> MobBundle {
+        MobBundle {
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("player.png"),
+                texture: asset_server.load("mob.png"),
+                transform: Transform {
+                    translation: Vec3::new(x, y, 0.0),
+                    ..Default::default()
+                },
                 ..Default::default()
             },
             ..Default::default()
@@ -29,10 +36,10 @@ impl PlayerBundle {
     }
 }
 
-impl Default for PlayerBundle {
+impl Default for MobBundle {
     fn default() -> Self {
         Self {
-            player: Player,
+            mob: Mob,
             rigid_body: RigidBody::Dynamic,
             collision_shape: CollisionShape::Sphere { radius: 32.0 },
             velocity: Default::default(),

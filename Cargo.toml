@@ -10,4 +10,5 @@ edition = "2021"
 bevy = "0.7.0"
 derive-error = "0.0.5"
 heron = { version = "3.1.0", features = ["2d"] }
+rand = { version = "0.8.5",  features = ["small_rng"] }
 

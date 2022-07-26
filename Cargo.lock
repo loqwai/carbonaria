@@ -858,6 +858,7 @@ dependencies = [
  "bevy",
  "derive-error",
  "heron",
+ "rand",
 ]
 
 [[package]]
