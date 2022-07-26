@@ -11,7 +11,6 @@ use heron::PhysicsPlugin;
 
 fn main() {
     App::new()
-        .init_resource::<resources::PlayerResource>()
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin::default())
         .add_startup_system(systems::spawn_camera)
