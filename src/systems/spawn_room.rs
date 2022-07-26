@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use bevy::{prelude::*, sprite::SpriteBundle};
 
-use crate::bundles::WallBundle;
+use crate::{bundles::WallBundle, components::HitBox};
 
 type Position = (f32, f32);
 
@@ -41,6 +41,7 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 fn horizontal_wall(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
     WallBundle {
+        hitbox: HitBox::new(64.0, 32.0),
         sprite_bundle: SpriteBundle {
             texture: asset_server.load("wall-straight.png"),
             transform: Transform {
@@ -56,6 +57,7 @@ fn horizontal_wall(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBun
 
 fn vertical_wall(asset_server: &Res<AssetServer>, (x, y): Position) -> WallBundle {
     WallBundle {
+        hitbox: HitBox::new(32.0, 64.0),
         sprite_bundle: SpriteBundle {
             texture: asset_server.load("wall-straight.png"),
             transform: Transform {
