@@ -1,4 +1,8 @@
-use bevy::{math::Vec3, prelude::Bundle, sprite::SpriteBundle};
+use bevy::{
+    math::Vec3,
+    prelude::{AssetServer, Bundle, Res},
+    sprite::SpriteBundle,
+};
 use heron::{CollisionShape, RigidBody, Velocity};
 
 use crate::components::Player;
@@ -12,6 +16,18 @@ pub struct PlayerBundle {
 
     #[bundle]
     pub sprite_bundle: SpriteBundle,
+}
+
+impl PlayerBundle {
+    pub fn new(asset_server: Res<AssetServer>) -> PlayerBundle {
+        PlayerBundle {
+            sprite_bundle: SpriteBundle {
+                texture: asset_server.load("player.png"),
+                ..Default::default()
+            },
+            ..Default::default()
+        }
+    }
 }
 
 impl Default for PlayerBundle {
