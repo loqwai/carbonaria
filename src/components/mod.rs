@@ -7,4 +7,7 @@ pub struct Mob;
 pub struct Player;
 
 #[derive(Component)]
+pub struct Stick;
+
+#[derive(Component)]
 pub struct Wall;

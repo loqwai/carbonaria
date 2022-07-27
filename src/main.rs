@@ -18,7 +18,9 @@ fn main() {
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_room)
         .add_startup_system(systems::spawn_player)
+        .add_startup_system(systems::spawn_stick)
         .add_system(systems::spawn_mobs)
         .add_system(systems::move_player)
+        .add_system(systems::update_carried_item_locations)
         .run();
 }
