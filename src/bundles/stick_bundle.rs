@@ -17,7 +17,7 @@ pub struct StickBundle {
 }
 
 impl StickBundle {
-    pub fn new(asset_server: Res<AssetServer>, position: Vec3) -> StickBundle {
+    pub fn new(asset_server: &Res<AssetServer>, position: Vec3) -> StickBundle {
         StickBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("stick.png"),

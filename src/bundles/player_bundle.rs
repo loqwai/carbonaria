@@ -18,7 +18,7 @@ pub struct PlayerBundle {
 }
 
 impl PlayerBundle {
-    pub fn new(asset_server: Res<AssetServer>) -> PlayerBundle {
+    pub fn new(asset_server: &Res<AssetServer>) -> PlayerBundle {
         PlayerBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("player.png"),
