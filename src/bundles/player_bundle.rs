@@ -2,7 +2,7 @@ use bevy::{
     prelude::{AssetServer, Bundle, Res},
     sprite::SpriteBundle,
 };
-use heron::{CollisionShape, RigidBody, Velocity};
+use heron::{CollisionShape, Damping, RigidBody, RotationConstraints, Velocity};
 
 use crate::components::Player;
 
@@ -12,6 +12,8 @@ pub struct PlayerBundle {
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub velocity: Velocity,
+    pub damping: Damping,
+    pub rotation_constraints: RotationConstraints,
 
     #[bundle]
     pub sprite_bundle: SpriteBundle,
@@ -36,6 +38,12 @@ impl Default for PlayerBundle {
             rigid_body: RigidBody::Dynamic,
             collision_shape: CollisionShape::Sphere { radius: 32.0 },
             velocity: Default::default(),
+            damping: Damping::from_linear(10.0),
+            rotation_constraints: RotationConstraints {
+                allow_x: false,
+                allow_y: false,
+                allow_z: false,
+            },
             sprite_bundle: Default::default(),
         }
     }

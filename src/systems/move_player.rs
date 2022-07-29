@@ -20,7 +20,7 @@ fn fallible_move_player(
 ) -> Result<(), MovePlayerError> {
     let mut velocity = query.get_single_mut()?;
 
-    let player_speed = 5.0;
+    let player_speed = 40.0;
 
     if keyboard_input.pressed(KeyCode::A) {
         velocity.linear += Vec3::new(-player_speed, 0.0, 0.0);
