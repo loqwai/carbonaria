@@ -20,5 +20,7 @@ fn main() {
         .add_startup_system(systems::spawn_player)
         .add_system(systems::spawn_mobs)
         .add_system(systems::move_player)
+        .add_system(systems::on_click_mark_stick_swinging)
+        .add_system(systems::swing_stick)
         .run();
 }
