@@ -24,6 +24,7 @@ pub fn maybe_end_swing_stick_animation(
             return;
         }
 
-        player.play(animation.reset_handle.clone());
+        player.pause();
+        player.set_elapsed(0.0);
     });
 }
