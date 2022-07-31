@@ -6,7 +6,8 @@ pub fn on_click_mark_stick_swinging(
     mouse_input: Res<Input<MouseButton>>,
     mut commands: Commands,
     q_player: Query<&Children, With<Player>>,
-    q_stick: Query<Entity, (With<Stick>, Without<SwingStickAnimation>)>,
+    q_stick: Query<(Entity, &Name), (With<Stick>, Without<SwingStickAnimation>)>,
+    mut animations: ResMut<Assets<AnimationClip>>,
 ) {
     if !mouse_input.pressed(MouseButton::Left) {
         return;
@@ -18,10 +19,10 @@ pub fn on_click_mark_stick_swinging(
         .unwrap();
 
     for &child in children.iter() {
-        if let Ok(stick) = q_stick.get(child) {
+        if let Ok((stick, name)) = q_stick.get(child) {
             commands
                 .entity(stick)
-                .insert(SwingStickAnimation::default());
+                .insert(SwingStickAnimation::new(&mut animations, name.clone()));
         }
     }
 }

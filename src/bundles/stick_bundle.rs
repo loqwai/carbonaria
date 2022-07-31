@@ -6,7 +6,7 @@ use bevy::{
 };
 use heron::{CollisionShape, RigidBody};
 
-use crate::components::Stick;
+use crate::components::{Stick, SwingStickAnimation};
 
 #[derive(Bundle)]
 pub struct StickBundle {
@@ -15,14 +15,21 @@ pub struct StickBundle {
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub animation_player: AnimationPlayer,
+    pub animation: SwingStickAnimation,
 
     #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 
 impl StickBundle {
-    pub fn new(asset_server: &Res<AssetServer>) -> StickBundle {
+    pub fn new(
+        asset_server: &Res<AssetServer>,
+        mut animations: ResMut<Assets<AnimationClip>>,
+    ) -> StickBundle {
+        let name: Name = "stick".into();
+
         StickBundle {
+            name: name.clone(),
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("stick.png"),
                 transform: Transform {
@@ -35,6 +42,7 @@ impl StickBundle {
                 },
                 ..Default::default()
             },
+            animation: SwingStickAnimation::new(&mut animations, name),
             ..Default::default()
         }
     }
@@ -59,6 +67,7 @@ impl Default for StickBundle {
             sprite_bundle: SpriteBundle {
                 ..Default::default()
             },
+            animation: Default::default(),
         }
     }
 }

@@ -21,6 +21,7 @@ fn main() {
         .add_system(systems::spawn_mobs)
         .add_system(systems::move_player)
         .add_system(systems::on_click_mark_stick_swinging)
-        .add_system(systems::swing_stick)
+        .add_system(systems::begin_swing_stick_animation)
+        .add_system(systems::maybe_end_swing_stick_animation)
         .run();
 }

@@ -12,4 +12,5 @@ pub use spawn_camera::spawn_camera;
 pub use spawn_mobs::spawn_mobs;
 pub use spawn_player::spawn_player;
 pub use spawn_room::spawn_room;
-pub use swing_stick::swing_stick;
+pub use swing_stick::begin_swing_stick_animation;
+pub use swing_stick::maybe_end_swing_stick_animation;
