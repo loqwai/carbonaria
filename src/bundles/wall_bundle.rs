@@ -19,6 +19,7 @@ pub struct WallBundle {
     pub sprite_bundle: SpriteBundle,
 }
 
+#[derive(Clone, Copy, Debug)]
 pub enum WallTexture {
     Straight,
     Corner,

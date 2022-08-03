@@ -1,84 +1,117 @@
 use std::f32::consts::PI;
 
-use bevy::prelude::*;
+use bevy::{prelude::*, utils::HashMap};
 
 use crate::bundles::{WallBundle, WallTexture};
 
-type Position = (f32, f32);
-
 pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let tile_size: usize = 64;
+    let room = generate_room();
+
+    for (position, tile) in room.iter() {
+        let x: f32 = f32::from(position.0 .0);
+        let y: f32 = f32::from(position.0 .1);
+
+        commands.spawn_bundle(WallBundle::new(
+            &asset_server,
+            tile.texture,
+            (x, y),
+            tile.rotation,
+            Vec3::new(16.0, 16.0, 0.0),
+        ));
+    }
+}
+
+#[derive(PartialEq, Eq, Hash)]
+struct Position(pub (i16, i16));
+
+struct Tile {
+    texture: WallTexture,
+    rotation: f32,
+}
+
+fn generate_room() -> HashMap<Position, Tile> {
     let num_tiles: i16 = 8;
+    let tile_size: usize = 64;
     let end: i16 = (num_tiles / 2) * i16::try_from(tile_size).unwrap();
     let begin: i16 = end * -1;
 
-    // bottom wall
+    let mut map: HashMap<Position, Tile> = HashMap::new();
+
     for i in (begin..end).step_by(tile_size) {
-        let x = f32::from(i);
-        let y = f32::from(i);
-        let begin = f32::from(begin);
-        let end = f32::from(end);
+        let x = i;
+        let y = i;
 
         match x {
-            // we're talking corner
+            // corner sections
             x if x == begin => {
-                commands.spawn_bundle(bottom_left_corner(&asset_server, (begin, begin)));
-                commands.spawn_bundle(top_left_corner(&asset_server, (begin, end)));
-                commands.spawn_bundle(top_right_corner(&asset_server, (end, end)));
-                commands.spawn_bundle(bottom_right_corner(&asset_server, (end, begin)));
+                map.insert(
+                    Position((begin, begin)),
+                    Tile {
+                        texture: WallTexture::Corner,
+                        rotation: PI / -2.0,
+                    },
+                );
+
+                map.insert(
+                    Position((begin, end)),
+                    Tile {
+                        texture: WallTexture::Corner,
+                        rotation: PI,
+                    },
+                );
+                map.insert(
+                    Position((end, end)),
+                    Tile {
+                        texture: WallTexture::Corner,
+                        rotation: PI / 2.0,
+                    },
+                );
+
+                map.insert(
+                    Position((end, begin)),
+                    Tile {
+                        texture: WallTexture::Corner,
+                        rotation: 0.0,
+                    },
+                );
             }
 
             // normal straight wall section
             _ => {
-                commands.spawn_bundle(horizontal_wall(&asset_server, (x, begin))); // bottom
-                commands.spawn_bundle(horizontal_wall(&asset_server, (x, end))); // top
-                commands.spawn_bundle(vertical_wall(&asset_server, (begin, y))); // left
-                commands.spawn_bundle(vertical_wall(&asset_server, (end, y))); // right
+                map.insert(
+                    Position((x, begin)),
+                    Tile {
+                        texture: WallTexture::Straight,
+                        rotation: 0.0,
+                    },
+                );
+
+                map.insert(
+                    Position((x, end)),
+                    Tile {
+                        texture: WallTexture::Straight,
+                        rotation: 0.0,
+                    },
+                );
+
+                map.insert(
+                    Position((begin, y)),
+                    Tile {
+                        texture: WallTexture::Straight,
+                        rotation: PI / 2.0,
+                    },
+                );
+
+                map.insert(
+                    Position((end, y)),
+                    Tile {
+                        texture: WallTexture::Straight,
+                        rotation: PI / 2.0,
+                    },
+                );
             }
         }
     }
-}
 
-fn horizontal_wall(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
-    straight_wall(asset_server, position, 0.0)
-}
-
-fn vertical_wall(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
-    straight_wall(asset_server, position, PI / 2.0)
-}
-
-fn straight_wall(asset_server: &Res<AssetServer>, position: Position, rotation: f32) -> WallBundle {
-    WallBundle::new(
-        asset_server,
-        WallTexture::Straight,
-        position,
-        rotation,
-        Vec3::new(32.0, 16.0, 0.0), // same for both vertical & horizontal because the rotate value above
-    )
-}
-
-fn top_left_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
-    corner_wall(asset_server, position, PI)
-}
-
-fn top_right_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
-    corner_wall(asset_server, position, PI / 2.0)
-}
-
-fn bottom_right_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
-    corner_wall(asset_server, position, 0.0)
-}
-
-fn bottom_left_corner(asset_server: &Res<AssetServer>, position: Position) -> WallBundle {
-    corner_wall(asset_server, position, PI / -2.0)
-}
-
-fn corner_wall(asset_server: &Res<AssetServer>, position: Position, rotation: f32) -> WallBundle {
-    WallBundle::new(
-        asset_server,
-        WallTexture::Corner,
-        position,
-        rotation,
-        Vec3::new(16.0, 16.0, 0.0),
-    )
+    map
 }
