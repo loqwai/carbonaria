@@ -11,9 +11,8 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>) {
 
         commands.spawn_bundle(WallBundle::new(
             &asset_server,
-            tile.texture,
+            tile,
             (x, y),
-            tile.rotation,
             Vec3::new(16.0, 16.0, 0.0),
         ));
     }
