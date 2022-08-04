@@ -9,7 +9,7 @@ use heron::{CollisionShape, RigidBody};
 
 use crate::components::Wall;
 
-type Position = (f32, f32);
+type Position = (i16, i16);
 
 #[derive(Bundle)]
 pub struct WallBundle {
@@ -74,6 +74,10 @@ impl WallBundle {
         (x, y): Position,
         half_extends: Vec3,
     ) -> WallBundle {
+        let tile_size: f32 = 64.0;
+        let x: f32 = f32::from(x) * tile_size;
+        let y: f32 = f32::from(y) * tile_size;
+
         WallBundle {
             collision_shape: CollisionShape::Cuboid {
                 half_extends,
