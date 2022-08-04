@@ -56,22 +56,15 @@ fn texture_for_wall_type(wall_type: &WallType) -> String {
     }
 }
 
-fn rotation_for_wall_type(wall_type: &WallType) -> f32 {
-    match wall_type {
+fn rotation_for_wall_type(wall_type: &WallType) -> Quat {
+    Quat::from_rotation_z(match wall_type {
         WallType::Vertical => 0.0,
         WallType::Horizontal => PI / 2.0,
         WallType::TopLeftCorner => PI,
         WallType::TopRightCorner => PI / 2.0,
         WallType::BottomRightCorner => 0.0,
         WallType::BottomLeftCorner => PI / -2.0,
-    }
-}
-
-fn texture_and_rotation_for_wall_type(wall_type: &WallType) -> (String, f32) {
-    (
-        texture_for_wall_type(wall_type),
-        rotation_for_wall_type(wall_type),
-    )
+    })
 }
 
 impl WallBundle {
@@ -81,17 +74,15 @@ impl WallBundle {
         (x, y): Position,
         half_extends: Vec3,
     ) -> WallBundle {
-        let (texture, rotation) = texture_and_rotation_for_wall_type(wall_type);
-
         WallBundle {
             collision_shape: CollisionShape::Cuboid {
                 half_extends,
                 border_radius: None,
             },
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load(&texture),
+                texture: asset_server.load(&texture_for_wall_type(wall_type)),
                 transform: Transform {
-                    rotation: Quat::from_rotation_z(rotation),
+                    rotation: rotation_for_wall_type(wall_type),
                     translation: Vec3::new(x, y, 0.0),
                     ..Default::default()
                 },
