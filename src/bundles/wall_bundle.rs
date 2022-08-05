@@ -23,12 +23,14 @@ pub struct WallBundle {
 
 #[derive(Clone, Copy, Debug)]
 enum WallTexture {
+    Empty,
     Straight,
     Corner,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum WallType {
+    Empty,
     Vertical,
     Horizontal,
     TopLeftCorner,
@@ -39,6 +41,7 @@ pub enum WallType {
 
 fn filename_for_wall_texture(texture: WallTexture) -> String {
     match texture {
+        WallTexture::Empty => "wall-empty.png",
         WallTexture::Straight => "wall-straight.png",
         WallTexture::Corner => "wall-corner.png",
     }
@@ -47,6 +50,7 @@ fn filename_for_wall_texture(texture: WallTexture) -> String {
 
 fn texture_for_wall_type(wall_type: &WallType) -> String {
     match wall_type {
+        WallType::Empty => filename_for_wall_texture(WallTexture::Empty),
         WallType::Vertical => filename_for_wall_texture(WallTexture::Straight),
         WallType::Horizontal => filename_for_wall_texture(WallTexture::Straight),
         WallType::TopLeftCorner => filename_for_wall_texture(WallTexture::Corner),
@@ -58,8 +62,9 @@ fn texture_for_wall_type(wall_type: &WallType) -> String {
 
 fn rotation_for_wall_type(wall_type: &WallType) -> Quat {
     Quat::from_rotation_z(match wall_type {
-        WallType::Vertical => 0.0,
-        WallType::Horizontal => PI / 2.0,
+        WallType::Empty => 0.0,
+        WallType::Vertical => PI / 2.0,
+        WallType::Horizontal => 0.0,
         WallType::TopLeftCorner => PI,
         WallType::TopRightCorner => PI / 2.0,
         WallType::BottomRightCorner => 0.0,
