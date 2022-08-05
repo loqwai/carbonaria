@@ -28,7 +28,7 @@ enum WallTexture {
     Corner,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WallType {
     Empty,
     Vertical,

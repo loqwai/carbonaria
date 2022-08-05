@@ -3,15 +3,17 @@ use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 
 use rand::rngs::SmallRng;
-use rand::seq::SliceRandom;
+use rand::seq::IteratorRandom;
 use rand::{Rng, SeedableRng};
 
 use crate::bundles::WallType;
 
+const DIMENSIONS: i16 = 8;
+
 #[derive(Clone, Debug)]
 enum WallTypeOrOptions {
     WallType(WallType),
-    Options(Vec<WallType>),
+    Options(HashSet<WallType>),
 }
 
 #[derive(Clone)]
@@ -22,8 +24,7 @@ pub struct Tile {
 type Position = (i16, i16);
 
 pub fn generate() -> HashMap<Position, WallType> {
-    let num_tiles: i16 = 8;
-    let end: i16 = num_tiles / 2;
+    let end: i16 = DIMENSIONS / 2;
     let begin: i16 = end * -1;
 
     let mut rng = SmallRng::from_entropy();
@@ -102,20 +103,7 @@ fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Orderi
 }
 
 fn add_missing_tiles(map: &mut HashMap<Position, Tile>) {
-    let ports: HashSet<Position> = map
-        .iter()
-        .map(ports_for_tile)
-        .collect::<Vec<HashSet<Position>>>()
-        .iter()
-        .flatten()
-        .cloned()
-        .collect();
-
-    for port in ports {
-        if map.contains_key(&port) {
-            continue;
-        }
-
+    for port in open_ports(map) {
         map.insert(
             port,
             Tile {
@@ -125,21 +113,27 @@ fn add_missing_tiles(map: &mut HashMap<Position, Tile>) {
     }
 }
 
+fn open_ports(map: &HashMap<Position, Tile>) -> HashSet<Position> {
+    map.iter()
+        .map(ports_for_tile)
+        .collect::<Vec<HashSet<Position>>>()
+        .iter()
+        .flatten()
+        .filter(|&position| !map.contains_key(position))
+        .cloned()
+        .collect()
+}
+
 fn update_options(map: &mut HashMap<Position, Tile>) {
     for (pos, tile) in map.clone().iter() {
         match &tile.value {
             WallTypeOrOptions::WallType(_) => continue,
             WallTypeOrOptions::Options(options) => {
-                let filtered_options: Vec<WallType> = options
+                let filtered_options: HashSet<WallType> = options
                     .iter()
                     .filter(|option| is_valid_wall_type_for_position(map, pos, option))
                     .cloned()
                     .collect();
-
-                if filtered_options.is_empty() {
-                    map.remove(pos);
-                    continue;
-                }
 
                 map.insert(
                     *pos,
@@ -159,13 +153,11 @@ fn is_valid_wall_type_for_position(
 ) -> bool {
     let (x, y) = position;
 
-    let max = 8;
-
     match position {
-        _ if *x > max => return false,
-        _ if *y > max => return false,
-        _ if *x < -max => return false,
-        _ if *y < -max => return false,
+        _ if *x > DIMENSIONS => return false,
+        _ if *y > DIMENSIONS => return false,
+        _ if *x < -DIMENSIONS => return false,
+        _ if *y < -DIMENSIONS => return false,
         _ => (),
     }
 
@@ -216,33 +208,33 @@ mod tests {
     }
 }
 
-fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> Vec<Position> {
+fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Position> {
     match wall_type {
-        WallType::Empty => Vec::new(),
-        WallType::Vertical => vec![
+        WallType::Empty => HashSet::new(),
+        WallType::Vertical => HashSet::from([
             shift_position(position, (0, 1)),
             shift_position(position, (0, -1)),
-        ],
-        WallType::Horizontal => vec![
+        ]),
+        WallType::Horizontal => HashSet::from([
             shift_position(position, (1, 0)),
             shift_position(position, (-1, 0)),
-        ],
-        WallType::TopLeftCorner => vec![
+        ]),
+        WallType::TopLeftCorner => HashSet::from([
             shift_position(position, (1, 0)),
             shift_position(position, (0, -1)),
-        ],
-        WallType::TopRightCorner => vec![
+        ]),
+        WallType::TopRightCorner => HashSet::from([
             shift_position(position, (-1, 0)),
             shift_position(position, (0, -1)),
-        ],
-        WallType::BottomRightCorner => vec![
+        ]),
+        WallType::BottomRightCorner => HashSet::from([
             shift_position(position, (-1, 0)),
             shift_position(position, (0, 1)),
-        ],
-        WallType::BottomLeftCorner => vec![
+        ]),
+        WallType::BottomLeftCorner => HashSet::from([
             shift_position(position, (1, 0)),
             shift_position(position, (0, 1)),
-        ],
+        ]),
     }
 }
 
@@ -260,8 +252,8 @@ fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
     (x + dx, y + dy)
 }
 
-fn all_wall_types() -> Vec<WallType> {
-    vec![
+fn all_wall_types() -> HashSet<WallType> {
+    HashSet::from([
         WallType::Empty,
         WallType::Horizontal,
         WallType::Vertical,
@@ -269,11 +261,16 @@ fn all_wall_types() -> Vec<WallType> {
         WallType::TopRightCorner,
         WallType::BottomRightCorner,
         WallType::BottomLeftCorner,
-    ]
+    ])
 }
 
-fn random_wall_type(rng: &mut SmallRng, wall_types: &Vec<WallType>) -> WallType {
-    wall_types.choose(rng).unwrap().clone()
+/// random_wall_type will select a random wall type from the set. If the set is empty, it will return
+/// WallType::Empty
+fn random_wall_type(rng: &mut SmallRng, wall_types: &HashSet<WallType>) -> WallType {
+    if wall_types.is_empty() {
+        return WallType::Empty;
+    }
+    wall_types.iter().choose(rng).unwrap().clone()
 }
 
 fn to_result(input: HashMap<Position, Tile>) -> HashMap<Position, WallType> {
