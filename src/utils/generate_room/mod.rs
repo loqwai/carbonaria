@@ -11,14 +11,9 @@ use crate::bundles::WallType;
 const DIMENSIONS: i16 = 8;
 
 #[derive(Clone, Debug)]
-enum WallTypeOrOptions {
+enum Tile {
     WallType(WallType),
     Options(HashSet<WallType>),
-}
-
-#[derive(Clone)]
-pub struct Tile {
-    value: WallTypeOrOptions,
 }
 
 type Position = (i16, i16);
@@ -35,9 +30,7 @@ pub fn generate_room() -> HashMap<Position, WallType> {
 
     map.insert(
         (x, y),
-        Tile {
-            value: WallTypeOrOptions::WallType(random_wall_type(&mut rng, &all_wall_types())),
-        },
+        Tile::WallType(random_wall_type(&mut rng, &all_wall_types())),
     );
 
     fill(&mut rng, &mut map);
@@ -64,52 +57,42 @@ fn fill(rng: &mut SmallRng, map: &mut HashMap<Position, Tile>) {
 
         let min = map
             .iter()
-            .filter(|(_, t)| is_options(t.value.clone()))
+            .filter(|(_, t)| is_options(t.clone()))
             .min_by(entropy);
 
         match min {
             None => return,
-            Some((pos, tile)) => match &tile.value {
-                WallTypeOrOptions::WallType(_) => {
+            Some((pos, tile)) => match tile {
+                Tile::WallType(_) => {
                     panic!("Should not have received a walltype here")
                 }
-                WallTypeOrOptions::Options(wall_types) => {
-                    map.insert(
-                        *pos,
-                        Tile {
-                            value: WallTypeOrOptions::WallType(random_wall_type(rng, &wall_types)),
-                        },
-                    );
+                Tile::Options(wall_types) => {
+                    map.insert(*pos, Tile::WallType(random_wall_type(rng, &wall_types)));
                 }
             },
         }
     }
 }
 
-fn is_options(v: WallTypeOrOptions) -> bool {
+fn is_options(v: &Tile) -> bool {
     match v {
-        WallTypeOrOptions::WallType(_) => false,
-        WallTypeOrOptions::Options(_) => true,
+        Tile::WallType(_) => false,
+        Tile::Options(_) => true,
     }
 }
 
 fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Ordering {
-    match (&t1.value, &t2.value) {
-        (WallTypeOrOptions::WallType(_), WallTypeOrOptions::WallType(_)) => Ordering::Equal,
-        (WallTypeOrOptions::WallType(_), WallTypeOrOptions::Options(_)) => Ordering::Less,
-        (WallTypeOrOptions::Options(_), WallTypeOrOptions::WallType(_)) => Ordering::Greater,
-        (WallTypeOrOptions::Options(o1), WallTypeOrOptions::Options(o2)) => o1.len().cmp(&o2.len()),
+    match (t1, t2) {
+        (Tile::WallType(_), Tile::WallType(_)) => Ordering::Equal,
+        (Tile::WallType(_), Tile::Options(_)) => Ordering::Less,
+        (Tile::Options(_), Tile::WallType(_)) => Ordering::Greater,
+        (Tile::Options(o1), Tile::Options(o2)) => o1.len().cmp(&o2.len()),
     }
 }
 
 fn add_missing_tiles(map: &mut HashMap<Position, Tile>) {
     for port in open_ports(map) {
-        map.insert(
-            port,
-            Tile {
-                value: WallTypeOrOptions::Options(all_wall_types()),
-            },
-        );
+        map.insert(port, Tile::Options(all_wall_types()));
     }
 }
 
@@ -126,21 +109,16 @@ fn open_ports(map: &HashMap<Position, Tile>) -> HashSet<Position> {
 
 fn update_options(map: &mut HashMap<Position, Tile>) {
     for (pos, tile) in map.clone().iter() {
-        match &tile.value {
-            WallTypeOrOptions::WallType(_) => continue,
-            WallTypeOrOptions::Options(options) => {
+        match tile {
+            Tile::WallType(_) => continue,
+            Tile::Options(options) => {
                 let filtered_options: HashSet<WallType> = options
                     .iter()
                     .filter(|option| is_valid_wall_type_for_position(map, pos, option))
                     .cloned()
                     .collect();
 
-                map.insert(
-                    *pos,
-                    Tile {
-                        value: WallTypeOrOptions::Options(filtered_options),
-                    },
-                );
+                map.insert(*pos, Tile::Options(filtered_options));
             }
         }
     }
@@ -164,9 +142,9 @@ fn is_valid_wall_type_for_position(
     for neighbor in ports_for_wall_type(position, wall_type) {
         match map.get(&neighbor) {
             None => continue,
-            Some(neighboring_tile) => match neighboring_tile.value {
-                WallTypeOrOptions::Options(_) => continue,
-                WallTypeOrOptions::WallType(neighbor_wall_type) => {
+            Some(neighboring_tile) => match neighboring_tile {
+                Tile::Options(_) => continue,
+                Tile::WallType(neighbor_wall_type) => {
                     let opposing_ports = ports_for_wall_type(&neighbor, &neighbor_wall_type);
 
                     if !opposing_ports.contains(position) {
@@ -195,12 +173,7 @@ mod tests {
     #[test]
     fn test_horizontal_over_vertical() {
         let mut map: HashMap<Position, Tile> = HashMap::new();
-        map.insert(
-            (0, 0),
-            Tile {
-                value: WallTypeOrOptions::WallType(WallType::Vertical),
-            },
-        );
+        map.insert((0, 0), Tile::WallType(WallType::Vertical));
 
         let is_valid = is_valid_wall_type_for_position(&map, &(0, 1), &WallType::Horizontal);
 
@@ -239,9 +212,9 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Pos
 }
 
 fn ports_for_tile((position, tile): (&Position, &Tile)) -> HashSet<Position> {
-    match tile.value {
-        WallTypeOrOptions::Options(_) => HashSet::new(),
-        WallTypeOrOptions::WallType(wall_type) => ports_for_wall_type(position, &wall_type)
+    match tile {
+        Tile::Options(_) => HashSet::new(),
+        Tile::WallType(wall_type) => ports_for_wall_type(position, &wall_type)
             .iter()
             .cloned()
             .collect(),
@@ -277,8 +250,8 @@ fn to_result(input: HashMap<Position, Tile>) -> HashMap<Position, WallType> {
     let mut result: HashMap<Position, WallType> = HashMap::new();
 
     for (&k, v) in input.iter() {
-        if let WallTypeOrOptions::WallType(wall_type) = v.value {
-            result.insert(k, wall_type);
+        if let Tile::WallType(wall_type) = v {
+            result.insert(k, *wall_type);
         }
     }
 
