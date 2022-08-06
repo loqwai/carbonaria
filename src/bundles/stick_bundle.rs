@@ -37,7 +37,7 @@ impl StickBundle {
                     ..Default::default()
                 },
                 sprite: Sprite {
-                    anchor: Anchor::Custom(Vec2::new(-40.0 / 32.0, 0.0)),
+                    anchor: Anchor::Custom(Vec2::new(-20.0 / 32.0, 0.0)),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -56,10 +56,10 @@ impl Default for StickBundle {
             rigid_body: RigidBody::KinematicPositionBased,
             collision_shape: CollisionShape::ConvexHull {
                 points: vec![
-                    Vec3::new(56.0, 4.0, 0.0),
-                    Vec3::new(84.0, 4.0, 0.0),
-                    Vec3::new(84.0, -4.0, 0.0),
-                    Vec3::new(56.0, -4.0, 0.0),
+                    Vec3::new(36.0, 2.0, 0.0),
+                    Vec3::new(44.0, 2.0, 0.0),
+                    Vec3::new(44.0, -2.0, 0.0),
+                    Vec3::new(36.0, -2.0, 0.0),
                 ],
                 border_radius: None,
             },
