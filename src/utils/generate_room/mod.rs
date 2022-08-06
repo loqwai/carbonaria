@@ -187,12 +187,12 @@ fn is_valid_connection(p1: &PortType, p2: &PortType) -> bool {
         (PortType::Empty, PortType::Empty) => true,
         (PortType::Empty, PortType::EmptyRequired) => true,
         (PortType::Empty, PortType::Wall) => false,
+
         (PortType::EmptyRequired, PortType::Empty) => true,
-        (PortType::EmptyRequired, PortType::EmptyRequired) => false,
-        (PortType::EmptyRequired, PortType::Wall) => false,
-        (PortType::Wall, PortType::Empty) => false,
-        (PortType::Wall, PortType::EmptyRequired) => false,
+        (PortType::EmptyRequired, _) => false,
+
         (PortType::Wall, PortType::Wall) => true,
+        (PortType::Wall, _) => false,
     }
 }
 
