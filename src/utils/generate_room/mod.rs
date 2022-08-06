@@ -8,7 +8,7 @@ use rand::{Rng, SeedableRng};
 
 use crate::bundles::WallType;
 
-const DIMENSIONS: i16 = 8;
+const DIMENSIONS: i16 = 16;
 
 #[derive(Clone, Debug)]
 enum Tile {
@@ -17,6 +17,18 @@ enum Tile {
 }
 
 type Position = (i16, i16);
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+enum PortType {
+    Empty,
+    Wall,
+}
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+struct Port {
+    position: Position,
+    port_type: PortType,
+}
 
 pub fn generate_room() -> HashMap<Position, WallType> {
     let end: i16 = DIMENSIONS / 2;
@@ -38,14 +50,14 @@ pub fn generate_room() -> HashMap<Position, WallType> {
     to_result(map)
 }
 
-// fn print_map(map: &HashMap<Position, Tile>, label: &str) {
-//     println!("");
-//     println!("=========={}==========", label);
-//     for (pos, tile) in map.iter() {
-//         println!("{:?} => {:?}", pos, tile.value);
-//     }
-//     println!("=========={}==========", label);
-// }
+fn _print_map(map: &HashMap<Position, Tile>, label: &str) {
+    println!("");
+    println!("=========={}==========", label);
+    for (pos, tile) in map.iter() {
+        println!("{:?} => {:?}", pos, tile);
+    }
+    println!("=========={}==========", label);
+}
 
 fn fill(rng: &mut SmallRng, map: &mut HashMap<Position, Tile>) {
     loop {
@@ -92,17 +104,30 @@ fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Orderi
 
 fn add_missing_tiles(map: &mut HashMap<Position, Tile>) {
     for port in open_ports(map) {
-        map.insert(port, Tile::Options(all_wall_types()));
+        let (x, y) = port.position;
+
+        if out_of_range(x) || out_of_range(y) {
+            continue;
+        }
+
+        map.insert(port.position, Tile::Options(all_wall_types()));
     }
 }
 
-fn open_ports(map: &HashMap<Position, Tile>) -> HashSet<Position> {
+fn out_of_range(n: i16) -> bool {
+    let max = DIMENSIONS / 2;
+    let min = -max;
+
+    !(min..=max).contains(&n)
+}
+
+fn open_ports(map: &HashMap<Position, Tile>) -> HashSet<Port> {
     map.iter()
         .map(ports_for_tile)
-        .collect::<Vec<HashSet<Position>>>()
+        .collect::<Vec<HashSet<Port>>>()
         .iter()
         .flatten()
-        .filter(|&position| !map.contains_key(position))
+        .filter(|&port| !map.contains_key(&port.position))
         .cloned()
         .collect()
 }
@@ -129,25 +154,17 @@ fn is_valid_wall_type_for_position(
     position: &Position,
     wall_type: &WallType,
 ) -> bool {
-    let (x, y) = position;
-
-    match position {
-        _ if *x > DIMENSIONS => return false,
-        _ if *y > DIMENSIONS => return false,
-        _ if *x < -DIMENSIONS => return false,
-        _ if *y < -DIMENSIONS => return false,
-        _ => (),
-    }
-
-    for neighbor in ports_for_wall_type(position, wall_type) {
-        match map.get(&neighbor) {
+    for port in ports_for_wall_type(position, wall_type) {
+        match map.get(&port.position) {
             None => continue,
-            Some(neighboring_tile) => match neighboring_tile {
+            Some(neighbor) => match neighbor {
                 Tile::Options(_) => continue,
                 Tile::WallType(neighbor_wall_type) => {
-                    let opposing_ports = ports_for_wall_type(&neighbor, &neighbor_wall_type);
-
-                    if !opposing_ports.contains(position) {
+                    let neighbors_ports = ports_for_wall_type(&port.position, &neighbor_wall_type);
+                    if !neighbors_ports.iter().any(|neighbor_port| {
+                        neighbor_port.position == *position
+                            && neighbor_port.port_type == port.port_type
+                    }) {
                         return false;
                     }
                 }
@@ -179,39 +196,150 @@ mod tests {
 
         assert_eq!(false, is_valid);
     }
+
+    #[test]
+    fn test_horizontal_over_empty() {
+        let mut map: HashMap<Position, Tile> = HashMap::new();
+        map.insert((0, 0), Tile::WallType(WallType::Empty));
+
+        let is_valid = is_valid_wall_type_for_position(&map, &(0, 1), &WallType::Horizontal);
+
+        assert_eq!(true, is_valid);
+    }
 }
 
-fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Position> {
+fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Port> {
     match wall_type {
-        WallType::Empty => HashSet::new(),
+        WallType::Empty => HashSet::from([
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Empty,
+            },
+        ]),
         WallType::Vertical => HashSet::from([
-            shift_position(position, (0, 1)),
-            shift_position(position, (0, -1)),
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Empty,
+            },
         ]),
         WallType::Horizontal => HashSet::from([
-            shift_position(position, (1, 0)),
-            shift_position(position, (-1, 0)),
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Wall,
+            },
         ]),
         WallType::TopLeftCorner => HashSet::from([
-            shift_position(position, (1, 0)),
-            shift_position(position, (0, -1)),
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Empty,
+            },
         ]),
         WallType::TopRightCorner => HashSet::from([
-            shift_position(position, (-1, 0)),
-            shift_position(position, (0, -1)),
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Wall,
+            },
         ]),
         WallType::BottomRightCorner => HashSet::from([
-            shift_position(position, (-1, 0)),
-            shift_position(position, (0, 1)),
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Wall,
+            },
         ]),
         WallType::BottomLeftCorner => HashSet::from([
-            shift_position(position, (1, 0)),
-            shift_position(position, (0, 1)),
+            Port {
+                position: shift_position(position, (0, 1)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (1, 0)),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: shift_position(position, (0, -1)),
+                port_type: PortType::Empty,
+            },
+            Port {
+                position: shift_position(position, (-1, 0)),
+                port_type: PortType::Empty,
+            },
         ]),
     }
 }
 
-fn ports_for_tile((position, tile): (&Position, &Tile)) -> HashSet<Position> {
+fn ports_for_tile((position, tile): (&Position, &Tile)) -> HashSet<Port> {
     match tile {
         Tile::Options(_) => HashSet::new(),
         Tile::WallType(wall_type) => ports_for_wall_type(position, &wall_type)
