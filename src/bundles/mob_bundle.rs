@@ -41,7 +41,7 @@ impl Default for MobBundle {
         Self {
             mob: Mob,
             rigid_body: RigidBody::Dynamic,
-            collision_shape: CollisionShape::Sphere { radius: 32.0 },
+            collision_shape: CollisionShape::Sphere { radius: 16.0 },
             velocity: Default::default(),
             sprite_bundle: Default::default(),
         }

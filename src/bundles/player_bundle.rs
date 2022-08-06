@@ -36,7 +36,7 @@ impl Default for PlayerBundle {
         Self {
             player: Player,
             rigid_body: RigidBody::Dynamic,
-            collision_shape: CollisionShape::Sphere { radius: 32.0 },
+            collision_shape: CollisionShape::Sphere { radius: 16.0 },
             velocity: Default::default(),
             damping: Damping::from_linear(10.0),
             rotation_constraints: RotationConstraints {

@@ -2,10 +2,10 @@ use std::f32::consts::PI;
 
 use bevy::{
     math::{Quat, Vec3},
-    prelude::{AssetServer, Bundle, Res, Transform},
+    prelude::{AssetServer, Bundle, Component, Res, Transform},
     sprite::SpriteBundle,
 };
-use heron::{CollisionShape, RigidBody};
+use heron::RigidBody;
 
 use crate::components::Wall;
 
@@ -14,8 +14,8 @@ type Position = (i16, i16);
 #[derive(Bundle)]
 pub struct WallBundle {
     pub wall: Wall,
+    pub wall_type: WallType,
     pub rigid_body: RigidBody,
-    pub collision_shape: CollisionShape,
 
     #[bundle]
     pub sprite_bundle: SpriteBundle,
@@ -28,7 +28,7 @@ enum WallTexture {
     Corner,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Component, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WallType {
     Empty,
     Vertical,
@@ -77,17 +77,13 @@ impl WallBundle {
         asset_server: &Res<AssetServer>,
         wall_type: &WallType,
         (x, y): Position,
-        half_extends: Vec3,
     ) -> WallBundle {
         let tile_size: f32 = 64.0;
         let x: f32 = f32::from(x) * tile_size;
         let y: f32 = f32::from(y) * tile_size;
 
         WallBundle {
-            collision_shape: CollisionShape::Cuboid {
-                half_extends,
-                border_radius: None,
-            },
+            wall_type: *wall_type,
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load(&texture_for_wall_type(wall_type)),
                 transform: Transform {
@@ -106,11 +102,8 @@ impl Default for WallBundle {
     fn default() -> Self {
         Self {
             wall: Wall,
+            wall_type: WallType::Empty,
             rigid_body: RigidBody::Static,
-            collision_shape: CollisionShape::Cuboid {
-                half_extends: Vec3::new(16.0, 16.0, 0.0),
-                border_radius: None,
-            },
             sprite_bundle: Default::default(),
         }
     }
