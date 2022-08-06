@@ -21,6 +21,7 @@ type Position = (i16, i16);
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 enum PortType {
     Empty,
+    EmptyRequired,
     Wall,
 }
 
@@ -161,11 +162,17 @@ fn is_valid_wall_type_for_position(
                 Tile::Options(_) => continue,
                 Tile::WallType(neighbor_wall_type) => {
                     let neighbors_ports = ports_for_wall_type(&port.position, &neighbor_wall_type);
-                    if !neighbors_ports.iter().any(|neighbor_port| {
-                        neighbor_port.position == *position
-                            && neighbor_port.port_type == port.port_type
-                    }) {
-                        return false;
+
+                    match neighbors_ports
+                        .iter()
+                        .find(|&neighbors_port| neighbors_port.position == *position)
+                    {
+                        None => return false,
+                        Some(neighbors_port) => {
+                            if !is_valid_connection(&neighbors_port.port_type, &port.port_type) {
+                                return false;
+                            }
+                        }
                     }
                 }
             },
@@ -173,6 +180,20 @@ fn is_valid_wall_type_for_position(
     }
 
     true
+}
+
+fn is_valid_connection(p1: &PortType, p2: &PortType) -> bool {
+    match (p1, p2) {
+        (PortType::Empty, PortType::Empty) => true,
+        (PortType::Empty, PortType::EmptyRequired) => true,
+        (PortType::Empty, PortType::Wall) => false,
+        (PortType::EmptyRequired, PortType::Empty) => true,
+        (PortType::EmptyRequired, PortType::EmptyRequired) => false,
+        (PortType::EmptyRequired, PortType::Wall) => false,
+        (PortType::Wall, PortType::Empty) => false,
+        (PortType::Wall, PortType::EmptyRequired) => false,
+        (PortType::Wall, PortType::Wall) => true,
+    }
 }
 
 #[cfg(test)]
@@ -206,6 +227,16 @@ mod tests {
 
         assert_eq!(true, is_valid);
     }
+
+    #[test]
+    fn test_horizontal_over_horizontal() {
+        let mut map: HashMap<Position, Tile> = HashMap::new();
+        map.insert((0, 0), Tile::WallType(WallType::Horizontal));
+
+        let is_valid = is_valid_wall_type_for_position(&map, &(0, 1), &WallType::Horizontal);
+
+        assert_eq!(false, is_valid);
+    }
 }
 
 fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Port> {
@@ -235,7 +266,7 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
             },
             Port {
                 position: shift_position(position, (1, 0)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (0, -1)),
@@ -243,13 +274,13 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
             },
             Port {
                 position: shift_position(position, (-1, 0)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
         ]),
         WallType::Horizontal => HashSet::from([
             Port {
                 position: shift_position(position, (0, 1)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (1, 0)),
@@ -257,7 +288,7 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
             },
             Port {
                 position: shift_position(position, (0, -1)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (-1, 0)),
@@ -267,7 +298,7 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
         WallType::TopLeftCorner => HashSet::from([
             Port {
                 position: shift_position(position, (0, 1)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (1, 0)),
@@ -279,17 +310,17 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
             },
             Port {
                 position: shift_position(position, (-1, 0)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
         ]),
         WallType::TopRightCorner => HashSet::from([
             Port {
                 position: shift_position(position, (0, 1)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (1, 0)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (0, -1)),
@@ -307,11 +338,11 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
             },
             Port {
                 position: shift_position(position, (1, 0)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (0, -1)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (-1, 0)),
@@ -329,11 +360,11 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
             },
             Port {
                 position: shift_position(position, (0, -1)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: shift_position(position, (-1, 0)),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
         ]),
     }
