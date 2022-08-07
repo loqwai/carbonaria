@@ -8,12 +8,21 @@ use rand::{Rng, SeedableRng};
 
 use crate::bundles::WallType;
 
-const DIMENSIONS: i16 = 16;
+const DIMENSIONS: i16 = 24;
 
 #[derive(Clone, Debug)]
 enum Tile {
     WallType(WallType),
     Options(HashSet<WallType>),
+}
+
+impl Into<Vec<WallType>> for &Tile {
+    fn into(self) -> Vec<WallType> {
+        match self {
+            Tile::WallType(wall_type) => vec![wall_type.clone()],
+            Tile::Options(options) => options.iter().cloned().collect(),
+        }
+    }
 }
 
 type Position = (i16, i16);
@@ -158,28 +167,54 @@ fn is_valid_wall_type_for_position(
     for port in ports_for_wall_type(position, wall_type) {
         match map.get(&port.position) {
             None => continue,
-            Some(neighbor) => match neighbor {
-                Tile::Options(_) => continue,
-                Tile::WallType(neighbor_wall_type) => {
-                    let neighbors_ports = ports_for_wall_type(&port.position, &neighbor_wall_type);
+            Some(neighbor) => {
+                let wall_types: Vec<WallType> = neighbor.into();
 
-                    match neighbors_ports
-                        .iter()
-                        .find(|&neighbors_port| neighbors_port.position == *position)
-                    {
-                        None => return false,
-                        Some(neighbors_port) => {
-                            if !is_valid_connection(&neighbors_port.port_type, &port.port_type) {
-                                return false;
-                            }
-                        }
-                    }
+                if none_compatible(position, &port.port_type, &port.position, &wall_types) {
+                    return false;
                 }
-            },
+            }
         }
     }
 
     true
+}
+
+fn none_compatible(
+    position: &(i16, i16),
+    port_type: &PortType,
+    neighbor_position: &Position,
+    neighbor_wall_types: &Vec<WallType>,
+) -> bool {
+    !neighbor_wall_types.iter().any(|neighbor_wall_type| {
+        compatible_neighbor(position, port_type, neighbor_position, neighbor_wall_type)
+    })
+}
+
+fn compatible_neighbor(
+    my_position: &Position,
+    my_port_type: &PortType,
+    neighbor_position: &Position,
+    neighbor_wall_type: &WallType,
+) -> bool {
+    match find_neighbors_port(my_position, neighbor_position, neighbor_wall_type) {
+        None => true,
+        Some(neighbors_port) => is_valid_connection(&neighbors_port.port_type, my_port_type),
+    }
+}
+
+fn find_neighbors_port(
+    my_position: &Position,
+    neighbor_position: &Position,
+    neighbor_wall_type: &WallType,
+) -> Option<Port> {
+    for port in ports_for_wall_type(&neighbor_position, &neighbor_wall_type) {
+        if port.position == *my_position {
+            return Some(port);
+        }
+    }
+
+    return None;
 }
 
 fn is_valid_connection(p1: &PortType, p2: &PortType) -> bool {
