@@ -4,12 +4,11 @@ use std::{
 };
 
 use bevy::prelude::*;
-use heron::CollisionShape;
 use rand::{rngs::SmallRng, seq::IteratorRandom, SeedableRng};
 
 use crate::{
     bundles::WallBundle,
-    components::{Room, Tile, WallType},
+    components::{Port, PortType, Room, Tile, WallType},
 };
 
 const DIMENSIONS: i16 = 24;
@@ -68,27 +67,14 @@ fn spawn_tile(
         .spawn_bundle(WallBundle::new(&asset_server, &wall_type, *position))
         .id();
 
-    for shape in collision_shapes_for_wall_type(&wall_type) {
+    for shape in wall_type.collision_shapes() {
         let child = commands.spawn().insert(shape).id();
         commands.entity(wall).push_children(&[child]);
     }
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
-struct Port {
-    position: Position,
-    port_type: PortType,
-}
-
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
-enum PortType {
-    Empty,
-    EmptyRequired,
-    Wall,
-}
-
 fn add_missing_tiles(room: &mut Room) {
-    for port in open_ports(&room.0) {
+    for port in room.open_ports() {
         let (x, y) = port.position;
 
         if out_of_range(x) || out_of_range(y) {
@@ -124,17 +110,6 @@ fn out_of_range(n: i16) -> bool {
     !(min..=max).contains(&n)
 }
 
-fn open_ports(map: &HashMap<Position, Tile>) -> HashSet<Port> {
-    map.iter()
-        .map(ports_for_tile)
-        .collect::<Vec<HashSet<Port>>>()
-        .iter()
-        .flatten()
-        .filter(|&port| !map.contains_key(&port.position))
-        .cloned()
-        .collect()
-}
-
 fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Ordering {
     match (t1, t2) {
         (Tile::WallType(_), Tile::WallType(_)) => Ordering::Equal,
@@ -142,151 +117,6 @@ fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Orderi
         (Tile::Options(_), Tile::WallType(_)) => Ordering::Greater,
         (Tile::Options(o1), Tile::Options(o2)) => o1.len().cmp(&o2.len()),
     }
-}
-
-fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Port> {
-    match wall_type {
-        WallType::Empty => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Empty,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Empty,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Empty,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Empty,
-            },
-        ]),
-        WallType::Vertical => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-        ]),
-        WallType::Horizontal => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Wall,
-            },
-        ]),
-        WallType::TopLeftCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-        ]),
-        WallType::TopRightCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Wall,
-            },
-        ]),
-        WallType::BottomRightCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Wall,
-            },
-        ]),
-        WallType::BottomLeftCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-        ]),
-    }
-}
-
-fn ports_for_tile((position, tile): (&Position, &Tile)) -> HashSet<Port> {
-    match tile {
-        Tile::Options(_) => HashSet::new(),
-        Tile::WallType(wall_type) => ports_for_wall_type(position, &wall_type)
-            .iter()
-            .cloned()
-            .collect(),
-    }
-}
-
-fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
-    (x + dx, y + dy)
 }
 
 fn all_wall_types() -> HashSet<WallType> {
@@ -315,7 +145,7 @@ fn is_valid_wall_type_for_position(
     position: &Position,
     wall_type: &WallType,
 ) -> bool {
-    for port in ports_for_wall_type(position, wall_type) {
+    for port in wall_type.ports(position) {
         match map.get(&port.position) {
             None => continue,
             Some(neighbor) => {
@@ -373,62 +203,11 @@ fn find_neighbors_port(
     neighbor_position: &Position,
     neighbor_wall_type: &WallType,
 ) -> Option<Port> {
-    for port in ports_for_wall_type(&neighbor_position, &neighbor_wall_type) {
+    for port in neighbor_wall_type.ports(&neighbor_position) {
         if port.position == *my_position {
             return Some(port);
         }
     }
 
     return None;
-}
-
-fn collision_shapes_for_wall_type(wall_type: &WallType) -> Vec<CollisionShape> {
-    // Note: These aren't adjusted for rotation since our transform should do that for us.
-
-    match wall_type {
-        WallType::Empty => Vec::new(),
-        WallType::Vertical => straight_piece(),
-        WallType::Horizontal => straight_piece(),
-        WallType::TopLeftCorner => corner_piece(),
-        WallType::TopRightCorner => corner_piece(),
-        WallType::BottomRightCorner => corner_piece(),
-        WallType::BottomLeftCorner => corner_piece(),
-    }
-}
-
-fn straight_piece() -> Vec<CollisionShape> {
-    vec![cuboid(32.0, 16.0)]
-}
-
-fn corner_piece() -> Vec<CollisionShape> {
-    vec![
-        convex(vec![
-            (-32.0, 16.0),
-            (-16.0, 16.0),
-            (-16.0, -16.0),
-            (-32.0, -16.0),
-        ]),
-        convex(vec![
-            (-16.0, 32.0),
-            (16.0, 32.0),
-            (16.0, -16.0),
-            (-16.0, -16.0),
-        ]),
-    ]
-}
-
-fn convex(points: Vec<(f32, f32)>) -> CollisionShape {
-    let points: Vec<Vec3> = points.iter().map(|(x, y)| Vec3::new(*x, *y, 0.0)).collect();
-
-    CollisionShape::ConvexHull {
-        points,
-        border_radius: None,
-    }
-}
-
-fn cuboid(half_width: f32, half_height: f32) -> CollisionShape {
-    CollisionShape::Cuboid {
-        half_extends: Vec3::new(half_width, half_height, 0.0),
-        border_radius: None,
-    }
 }
