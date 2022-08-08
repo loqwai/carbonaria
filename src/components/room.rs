@@ -87,6 +87,7 @@ impl Room {
                 Tile::WallType(_) => continue,
                 Tile::Options(options) => {
                     options.retain(|option| self.is_valid_wall_type_for_position(pos, &option));
+                    self.tiles.insert(*pos, Tile::Options(options.clone()));
                 }
             }
         }
