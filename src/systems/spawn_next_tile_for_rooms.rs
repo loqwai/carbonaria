@@ -9,27 +9,29 @@ use rand::{rngs::SmallRng, seq::IteratorRandom, SeedableRng};
 use crate::{
     bundles::WallBundle,
     components::{Port, PortType, Room, Tile, WallType},
+    resources::Config,
 };
-
-const DIMENSIONS: i16 = 24;
 
 type Position = (i16, i16);
 
 pub fn spawn_next_tile_for_rooms(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
+    config: Res<Config>,
     mut rooms_query: Query<&mut Room>,
 ) {
-    rooms_query.for_each_mut(|room| spawn_next_tile_for_room(&mut commands, &asset_server, room));
+    rooms_query
+        .for_each_mut(|room| spawn_next_tile_for_room(&mut commands, &asset_server, &config, room));
 }
 
 fn spawn_next_tile_for_room(
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
+    config: &Res<Config>,
     mut room: Mut<Room>,
 ) {
     // print_map(map, "begin");
-    add_missing_tiles(&mut room);
+    add_missing_tiles(config.dimensions, &mut room);
     // print_map(map, "add_missing_tiles");
     update_options(&mut room);
     // print_map(map, "update_options");
@@ -73,11 +75,11 @@ fn spawn_tile(
     }
 }
 
-fn add_missing_tiles(room: &mut Room) {
+fn add_missing_tiles(d: i16, room: &mut Room) {
     for port in room.open_ports() {
         let (x, y) = port.position;
 
-        if out_of_range(x) || out_of_range(y) {
+        if out_of_range(d, x) || out_of_range(d, y) {
             continue;
         }
 
@@ -103,8 +105,8 @@ fn update_options(room: &mut Room) {
     }
 }
 
-fn out_of_range(n: i16) -> bool {
-    let max = DIMENSIONS / 2;
+fn out_of_range(dimensions: i16, n: i16) -> bool {
+    let max = dimensions / 2;
     let min = -max;
 
     !(min..=max).contains(&n)
