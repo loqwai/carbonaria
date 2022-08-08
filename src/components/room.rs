@@ -1,4 +1,7 @@
-use std::collections::{hash_map::Iter, HashMap, HashSet};
+use std::collections::{
+    hash_map::{Iter, IterMut},
+    HashMap, HashSet,
+};
 
 use bevy::prelude::*;
 
@@ -17,6 +20,17 @@ impl Tile {
             Tile::Options(_) => true,
         }
     }
+
+    pub fn as_options(&self) -> &HashSet<WallType> {
+        match self {
+            Tile::WallType(_) => panic!("Called as_options on a Tile that was a WallType"),
+            Tile::Options(options) => options,
+        }
+    }
+
+    pub fn to_wall_type(&mut self, wall_type: WallType) {
+        *self = Tile::WallType(wall_type)
+    }
 }
 
 impl Into<Vec<WallType>> for &Tile {
@@ -29,26 +43,88 @@ impl Into<Vec<WallType>> for &Tile {
 }
 
 #[derive(Component, Clone)]
-pub struct Room(pub HashMap<Position, Tile>);
+pub struct Room {
+    pub dimensions: i16,
+    pub tiles: HashMap<Position, Tile>,
+}
 
 impl Room {
-    pub fn new() -> Room {
-        Room(HashMap::from([((0, 0), Tile::WallType(WallType::Empty))]))
+    pub fn new(dimensions: i16) -> Room {
+        Room {
+            dimensions,
+            tiles: HashMap::from([((0, 0), Tile::WallType(WallType::Empty))]),
+        }
     }
 
     pub fn iter(&self) -> Iter<Position, Tile> {
-        self.0.iter()
+        self.tiles.iter()
     }
 
-    pub fn open_ports(&self) -> HashSet<Port> {
+    pub fn iter_mut(&mut self) -> IterMut<Position, Tile> {
+        self.tiles.iter_mut()
+    }
+
+    /// add_missing_tiles iterates over all the confirmed tiles
+    /// and ensures that their direct neighbors all have tiles
+    pub fn add_missing_tiles(&mut self) {
+        for port in self.open_ports() {
+            let (x, y) = port.position;
+
+            if self.out_of_range(x) || self.out_of_range(y) {
+                continue;
+            }
+
+            self.tiles
+                .insert(port.position, Tile::Options(WallType::all()));
+        }
+    }
+
+    /// update_options mutates the room's tiles to remove all
+    /// options that are not allowed due ot port mismatches.
+    pub fn update_options(&mut self) {
+        for (pos, tile) in self.clone().iter_mut() {
+            match tile {
+                Tile::WallType(_) => continue,
+                Tile::Options(options) => {
+                    options.retain(|option| self.is_valid_wall_type_for_position(pos, &option));
+                }
+            }
+        }
+    }
+
+    fn is_valid_wall_type_for_position(&self, position: &Position, wall_type: &WallType) -> bool {
+        for port in wall_type.ports(position) {
+            match self.tiles.get(&port.position) {
+                None => continue,
+                Some(neighbor) => {
+                    let wall_types: Vec<WallType> = neighbor.into();
+
+                    if none_compatible(position, &port.port_type, &port.position, &wall_types) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        true
+    }
+
+    fn open_ports(&self) -> HashSet<Port> {
         self.iter()
             .map(ports_for_tile)
             .collect::<Vec<HashSet<Port>>>()
             .iter()
             .flatten()
-            .filter(|&port| !self.0.contains_key(&port.position))
+            .filter(|&port| !self.tiles.contains_key(&port.position))
             .cloned()
             .collect()
+    }
+
+    fn out_of_range(&self, n: i16) -> bool {
+        let max = self.dimensions / 2;
+        let min = -max;
+
+        !(min..=max).contains(&n)
     }
 }
 
@@ -197,4 +273,55 @@ fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Por
 
 fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
     (x + dx, y + dy)
+}
+
+fn none_compatible(
+    position: &(i16, i16),
+    port_type: &PortType,
+    neighbor_position: &Position,
+    neighbor_wall_types: &Vec<WallType>,
+) -> bool {
+    !neighbor_wall_types.iter().any(|neighbor_wall_type| {
+        compatible_neighbor(position, port_type, neighbor_position, neighbor_wall_type)
+    })
+}
+
+fn compatible_neighbor(
+    my_position: &Position,
+    my_port_type: &PortType,
+    neighbor_position: &Position,
+    neighbor_wall_type: &WallType,
+) -> bool {
+    match find_neighbors_port(my_position, neighbor_position, neighbor_wall_type) {
+        None => true,
+        Some(neighbors_port) => is_valid_connection(&neighbors_port.port_type, my_port_type),
+    }
+}
+
+fn is_valid_connection(p1: &PortType, p2: &PortType) -> bool {
+    match (p1, p2) {
+        (PortType::Empty, PortType::Empty) => true,
+        (PortType::Empty, PortType::EmptyRequired) => true,
+        (PortType::Empty, PortType::Wall) => false,
+
+        (PortType::EmptyRequired, PortType::Empty) => true,
+        (PortType::EmptyRequired, _) => false,
+
+        (PortType::Wall, PortType::Wall) => true,
+        (PortType::Wall, _) => false,
+    }
+}
+
+fn find_neighbors_port(
+    my_position: &Position,
+    neighbor_position: &Position,
+    neighbor_wall_type: &WallType,
+) -> Option<Port> {
+    for port in neighbor_wall_type.ports(&neighbor_position) {
+        if port.position == *my_position {
+            return Some(port);
+        }
+    }
+
+    return None;
 }

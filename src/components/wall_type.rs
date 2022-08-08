@@ -30,6 +30,19 @@ pub enum PortType {
 }
 
 impl WallType {
+    /// all returns a hashset of all of the possible walltypes
+    pub fn all() -> HashSet<WallType> {
+        HashSet::from([
+            WallType::Empty,
+            WallType::Horizontal,
+            WallType::Vertical,
+            WallType::TopLeftCorner,
+            WallType::TopRightCorner,
+            WallType::BottomRightCorner,
+            WallType::BottomLeftCorner,
+        ])
+    }
+
     pub fn collision_shapes(&self) -> Vec<CollisionShape> {
         // Note: These aren't adjusted for rotation since our transform should do that for us.
 

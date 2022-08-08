@@ -4,10 +4,11 @@ use heron::CollisionShape;
 use crate::{
     bundles::WallBundle,
     components::{Room, Tile, WallType},
+    resources::Config,
 };
 
-pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let room = Room::new();
+pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config: Res<Config>) {
+    let room = Room::new(config.dimensions);
 
     commands.spawn().insert(room.clone());
 
