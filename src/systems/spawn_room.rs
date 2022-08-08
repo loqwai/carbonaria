@@ -2,20 +2,28 @@ use bevy::prelude::*;
 use heron::CollisionShape;
 
 use crate::{
-    bundles::{WallBundle, WallType},
-    utils::generate_room,
+    bundles::WallBundle,
+    components::{Room, Tile, WallType},
 };
 
 pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let room = generate_room();
+    let room = Room::new();
 
-    for (&position, tile) in room.iter() {
-        let bundle = WallBundle::new(&asset_server, tile, position);
-        let entity = commands.spawn_bundle(bundle).id();
+    commands.spawn().insert(room.clone());
 
-        for shape in collision_shapes_for_wall_type(tile) {
-            let child = commands.spawn().insert(shape).id();
-            commands.entity(entity).push_children(&[child]);
+    for (position, tile) in room.iter() {
+        match tile {
+            Tile::Options(_) => (),
+            Tile::WallType(wall_type) => {
+                let wall = commands
+                    .spawn_bundle(WallBundle::new(&asset_server, &wall_type, *position))
+                    .id();
+
+                for shape in collision_shapes_for_wall_type(&wall_type) {
+                    let child = commands.spawn().insert(shape).id();
+                    commands.entity(wall).push_children(&[child]);
+                }
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ mod components;
 mod events;
 mod resources;
 mod systems;
-mod utils;
 
 use bevy::prelude::*;
 use heron::PhysicsPlugin;
@@ -21,6 +20,7 @@ fn main() {
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_room)
         .add_startup_system(systems::spawn_player)
+        .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)
         .add_system(systems::move_player)
         .add_system(systems::on_click_swing_stick)

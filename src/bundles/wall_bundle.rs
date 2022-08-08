@@ -2,12 +2,12 @@ use std::f32::consts::PI;
 
 use bevy::{
     math::{Quat, Vec3},
-    prelude::{AssetServer, Bundle, Component, Res, Transform},
+    prelude::{AssetServer, Bundle, Res, Transform},
     sprite::SpriteBundle,
 };
 use heron::RigidBody;
 
-use crate::components::Wall;
+use crate::components::{Wall, WallType};
 
 type Position = (i16, i16);
 
@@ -26,17 +26,6 @@ enum WallTexture {
     Empty,
     Straight,
     Corner,
-}
-
-#[derive(Clone, Component, Copy, Debug, Eq, PartialEq, Hash)]
-pub enum WallType {
-    Empty,
-    Vertical,
-    Horizontal,
-    TopLeftCorner,
-    TopRightCorner,
-    BottomRightCorner,
-    BottomLeftCorner,
 }
 
 fn filename_for_wall_texture(texture: WallTexture) -> String {
