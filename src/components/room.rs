@@ -1,6 +1,9 @@
-use std::collections::{
-    hash_map::{Iter, IterMut},
-    HashMap, HashSet,
+use std::{
+    cmp::Ordering,
+    collections::{
+        hash_map::{Iter, IterMut},
+        HashMap, HashSet,
+    },
 };
 
 use bevy::prelude::*;
@@ -18,6 +21,13 @@ impl Tile {
         match self {
             Tile::WallType(_) => false,
             Tile::Options(_) => true,
+        }
+    }
+
+    pub fn is_wall_type(&self) -> bool {
+        match self {
+            Tile::WallType(_) => true,
+            Tile::Options(_) => false,
         }
     }
 
@@ -45,6 +55,7 @@ impl Into<Vec<WallType>> for &Tile {
 #[derive(Component, Clone)]
 pub struct Room {
     pub dimensions: i16,
+    pub complete: bool,
     pub tiles: HashMap<Position, Tile>,
 }
 
@@ -52,6 +63,7 @@ impl Room {
     pub fn new(dimensions: i16) -> Room {
         Room {
             dimensions,
+            complete: false,
             tiles: HashMap::from([((0, 0), Tile::WallType(WallType::Empty))]),
         }
     }
@@ -91,6 +103,20 @@ impl Room {
                 }
             }
         }
+    }
+
+    /// update_complete checks to see if there are any open port left. If not,
+    /// then it updates room.complete to be true.
+    pub fn update_complete(&mut self) {
+        if self.iter().all(|(_, t)| t.is_wall_type()) {
+            self.complete = true
+        }
+    }
+
+    pub fn options_tile_with_least_entropy(&mut self) -> Option<(&Position, &mut Tile)> {
+        self.iter_mut()
+            .filter(|(_, t)| t.is_options())
+            .min_by(entropy)
     }
 
     fn is_valid_wall_type_for_position(&self, position: &Position, wall_type: &WallType) -> bool {
@@ -325,4 +351,13 @@ fn find_neighbors_port(
     }
 
     return None;
+}
+
+fn entropy((_, t1): &(&Position, &mut Tile), (_, t2): &(&Position, &mut Tile)) -> Ordering {
+    match (t1, t2) {
+        (Tile::WallType(_), Tile::WallType(_)) => Ordering::Equal,
+        (Tile::WallType(_), Tile::Options(_)) => Ordering::Less,
+        (Tile::Options(_), Tile::WallType(_)) => Ordering::Greater,
+        (Tile::Options(o1), Tile::Options(o2)) => o1.len().cmp(&o2.len()),
+    }
 }
