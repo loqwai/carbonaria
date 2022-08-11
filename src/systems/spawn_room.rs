@@ -12,7 +12,7 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config
 
     commands.spawn().insert(room.clone());
 
-    for (position, tile) in room.iter() {
+    for (position, tile) in room.tiles.iter() {
         match tile {
             Tile::Options(_) => (),
             Tile::WallType(wall_type) => {

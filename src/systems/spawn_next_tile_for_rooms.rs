@@ -5,7 +5,7 @@ use rand::{rngs::SmallRng, seq::IteratorRandom};
 
 use crate::{
     bundles::WallBundle,
-    components::{Room, WallType},
+    components::{Room, Tile, WallType},
 };
 
 type Position = (i16, i16);
@@ -30,23 +30,52 @@ fn spawn_next_tile_for_room(
     if room.complete {
         return;
     }
-    // print_map(map, "begin");
-    room.add_missing_tiles();
-    // print_map(map, "add_missing_tiles");
-    room.update_options();
-    // print_map(map, "update_options");
-    room.update_complete();
+    add_missing_tiles(&mut room);
+    remove_impossible_options(&mut room);
+    update_complete(&mut room);
 
     match room.options_tile_with_least_entropy() {
         None => return,
         Some((&pos, tile)) => {
-            let options = tile.as_options();
-
-            let wall_type = random_wall_type(rng, &options);
-            tile.to_wall_type(wall_type);
+            let wall_type = random_wall_type(rng, tile.as_options());
+            tile.convert_to_wall_type(wall_type);
 
             spawn_tile(commands, asset_server, &pos, wall_type);
         }
+    }
+}
+
+/// add_missing_tiles iterates over all the confirmed tiles
+/// and ensures that their direct neighbors all have tiles
+pub fn add_missing_tiles(room: &mut Room) {
+    for (x, y) in room.open_port_positions() {
+        if room.out_of_range(x) || room.out_of_range(y) {
+            continue;
+        }
+
+        room.tiles.insert((x, y), Tile::Options(WallType::all()));
+    }
+}
+
+/// update_options mutates the room's tiles to remove all
+/// options that are not allowed due to port mismatches.
+pub fn remove_impossible_options(room: &mut Room) {
+    for (pos, tile) in room.clone().tiles.iter_mut() {
+        match tile {
+            Tile::WallType(_) => continue,
+            Tile::Options(options) => {
+                options.retain(|option| room.is_valid_wall_type_for_position(pos, &option));
+                room.tiles.insert(*pos, Tile::Options(options.clone()));
+            }
+        }
+    }
+}
+
+/// update_complete checks to see if there are any open port left. If not,
+/// then it updates room.complete to be true.
+pub fn update_complete(room: &mut Room) {
+    if room.tiles.iter().all(|(_, t)| t.is_wall_type()) {
+        room.complete = true
     }
 }
 
