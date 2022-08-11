@@ -79,15 +79,12 @@ impl Room {
     /// add_missing_tiles iterates over all the confirmed tiles
     /// and ensures that their direct neighbors all have tiles
     pub fn add_missing_tiles(&mut self) {
-        for port in self.open_ports() {
-            let (x, y) = port.position;
-
+        for (x, y) in self.open_port_positions() {
             if self.out_of_range(x) || self.out_of_range(y) {
                 continue;
             }
 
-            self.tiles
-                .insert(port.position, Tile::Options(WallType::all()));
+            self.tiles.insert((x, y), Tile::Options(WallType::all()));
         }
     }
 
@@ -136,13 +133,13 @@ impl Room {
         true
     }
 
-    fn open_ports(&self) -> HashSet<Port> {
+    fn open_port_positions(&self) -> HashSet<Position> {
         self.iter()
-            .map(ports_for_tile)
-            .collect::<Vec<HashSet<Port>>>()
+            .map(tile_neighbors)
+            .collect::<Vec<HashSet<Position>>>()
             .iter()
             .flatten()
-            .filter(|&port| !self.tiles.contains_key(&port.position))
+            .filter(|&p| !self.tiles.contains_key(&p))
             .cloned()
             .collect()
     }
@@ -157,145 +154,20 @@ impl Room {
 
 type Position = (i16, i16);
 
-fn ports_for_tile((position, tile): (&Position, &Tile)) -> HashSet<Port> {
+fn tile_neighbors((position, tile): (&Position, &Tile)) -> HashSet<Position> {
     match tile {
         Tile::Options(_) => HashSet::new(),
-        Tile::WallType(wall_type) => ports_for_wall_type(position, &wall_type)
-            .iter()
-            .cloned()
-            .collect(),
+        Tile::WallType(_) => neighbor_positions_for_position(position),
     }
 }
 
-fn ports_for_wall_type(position: &Position, wall_type: &WallType) -> HashSet<Port> {
-    match wall_type {
-        WallType::Empty => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Empty,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Empty,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Empty,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Empty,
-            },
-        ]),
-        WallType::Vertical => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-        ]),
-        WallType::Horizontal => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Wall,
-            },
-        ]),
-        WallType::TopLeftCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-        ]),
-        WallType::TopRightCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Wall,
-            },
-        ]),
-        WallType::BottomRightCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::Wall,
-            },
-        ]),
-        WallType::BottomLeftCorner => HashSet::from([
-            Port {
-                position: shift_position(position, (0, 1)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (1, 0)),
-                port_type: PortType::Wall,
-            },
-            Port {
-                position: shift_position(position, (0, -1)),
-                port_type: PortType::EmptyRequired,
-            },
-            Port {
-                position: shift_position(position, (-1, 0)),
-                port_type: PortType::EmptyRequired,
-            },
-        ]),
-    }
+fn neighbor_positions_for_position(position: &Position) -> HashSet<Position> {
+    HashSet::from([
+        shift_position(position, (0, 1)),
+        shift_position(position, (1, 0)),
+        shift_position(position, (0, -1)),
+        shift_position(position, (-1, 0)),
+    ])
 }
 
 fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
