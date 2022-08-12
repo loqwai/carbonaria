@@ -13,11 +13,17 @@ type Position = (i16, i16);
 pub fn spawn_next_tile_for_rooms(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut rooms_query: Query<&mut Room>,
+    mut rooms_query: Query<(&mut Room, Entity)>,
     mut rng: ResMut<SmallRng>,
 ) {
-    rooms_query.for_each_mut(|room| {
-        spawn_next_tile_for_room(&mut commands, &asset_server, rng.as_mut(), room)
+    rooms_query.for_each_mut(|(room, room_entity)| {
+        spawn_next_tile_for_room(
+            &mut commands,
+            &asset_server,
+            rng.as_mut(),
+            room,
+            room_entity,
+        )
     });
 }
 
@@ -26,21 +32,23 @@ fn spawn_next_tile_for_room(
     asset_server: &Res<AssetServer>,
     rng: &mut SmallRng,
     mut room: Mut<Room>,
+    room_entity: Entity,
 ) {
     if room.complete {
         return;
     }
     add_missing_tiles(&mut room);
     remove_impossible_options(&mut room);
-    update_complete(&mut room);
+    mark_complete_if_no_open_ports(&mut room);
 
-    match room.options_tile_with_least_entropy() {
+    match room.position_of_options_tile_with_least_entropy() {
         None => return,
-        Some((&pos, tile)) => {
+        Some(pos) => {
+            let tile = room.tiles.get(&pos).unwrap();
             let wall_type = random_wall_type(rng, tile.as_options());
-            tile.convert_to_wall_type(wall_type);
 
-            spawn_tile(commands, asset_server, &pos, wall_type);
+            room.tiles.insert(pos, Tile::WallType(wall_type));
+            spawn_tile(commands, asset_server, room_entity, pos, wall_type);
         }
     }
 }
@@ -73,22 +81,30 @@ pub fn remove_impossible_options(room: &mut Room) {
 
 /// update_complete checks to see if there are any open port left. If not,
 /// then it updates room.complete to be true.
-pub fn update_complete(room: &mut Room) {
+pub fn mark_complete_if_no_open_ports(room: &mut Room) {
     if room.tiles.iter().all(|(_, t)| t.is_wall_type()) {
         room.complete = true
     }
 }
 
+/// spawn_tile instantiates a new tile component instance and registers it as
+/// a child of the room
 fn spawn_tile(
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
-    position: &Position,
+    room_entity: Entity,
+    position: Position,
     wall_type: WallType,
 ) {
     let wall = commands
-        .spawn_bundle(WallBundle::new(&asset_server, &wall_type, *position))
+        .spawn_bundle(WallBundle::new(&asset_server, &wall_type, position))
         .id();
 
+    commands.entity(room_entity).push_children(&[wall]);
+
+    // Heron, the physics system only supports convex shapes, but we can build
+    // compound shapes to achieve the same thing by making multiple collision shapes
+    // children of the entity that contains the RigidBody component.
     for shape in wall_type.collision_shapes() {
         let child = commands.spawn().insert(shape).id();
         commands.entity(wall).push_children(&[child]);
