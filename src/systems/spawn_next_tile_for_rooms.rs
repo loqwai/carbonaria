@@ -32,13 +32,19 @@ fn spawn_next_tile_for_room(
 
     loop {
         if room.is_complete() {
-            println!("elapsed: {:?}", start.elapsed());
+            println!("elapsed: {:?}, {}", start.elapsed(), room.known_tiles.len());
             panic!("panicking!");
             // return;
         }
 
+        let start_add_missing_tiles = Instant::now();
         add_missing_tiles(&mut room);
+        println!("add_missing_tiles: {:?}", start_add_missing_tiles.elapsed());
+
+
+        let start_remove_impossible_options = Instant::now();
         remove_impossible_options(&mut room);
+        println!("remove_impossible_options: {:?}", start_remove_impossible_options.elapsed());
 
         match room.options_with_least_entropy() {
             None => return,
@@ -56,7 +62,9 @@ fn spawn_next_tile_for_room(
 /// add_missing_tiles iterates over all the confirmed tiles
 /// and ensures that their direct neighbors all have tiles
 pub fn add_missing_tiles(room: &mut Room) {
-    for (x, y) in room.new_open_port_positions() {
+    let positions = room.new_open_port_positions();
+
+    for (x, y) in positions {
         if room.out_of_range(x) || room.out_of_range(y) {
             continue;
         }

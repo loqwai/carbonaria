@@ -1,6 +1,7 @@
 use std::{
     cmp::Ordering,
     collections::{HashMap, HashSet},
+    time::Instant,
 };
 
 use bevy::prelude::*;
@@ -65,15 +66,13 @@ impl Room {
     }
 
     pub fn new_open_port_positions(&self) -> HashSet<Position> {
-        self.known_tiles
-            .iter()
-            .map(tile_neighbors)
-            .collect::<Vec<HashSet<Position>>>()
-            .iter()
-            .flatten()
-            .filter(|&p| !self.known_tiles.contains_key(&p) && !self.options_tiles.contains_key(&p))
-            .cloned()
-            .collect()
+        let start_building = Instant::now();
+        let mut positions: HashSet<Position> = self.known_tiles.keys().map(neighbor_positions_for_position).flatten().collect();
+        println!("building: {:?}", start_building.elapsed());
+
+        positions.retain(|p| !self.known_tiles.contains_key(&p) && !self.options_tiles.contains_key(&p));
+
+        return positions
     }
 
     pub fn out_of_range(&self, n: i16) -> bool {
@@ -85,10 +84,6 @@ impl Room {
 }
 
 type Position = (i16, i16);
-
-fn tile_neighbors((position, _): (&Position, &WallType)) -> HashSet<Position> {
-    neighbor_positions_for_position(position)
-}
 
 fn neighbor_positions_for_position(position: &Position) -> HashSet<Position> {
     HashSet::from([
