@@ -13,6 +13,7 @@ pub struct Room {
     pub dimensions: i16,
     pub known_tiles: HashMap<Position, WallType>,
     pub options_tiles: HashMap<Position, HashSet<WallType>>,
+    pub occupied_positions: HashSet<Position>,
 }
 
 impl Room {
@@ -21,6 +22,7 @@ impl Room {
             dimensions,
             known_tiles: HashMap::from([((0, 0), WallType::Empty)]),
             options_tiles: HashMap::new(),
+            occupied_positions: vec![(0, 0)].iter().cloned().collect(),
         }
     }
 
@@ -66,13 +68,14 @@ impl Room {
     }
 
     pub fn new_open_port_positions(&self) -> HashSet<Position> {
-        let start_building = Instant::now();
-        let mut positions: HashSet<Position> = self.known_tiles.keys().map(neighbor_positions_for_position).flatten().collect();
-        println!("building: {:?}", start_building.elapsed());
-
-        positions.retain(|p| !self.known_tiles.contains_key(&p) && !self.options_tiles.contains_key(&p));
-
-        return positions
+        self.known_tiles
+            .keys()
+            .map(neighbor_positions_for_position)
+            .flatten()
+            .collect::<HashSet<Position>>()
+            .difference(&self.occupied_positions)
+            .cloned()
+            .collect()
     }
 
     pub fn out_of_range(&self, n: i16) -> bool {

@@ -70,6 +70,7 @@ pub fn add_missing_tiles(room: &mut Room) {
         }
 
         room.options_tiles.insert((x, y), WallType::all());
+        room.occupied_positions.insert((x, y));
     }
 }
 
