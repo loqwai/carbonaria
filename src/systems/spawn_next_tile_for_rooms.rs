@@ -34,11 +34,10 @@ fn spawn_next_tile_for_room(
     remove_impossible_options(&mut room);
     update_complete(&mut room);
 
-    match room.position_of_options_tile_with_least_entropy() {
+    match room.options_with_least_entropy() {
         None => return,
-        Some(pos) => {
-            let tile = room.tiles.get(&pos).unwrap();
-            let wall_type = random_wall_type(rng, tile.as_options());
+        Some((pos, options)) => {
+            let wall_type = random_wall_type(rng, &options);
 
             room.tiles.insert(pos, Tile::WallType(wall_type));
             spawn_tile(commands, asset_server, &pos, wall_type);

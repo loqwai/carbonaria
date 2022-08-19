@@ -62,13 +62,14 @@ impl Room {
         }
     }
 
-    pub fn position_of_options_tile_with_least_entropy(&self) -> Option<Position> {
-        let (&position, _) = self.tiles
+    pub fn options_with_least_entropy(&self) -> Option<(Position, HashSet<WallType>)> {
+        let (position, tile) = self.tiles
             .iter()
             .filter(|(_, t)| t.is_options())
-            .min_by(entropy)?;
+            .min_by(entropy)?
+            .clone();
 
-        return Some(position)
+        return Some((position.clone(), tile.as_options().clone()))
     }
 
     pub fn is_valid_wall_type_for_position(
