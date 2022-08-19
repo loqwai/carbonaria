@@ -38,7 +38,7 @@ fn spawn_next_tile_for_room(
         None => return,
         Some((&pos, tile)) => {
             let wall_type = random_wall_type(rng, tile.as_options());
-            tile.convert_to_wall_type(wall_type);
+            *tile = Tile::WallType(wall_type);
 
             spawn_tile(commands, asset_server, &pos, wall_type);
         }

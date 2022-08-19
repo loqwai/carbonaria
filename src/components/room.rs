@@ -35,12 +35,6 @@ impl Tile {
         }
     }
 
-    /// Updates the tile to become a specific WallType. This mutates
-    /// the tile.
-    pub fn convert_to_wall_type(&mut self, wall_type: WallType) {
-        *self = Tile::WallType(wall_type)
-    }
-
     /// coerce_into_vec will either return a vector of the possible
     /// wall_types, or a single item vector containing the locked in
     /// wall_type if it is already known.
