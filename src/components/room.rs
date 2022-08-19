@@ -62,11 +62,13 @@ impl Room {
         }
     }
 
-    pub fn options_tile_with_least_entropy(&mut self) -> Option<(&Position, &mut Tile)> {
-        self.tiles
-            .iter_mut()
+    pub fn position_of_options_tile_with_least_entropy(&self) -> Option<&Position> {
+        let (position, _) = self.tiles
+            .iter()
             .filter(|(_, t)| t.is_options())
-            .min_by(entropy)
+            .min_by(entropy)?;
+
+        return Some(position)
     }
 
     pub fn is_valid_wall_type_for_position(
@@ -198,7 +200,7 @@ fn find_neighbors_port(
     return None;
 }
 
-fn entropy((_, t1): &(&Position, &mut Tile), (_, t2): &(&Position, &mut Tile)) -> Ordering {
+fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Ordering {
     match (t1, t2) {
         (Tile::WallType(_), Tile::WallType(_)) => Ordering::Equal,
         (Tile::WallType(_), Tile::Options(_)) => Ordering::Less,
