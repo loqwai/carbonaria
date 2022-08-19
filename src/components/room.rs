@@ -62,8 +62,8 @@ impl Room {
         }
     }
 
-    pub fn position_of_options_tile_with_least_entropy(&self) -> Option<&Position> {
-        let (position, _) = self.tiles
+    pub fn position_of_options_tile_with_least_entropy(&self) -> Option<Position> {
+        let (&position, _) = self.tiles
             .iter()
             .filter(|(_, t)| t.is_options())
             .min_by(entropy)?;

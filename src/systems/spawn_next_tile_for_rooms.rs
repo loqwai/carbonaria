@@ -37,13 +37,11 @@ fn spawn_next_tile_for_room(
     match room.position_of_options_tile_with_least_entropy() {
         None => return,
         Some(pos) => {
-            let tile = room.tiles.get(pos).unwrap().clone();
+            let tile = room.tiles.get(&pos).unwrap();
             let wall_type = random_wall_type(rng, tile.as_options());
 
-            let npos = pos.clone();
-
-            room.tiles.insert(npos, Tile::WallType(wall_type));
-            spawn_tile(commands, asset_server, &npos, wall_type);
+            room.tiles.insert(pos, Tile::WallType(wall_type));
+            spawn_tile(commands, asset_server, &pos, wall_type);
         }
     }
 }
