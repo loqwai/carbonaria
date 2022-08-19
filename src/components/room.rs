@@ -1,7 +1,6 @@
 use std::{
     cmp::Ordering,
     collections::{HashMap, HashSet},
-    time::Instant,
 };
 
 use bevy::prelude::*;
@@ -21,7 +20,12 @@ impl Room {
         Room {
             dimensions,
             known_tiles: HashMap::from([((0, 0), WallType::Empty)]),
-            options_tiles: HashMap::new(),
+            options_tiles: HashMap::from([
+                ((0,1), WallType::all()),
+                ((0,-1), WallType::all()),
+                ((1,0), WallType::all()),
+                ((-1,0), WallType::all()),
+            ]),
             occupied_positions: vec![(0, 0)].iter().cloned().collect(),
         }
     }
@@ -40,14 +44,11 @@ impl Room {
 
     /// get_wall_types_for_position will return the known position as a single item HashSet if its known,
     /// if not the position is unknown, it will return the options for that position. If the options aren't 
-    /// defined, it will return the set of all walltypes
-    fn get_wall_types_for_position(&self, position: &Position) -> HashSet<WallType> {
+    /// defined, it will return none
+    fn get_wall_types_for_position(&self, position: &Position) -> Option<HashSet<WallType>> {
         match self.known_tiles.get(position) {
-            Some(wall_type) => HashSet::from([wall_type.clone()]),
-            None => match self.options_tiles.get(position) {
-                Some(wall_types) => wall_types.clone(),
-                None => WallType::all(),
-            }
+            Some(wall_type) => Some(HashSet::from([wall_type.clone()])),
+            None => self.options_tiles.get(position).map(|options| options.clone())
         }
     }
 
@@ -57,49 +58,32 @@ impl Room {
         wall_type: &WallType,
     ) -> bool {
         for port in wall_type.ports(position) {
-            let wall_types = self.get_wall_types_for_position(&port.position);
-
-            if none_compatible(position, &port.port_type, &port.position, &wall_types) {
-                return false;
+            match self.get_wall_types_for_position(&port.position) {
+                None => continue,
+                Some(wall_types) => {
+                    if none_compatible(position, &port.port_type, &port.position, &wall_types) {
+                        return false;
+                    }
+                },
             }
         }
 
         true
     }
 
-    pub fn new_open_port_positions(&self) -> HashSet<Position> {
-        self.known_tiles
-            .keys()
-            .map(neighbor_positions_for_position)
-            .flatten()
-            .collect::<HashSet<Position>>()
-            .difference(&self.occupied_positions)
-            .cloned()
-            .collect()
+    pub fn out_of_bounds(&self, (x, y): &Position) -> bool {
+        self.out_of_range(x) || self.out_of_range(y)
     }
 
-    pub fn out_of_range(&self, n: i16) -> bool {
+    pub fn out_of_range(&self, n: &i16) -> bool {
         let max = self.dimensions / 2;
         let min = -max;
 
-        !(min..=max).contains(&n)
+        !(min..=max).contains(n)
     }
 }
 
 type Position = (i16, i16);
-
-fn neighbor_positions_for_position(position: &Position) -> HashSet<Position> {
-    HashSet::from([
-        shift_position(position, (0, 1)),
-        shift_position(position, (1, 0)),
-        shift_position(position, (0, -1)),
-        shift_position(position, (-1, 0)),
-    ])
-}
-
-fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
-    (x + dx, y + dy)
-}
 
 /// none_compatible returns true if none of the possible wall_types contain a port
 /// that could interface with our port.

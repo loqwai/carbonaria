@@ -37,40 +37,26 @@ fn spawn_next_tile_for_room(
             // return;
         }
 
-        let start_add_missing_tiles = Instant::now();
-        add_missing_tiles(&mut room);
-        println!("add_missing_tiles: {:?}", start_add_missing_tiles.elapsed());
-
-
-        let start_remove_impossible_options = Instant::now();
         remove_impossible_options(&mut room);
-        println!("remove_impossible_options: {:?}", start_remove_impossible_options.elapsed());
 
         match room.options_with_least_entropy() {
             None => return,
             Some((pos, options)) => {
                 let wall_type = random_wall_type(rng, &options);
-
                 room.known_tiles.insert(pos, wall_type);
                 room.options_tiles.remove(&pos);
                 spawn_tile(commands, asset_server, &pos, wall_type);
+
+                for neighbor_position in neighbor_positions_for_position(&pos) {
+                    if room.out_of_bounds(&neighbor_position) || room.occupied_positions.contains(&neighbor_position) {
+                        continue
+                    }
+
+                    room.options_tiles.insert(neighbor_position, WallType::all());
+                    room.occupied_positions.insert(neighbor_position);
+                }
             }
         }
-    }
-}
-
-/// add_missing_tiles iterates over all the confirmed tiles
-/// and ensures that their direct neighbors all have tiles
-pub fn add_missing_tiles(room: &mut Room) {
-    let positions = room.new_open_port_positions();
-
-    for (x, y) in positions {
-        if room.out_of_range(x) || room.out_of_range(y) {
-            continue;
-        }
-
-        room.options_tiles.insert((x, y), WallType::all());
-        room.occupied_positions.insert((x, y));
     }
 }
 
@@ -106,4 +92,17 @@ fn random_wall_type(rng: &mut SmallRng, wall_types: &HashSet<WallType>) -> WallT
         return WallType::Empty;
     }
     wall_types.iter().choose(rng).unwrap().clone()
+}
+
+fn neighbor_positions_for_position(position: &Position) -> HashSet<Position> {
+    HashSet::from([
+        shift_position(position, (0, 1)),
+        shift_position(position, (1, 0)),
+        shift_position(position, (0, -1)),
+        shift_position(position, (-1, 0)),
+    ])
+}
+
+fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
+    (x + dx, y + dy)
 }
