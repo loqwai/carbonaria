@@ -15,7 +15,7 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config
     for (position, tile) in room.tiles.iter() {
         match tile {
             Tile::Options(_) => (),
-            Tile::WallType(wall_type) => {
+            Tile::Known(wall_type) => {
                 let wall = commands
                     .spawn_bundle(WallBundle::new(&asset_server, &wall_type, *position))
                     .id();

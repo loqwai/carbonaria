@@ -9,28 +9,28 @@ use super::wall_type::{Port, PortType, WallType};
 
 #[derive(Clone, Debug)]
 pub enum Tile {
-    WallType(WallType),
+    Known(WallType),
     Options(HashSet<WallType>),
 }
 
 impl Tile {
     pub fn is_options(&self) -> bool {
         match self {
-            Tile::WallType(_) => false,
+            Tile::Known(_) => false,
             Tile::Options(_) => true,
         }
     }
 
     pub fn is_wall_type(&self) -> bool {
         match self {
-            Tile::WallType(_) => true,
+            Tile::Known(_) => true,
             Tile::Options(_) => false,
         }
     }
 
     pub fn as_options(&self) -> &HashSet<WallType> {
         match self {
-            Tile::WallType(_) => panic!("Called as_options on a Tile that was a WallType"),
+            Tile::Known(_) => panic!("Called as_options on a Tile that was a WallType"),
             Tile::Options(options) => options,
         }
     }
@@ -40,7 +40,7 @@ impl Tile {
     /// wall_type if it is already known.
     pub fn coerce_into_vec(&self) -> Vec<WallType> {
         match self {
-            Tile::WallType(wall_type) => vec![wall_type.clone()],
+            Tile::Known(wall_type) => vec![wall_type.clone()],
             Tile::Options(options) => options.iter().cloned().collect(),
         }
     }
@@ -58,7 +58,7 @@ impl Room {
         Room {
             dimensions,
             complete: false,
-            tiles: HashMap::from([((0, 0), Tile::WallType(WallType::Empty))]),
+            tiles: HashMap::from([((0, 0), Tile::Known(WallType::Empty))]),
         }
     }
 
@@ -118,7 +118,7 @@ type Position = (i16, i16);
 fn tile_neighbors((position, tile): (&Position, &Tile)) -> HashSet<Position> {
     match tile {
         Tile::Options(_) => HashSet::new(),
-        Tile::WallType(_) => neighbor_positions_for_position(position),
+        Tile::Known(_) => neighbor_positions_for_position(position),
     }
 }
 
@@ -203,9 +203,9 @@ fn find_neighbors_port(
 
 fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Ordering {
     match (t1, t2) {
-        (Tile::WallType(_), Tile::WallType(_)) => Ordering::Equal,
-        (Tile::WallType(_), Tile::Options(_)) => Ordering::Less,
-        (Tile::Options(_), Tile::WallType(_)) => Ordering::Greater,
+        (Tile::Known(_), Tile::Known(_)) => Ordering::Equal,
+        (Tile::Known(_), Tile::Options(_)) => Ordering::Less,
+        (Tile::Options(_), Tile::Known(_)) => Ordering::Greater,
         (Tile::Options(o1), Tile::Options(o2)) => o1.len().cmp(&o2.len()),
     }
 }

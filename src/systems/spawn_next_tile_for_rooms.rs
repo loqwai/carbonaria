@@ -5,7 +5,7 @@ use rand::{rngs::SmallRng, seq::IteratorRandom};
 
 use crate::{
     bundles::WallBundle,
-    components::{Room, Tile, WallType},
+    components::{Room, Tile::Known, Tile::Options, WallType, WallType::Empty},
 };
 
 type Position = (i16, i16);
@@ -39,7 +39,7 @@ fn spawn_next_tile_for_room(
         Some((pos, options)) => {
             let wall_type = random_wall_type(rng, &options);
 
-            room.tiles.insert(pos, Tile::WallType(wall_type));
+            room.tiles.insert(pos, Known(wall_type));
             spawn_tile(commands, asset_server, &pos, wall_type);
         }
     }
@@ -53,7 +53,7 @@ pub fn add_missing_tiles(room: &mut Room) {
             continue;
         }
 
-        room.tiles.insert((x, y), Tile::Options(WallType::all()));
+        room.tiles.insert((x, y), Options(WallType::all()));
     }
 }
 
@@ -62,10 +62,10 @@ pub fn add_missing_tiles(room: &mut Room) {
 pub fn remove_impossible_options(room: &mut Room) {
     for (pos, tile) in room.clone().tiles.iter_mut() {
         match tile {
-            Tile::WallType(_) => continue,
-            Tile::Options(options) => {
+            Known(_) => continue,
+            Options(options) => {
                 options.retain(|option| room.is_valid_wall_type_for_position(pos, &option));
-                room.tiles.insert(*pos, Tile::Options(options.clone()));
+                room.tiles.insert(*pos, Options(options.clone()));
             }
         }
     }
@@ -99,7 +99,7 @@ fn spawn_tile(
 /// WallType::Empty
 fn random_wall_type(rng: &mut SmallRng, wall_types: &HashSet<WallType>) -> WallType {
     if wall_types.is_empty() {
-        return WallType::Empty;
+        return Empty;
     }
     wall_types.iter().choose(rng).unwrap().clone()
 }
