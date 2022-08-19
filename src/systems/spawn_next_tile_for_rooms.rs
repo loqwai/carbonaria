@@ -2,10 +2,11 @@ use std::collections::HashSet;
 
 use bevy::prelude::*;
 use rand::{rngs::SmallRng, seq::IteratorRandom};
+use std::time::Instant;
 
 use crate::{
     bundles::WallBundle,
-    components::{Room, Tile::Known, Tile::Options, WallType, WallType::Empty},
+    components::{Room, WallType},
 };
 
 type Position = (i16, i16);
@@ -27,20 +28,27 @@ fn spawn_next_tile_for_room(
     rng: &mut SmallRng,
     mut room: Mut<Room>,
 ) {
-    if room.complete {
-        return;
-    }
-    add_missing_tiles(&mut room);
-    remove_impossible_options(&mut room);
-    update_complete(&mut room);
+    let start = Instant::now();
 
-    match room.options_with_least_entropy() {
-        None => return,
-        Some((pos, options)) => {
-            let wall_type = random_wall_type(rng, &options);
+    loop {
+        if room.is_complete() {
+            println!("elapsed: {:?}", start.elapsed());
+            panic!("panicking!");
+            // return;
+        }
 
-            room.tiles.insert(pos, Known(wall_type));
-            spawn_tile(commands, asset_server, &pos, wall_type);
+        add_missing_tiles(&mut room);
+        remove_impossible_options(&mut room);
+
+        match room.options_with_least_entropy() {
+            None => return,
+            Some((pos, options)) => {
+                let wall_type = random_wall_type(rng, &options);
+
+                room.known_tiles.insert(pos, wall_type);
+                room.options_tiles.remove(&pos);
+                spawn_tile(commands, asset_server, &pos, wall_type);
+            }
         }
     }
 }
@@ -48,34 +56,21 @@ fn spawn_next_tile_for_room(
 /// add_missing_tiles iterates over all the confirmed tiles
 /// and ensures that their direct neighbors all have tiles
 pub fn add_missing_tiles(room: &mut Room) {
-    for (x, y) in room.open_port_positions() {
+    for (x, y) in room.new_open_port_positions() {
         if room.out_of_range(x) || room.out_of_range(y) {
             continue;
         }
 
-        room.tiles.insert((x, y), Options(WallType::all()));
+        room.options_tiles.insert((x, y), WallType::all());
     }
 }
 
 /// update_options mutates the room's tiles to remove all
 /// options that are not allowed due to port mismatches.
 pub fn remove_impossible_options(room: &mut Room) {
-    for (pos, tile) in room.clone().tiles.iter_mut() {
-        match tile {
-            Known(_) => continue,
-            Options(options) => {
-                options.retain(|option| room.is_valid_wall_type_for_position(pos, &option));
-                room.tiles.insert(*pos, Options(options.clone()));
-            }
-        }
-    }
-}
-
-/// update_complete checks to see if there are any open port left. If not,
-/// then it updates room.complete to be true.
-pub fn update_complete(room: &mut Room) {
-    if room.tiles.iter().all(|(_, t)| t.is_wall_type()) {
-        room.complete = true
+    for (pos, options) in room.options_tiles.clone().iter_mut() {
+        options.retain(|option| room.is_valid_wall_type_for_position(pos, &option));
+        room.options_tiles.insert(*pos, options.clone());
     }
 }
 
@@ -99,7 +94,7 @@ fn spawn_tile(
 /// WallType::Empty
 fn random_wall_type(rng: &mut SmallRng, wall_types: &HashSet<WallType>) -> WallType {
     if wall_types.is_empty() {
-        return Empty;
+        return WallType::Empty;
     }
     wall_types.iter().choose(rng).unwrap().clone()
 }

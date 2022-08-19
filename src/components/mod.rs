@@ -5,7 +5,6 @@ mod wall_type;
 use bevy::prelude::*;
 
 pub use room::Room;
-pub use room::Tile;
 pub use swing_stick_animation::SwingStickAnimation;
 pub use wall_type::Port;
 pub use wall_type::PortType;

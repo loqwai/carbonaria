@@ -7,69 +7,45 @@ use bevy::prelude::*;
 
 use super::wall_type::{Port, PortType, WallType};
 
-#[derive(Clone, Debug)]
-pub enum Tile {
-    Known(WallType),
-    Options(HashSet<WallType>),
-}
-
-impl Tile {
-    pub fn is_options(&self) -> bool {
-        match self {
-            Tile::Known(_) => false,
-            Tile::Options(_) => true,
-        }
-    }
-
-    pub fn is_wall_type(&self) -> bool {
-        match self {
-            Tile::Known(_) => true,
-            Tile::Options(_) => false,
-        }
-    }
-
-    pub fn as_options(&self) -> &HashSet<WallType> {
-        match self {
-            Tile::Known(_) => panic!("Called as_options on a Tile that was a WallType"),
-            Tile::Options(options) => options,
-        }
-    }
-
-    /// coerce_into_vec will either return a vector of the possible
-    /// wall_types, or a single item vector containing the locked in
-    /// wall_type if it is already known.
-    pub fn coerce_into_vec(&self) -> Vec<WallType> {
-        match self {
-            Tile::Known(wall_type) => vec![wall_type.clone()],
-            Tile::Options(options) => options.iter().cloned().collect(),
-        }
-    }
-}
-
 #[derive(Component, Clone)]
 pub struct Room {
     pub dimensions: i16,
-    pub complete: bool,
-    pub tiles: HashMap<Position, Tile>,
+    pub known_tiles: HashMap<Position, WallType>,
+    pub options_tiles: HashMap<Position, HashSet<WallType>>,
 }
 
 impl Room {
     pub fn new(dimensions: i16) -> Room {
         Room {
             dimensions,
-            complete: false,
-            tiles: HashMap::from([((0, 0), Tile::Known(WallType::Empty))]),
+            known_tiles: HashMap::from([((0, 0), WallType::Empty)]),
+            options_tiles: HashMap::new(),
         }
     }
 
-    pub fn options_with_least_entropy(&self) -> Option<(Position, HashSet<WallType>)> {
-        let (position, tile) = self.tiles
-            .iter()
-            .filter(|(_, t)| t.is_options())
-            .min_by(entropy)?
-            .clone();
+    pub fn is_complete(&self) -> bool {
+        return self.known_tiles.len() > 1 && self.options_tiles.is_empty();
+    }
 
-        return Some((position.clone(), tile.as_options().clone()))
+    pub fn options_with_least_entropy(&self) -> Option<(Position, HashSet<WallType>)> {
+        let (position, options) = self.options_tiles
+            .iter()
+            .min_by(entropy)?;
+
+        return Some((position.clone(), options.clone()))
+    }
+
+    /// get_wall_types_for_position will return the known position as a single item HashSet if its known,
+    /// if not the position is unknown, it will return the options for that position. If the options aren't 
+    /// defined, it will return the set of all walltypes
+    fn get_wall_types_for_position(&self, position: &Position) -> HashSet<WallType> {
+        match self.known_tiles.get(position) {
+            Some(wall_type) => HashSet::from([wall_type.clone()]),
+            None => match self.options_tiles.get(position) {
+                Some(wall_types) => wall_types.clone(),
+                None => WallType::all(),
+            }
+        }
     }
 
     pub fn is_valid_wall_type_for_position(
@@ -78,29 +54,24 @@ impl Room {
         wall_type: &WallType,
     ) -> bool {
         for port in wall_type.ports(position) {
-            match self.tiles.get(&port.position) {
-                None => continue,
-                Some(neighbor) => {
-                    let wall_types: Vec<WallType> = neighbor.coerce_into_vec();
+            let wall_types = self.get_wall_types_for_position(&port.position);
 
-                    if none_compatible(position, &port.port_type, &port.position, &wall_types) {
-                        return false;
-                    }
-                }
+            if none_compatible(position, &port.port_type, &port.position, &wall_types) {
+                return false;
             }
         }
 
         true
     }
 
-    pub fn open_port_positions(&self) -> HashSet<Position> {
-        self.tiles
+    pub fn new_open_port_positions(&self) -> HashSet<Position> {
+        self.known_tiles
             .iter()
             .map(tile_neighbors)
             .collect::<Vec<HashSet<Position>>>()
             .iter()
             .flatten()
-            .filter(|&p| !self.tiles.contains_key(&p))
+            .filter(|&p| !self.known_tiles.contains_key(&p) && !self.options_tiles.contains_key(&p))
             .cloned()
             .collect()
     }
@@ -115,11 +86,8 @@ impl Room {
 
 type Position = (i16, i16);
 
-fn tile_neighbors((position, tile): (&Position, &Tile)) -> HashSet<Position> {
-    match tile {
-        Tile::Options(_) => HashSet::new(),
-        Tile::Known(_) => neighbor_positions_for_position(position),
-    }
+fn tile_neighbors((position, _): (&Position, &WallType)) -> HashSet<Position> {
+    neighbor_positions_for_position(position)
 }
 
 fn neighbor_positions_for_position(position: &Position) -> HashSet<Position> {
@@ -141,7 +109,7 @@ fn none_compatible(
     position: &(i16, i16),
     port_type: &PortType,
     neighbor_position: &Position,
-    neighbor_wall_types: &Vec<WallType>,
+    neighbor_wall_types: &HashSet<WallType>,
 ) -> bool {
     !any_compatible(position, port_type, neighbor_position, neighbor_wall_types)
 }
@@ -152,7 +120,7 @@ fn any_compatible(
     position: &(i16, i16),
     port_type: &PortType,
     neighbor_position: &Position,
-    neighbor_wall_types: &Vec<WallType>,
+    neighbor_wall_types: &HashSet<WallType>,
 ) -> bool {
     neighbor_wall_types.iter().any(|neighbor_wall_type| {
         compatible_neighbor(position, port_type, neighbor_position, neighbor_wall_type)
@@ -201,11 +169,6 @@ fn find_neighbors_port(
     return None;
 }
 
-fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Ordering {
-    match (t1, t2) {
-        (Tile::Known(_), Tile::Known(_)) => Ordering::Equal,
-        (Tile::Known(_), Tile::Options(_)) => Ordering::Less,
-        (Tile::Options(_), Tile::Known(_)) => Ordering::Greater,
-        (Tile::Options(o1), Tile::Options(o2)) => o1.len().cmp(&o2.len()),
-    }
+fn entropy((_, o1): &(&Position, &HashSet<WallType>), (_, o2): &(&Position, &HashSet<WallType>)) -> Ordering {
+    o1.len().cmp(&o2.len()) 
 }

@@ -3,7 +3,7 @@ use heron::CollisionShape;
 
 use crate::{
     bundles::WallBundle,
-    components::{Room, Tile, WallType},
+    components::{Room, WallType},
     resources::Config,
 };
 
@@ -12,19 +12,14 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config
 
     commands.spawn().insert(room.clone());
 
-    for (position, tile) in room.tiles.iter() {
-        match tile {
-            Tile::Options(_) => (),
-            Tile::Known(wall_type) => {
-                let wall = commands
-                    .spawn_bundle(WallBundle::new(&asset_server, &wall_type, *position))
-                    .id();
+    for (position, wall_type) in room.known_tiles.iter() {
+        let wall = commands
+            .spawn_bundle(WallBundle::new(&asset_server, wall_type, *position))
+            .id();
 
-                for shape in collision_shapes_for_wall_type(&wall_type) {
-                    let child = commands.spawn().insert(shape).id();
-                    commands.entity(wall).push_children(&[child]);
-                }
-            }
+        for shape in collision_shapes_for_wall_type(wall_type) {
+            let child = commands.spawn().insert(shape).id();
+            commands.entity(wall).push_children(&[child]);
         }
     }
 }
