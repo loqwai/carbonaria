@@ -35,6 +35,12 @@ impl Tile {
         }
     }
 
+    /// Updates the tile to become a specific WallType. This mutates
+    /// the tile.
+    pub fn convert_to_wall_type(&mut self, wall_type: WallType) {
+        *self = Tile::WallType(wall_type)
+    }
+
     /// coerce_into_vec will either return a vector of the possible
     /// wall_types, or a single item vector containing the locked in
     /// wall_type if it is already known.
@@ -62,12 +68,11 @@ impl Room {
         }
     }
 
-    pub fn position_of_options_tile_with_least_entropy(&self) -> Option<Position> {
+    pub fn options_tile_with_least_entropy(&mut self) -> Option<(&Position, &mut Tile)> {
         self.tiles
-            .iter()
+            .iter_mut()
             .filter(|(_, t)| t.is_options())
             .min_by(entropy)
-            .and_then(|(position, _)| Some(*position))
     }
 
     pub fn is_valid_wall_type_for_position(
@@ -199,7 +204,7 @@ fn find_neighbors_port(
     return None;
 }
 
-fn entropy((_, t1): &(&Position, &Tile), (_, t2): &(&Position, &Tile)) -> Ordering {
+fn entropy((_, t1): &(&Position, &mut Tile), (_, t2): &(&Position, &mut Tile)) -> Ordering {
     match (t1, t2) {
         (Tile::WallType(_), Tile::WallType(_)) => Ordering::Equal,
         (Tile::WallType(_), Tile::Options(_)) => Ordering::Less,
