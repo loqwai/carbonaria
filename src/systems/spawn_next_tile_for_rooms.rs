@@ -2,7 +2,6 @@ use std::collections::HashSet;
 
 use bevy::prelude::*;
 use rand::{rngs::SmallRng, seq::IteratorRandom};
-use std::time::Instant;
 
 use crate::{
     bundles::WallBundle,
@@ -28,44 +27,62 @@ fn spawn_next_tile_for_room(
     rng: &mut SmallRng,
     mut room: Mut<Room>,
 ) {
-    let start = Instant::now();
+    if room.is_complete() {
+        return;
+    }
 
-    loop {
-        if room.is_complete() {
-            println!("elapsed: {:?}, {}", start.elapsed(), room.known_tiles.len());
-            panic!("panicking!");
-            // return;
+    remove_impossible_options(commands, asset_server, &mut room);
+
+    match room.options_with_least_entropy() {
+        None => return,
+        Some((pos, options)) => {
+            let wall_type = random_wall_type(rng, &options);
+
+            confirm_wall_type(commands, asset_server, &mut room, pos, wall_type);
+        }
+    }
+}
+
+fn confirm_wall_type(
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    room: &mut Room,
+    pos: (i16, i16),
+    wall_type: WallType,
+) {
+    room.known_tiles.insert(pos, wall_type);
+    room.options_tiles.remove(&pos);
+    spawn_tile(commands, asset_server, &pos, wall_type);
+    for neighbor_position in neighbor_positions_for_position(&pos) {
+        if room.out_of_bounds(&neighbor_position) || room.is_occupied(&neighbor_position) {
+            continue;
         }
 
-        remove_impossible_options(&mut room);
-
-        match room.options_with_least_entropy() {
-            None => return,
-            Some((pos, options)) => {
-                let wall_type = random_wall_type(rng, &options);
-                room.known_tiles.insert(pos, wall_type);
-                room.options_tiles.remove(&pos);
-                spawn_tile(commands, asset_server, &pos, wall_type);
-
-                for neighbor_position in neighbor_positions_for_position(&pos) {
-                    if room.out_of_bounds(&neighbor_position) || room.occupied_positions.contains(&neighbor_position) {
-                        continue
-                    }
-
-                    room.options_tiles.insert(neighbor_position, WallType::all());
-                    room.occupied_positions.insert(neighbor_position);
-                }
-            }
-        }
+        room.options_tiles
+            .insert(neighbor_position, WallType::all());
     }
 }
 
 /// update_options mutates the room's tiles to remove all
 /// options that are not allowed due to port mismatches.
-pub fn remove_impossible_options(room: &mut Room) {
+pub fn remove_impossible_options(
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    room: &mut Room,
+) {
     for (pos, options) in room.options_tiles.clone().iter_mut() {
         options.retain(|option| room.is_valid_wall_type_for_position(pos, &option));
         room.options_tiles.insert(*pos, options.clone());
+
+        if options.len() == 1 {
+            confirm_wall_type(
+                commands,
+                asset_server,
+                room,
+                *pos,
+                *options.iter().next().unwrap(),
+            )
+        }
     }
 }
 

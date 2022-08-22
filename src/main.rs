@@ -6,6 +6,7 @@ mod components;
 mod events;
 mod resources;
 mod systems;
+mod util;
 
 use bevy::prelude::*;
 use heron::PhysicsPlugin;
@@ -17,7 +18,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin::default())
         .insert_resource(MobSpawnTimer(Timer::from_seconds(5.0, true)))
-        .insert_resource(Config { dimensions: 16 })
+        .insert_resource(Config { dimensions: 32 })
         .insert_resource(SmallRng::from_entropy())
         .add_event::<events::SwingStickEvent>()
         .add_startup_system(systems::spawn_camera)

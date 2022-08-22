@@ -3,16 +3,15 @@ use std::{
     collections::{HashMap, HashSet},
 };
 
-use bevy::prelude::*;
+use bevy::prelude::Component;
 
 use super::wall_type::{Port, PortType, WallType};
 
-#[derive(Component, Clone)]
+#[derive(Clone, Component)]
 pub struct Room {
     pub dimensions: i16,
     pub known_tiles: HashMap<Position, WallType>,
     pub options_tiles: HashMap<Position, HashSet<WallType>>,
-    pub occupied_positions: HashSet<Position>,
 }
 
 impl Room {
@@ -21,34 +20,38 @@ impl Room {
             dimensions,
             known_tiles: HashMap::from([((0, 0), WallType::Empty)]),
             options_tiles: HashMap::from([
-                ((0,1), WallType::all()),
-                ((0,-1), WallType::all()),
-                ((1,0), WallType::all()),
-                ((-1,0), WallType::all()),
+                ((0, 1), WallType::all()),
+                ((0, -1), WallType::all()),
+                ((1, 0), WallType::all()),
+                ((-1, 0), WallType::all()),
             ]),
-            occupied_positions: vec![(0, 0)].iter().cloned().collect(),
         }
     }
 
     pub fn is_complete(&self) -> bool {
-        return self.known_tiles.len() > 1 && self.options_tiles.is_empty();
+        self.known_tiles.len() > 1 && self.options_tiles.is_empty()
+    }
+
+    pub fn is_occupied(&self, pos: &Position) -> bool {
+        self.known_tiles.contains_key(pos) || self.options_tiles.contains_key(pos)
     }
 
     pub fn options_with_least_entropy(&self) -> Option<(Position, HashSet<WallType>)> {
-        let (position, options) = self.options_tiles
-            .iter()
-            .min_by(entropy)?;
+        let (position, options) = self.options_tiles.iter().min_by(entropy)?;
 
-        return Some((position.clone(), options.clone()))
+        return Some((position.clone(), options.clone()));
     }
 
     /// get_wall_types_for_position will return the known position as a single item HashSet if its known,
-    /// if not the position is unknown, it will return the options for that position. If the options aren't 
+    /// if not the position is unknown, it will return the options for that position. If the options aren't
     /// defined, it will return none
     fn get_wall_types_for_position(&self, position: &Position) -> Option<HashSet<WallType>> {
         match self.known_tiles.get(position) {
             Some(wall_type) => Some(HashSet::from([wall_type.clone()])),
-            None => self.options_tiles.get(position).map(|options| options.clone())
+            None => self
+                .options_tiles
+                .get(position)
+                .map(|options| options.clone()),
         }
     }
 
@@ -64,7 +67,7 @@ impl Room {
                     if none_compatible(position, &port.port_type, &port.position, &wall_types) {
                         return false;
                     }
-                },
+                }
             }
         }
 
@@ -151,6 +154,9 @@ fn find_neighbors_port(
     return None;
 }
 
-fn entropy((_, o1): &(&Position, &HashSet<WallType>), (_, o2): &(&Position, &HashSet<WallType>)) -> Ordering {
-    o1.len().cmp(&o2.len()) 
+fn entropy(
+    (_, o1): &(&Position, &HashSet<WallType>),
+    (_, o2): &(&Position, &HashSet<WallType>),
+) -> Ordering {
+    o1.len().cmp(&o2.len())
 }
