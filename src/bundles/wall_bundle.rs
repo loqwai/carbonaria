@@ -7,7 +7,7 @@ use bevy::{
 };
 use heron::RigidBody;
 
-use crate::components::{Wall, WallType};
+use crate::components::{TileType, Wall, WallType};
 
 type Position = (i16, i16);
 
@@ -38,26 +38,19 @@ fn filename_for_wall_texture(texture: WallTexture) -> String {
 }
 
 fn texture_for_wall_type(wall_type: &WallType) -> String {
-    match wall_type {
-        WallType::Empty => filename_for_wall_texture(WallTexture::Empty),
-        WallType::Vertical => filename_for_wall_texture(WallTexture::Straight),
-        WallType::Horizontal => filename_for_wall_texture(WallTexture::Straight),
-        WallType::TopLeftCorner => filename_for_wall_texture(WallTexture::Corner),
-        WallType::TopRightCorner => filename_for_wall_texture(WallTexture::Corner),
-        WallType::BottomRightCorner => filename_for_wall_texture(WallTexture::Corner),
-        WallType::BottomLeftCorner => filename_for_wall_texture(WallTexture::Corner),
+    match wall_type.tile_type {
+        TileType::Empty => filename_for_wall_texture(WallTexture::Empty),
+        TileType::Straight => filename_for_wall_texture(WallTexture::Straight),
+        TileType::Corner => filename_for_wall_texture(WallTexture::Corner),
     }
 }
 
 fn rotation_for_wall_type(wall_type: &WallType) -> Quat {
-    Quat::from_rotation_z(match wall_type {
-        WallType::Empty => 0.0,
-        WallType::Vertical => PI / 2.0,
-        WallType::Horizontal => 0.0,
-        WallType::TopLeftCorner => PI,
-        WallType::TopRightCorner => PI / 2.0,
-        WallType::BottomRightCorner => 0.0,
-        WallType::BottomLeftCorner => PI / -2.0,
+    Quat::from_rotation_z(match wall_type.quarter_rotations {
+        crate::components::QuarterRotation::Zero => 0.0,
+        crate::components::QuarterRotation::One => PI / 2.0,
+        crate::components::QuarterRotation::Two => PI,
+        crate::components::QuarterRotation::Three => PI / -2.0,
     })
 }
 
@@ -91,7 +84,7 @@ impl Default for WallBundle {
     fn default() -> Self {
         Self {
             wall: Wall,
-            wall_type: WallType::Empty,
+            wall_type: WallType::empty(),
             rigid_body: RigidBody::Static,
             sprite_bundle: Default::default(),
         }

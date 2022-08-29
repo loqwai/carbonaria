@@ -18,7 +18,7 @@ impl Room {
     pub fn new(dimensions: i16) -> Room {
         Room {
             dimensions,
-            known_tiles: HashMap::from([((0, 0), WallType::Empty)]),
+            known_tiles: HashMap::from([((0, 0), WallType::empty())]),
             options_tiles: HashMap::from([
                 ((0, 1), WallType::all()),
                 ((0, -1), WallType::all()),

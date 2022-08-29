@@ -102,11 +102,10 @@ fn spawn_tile(
     }
 }
 
-/// random_wall_type will select a random wall type from the set. If the set is empty, it will return
-/// WallType::Empty
+/// random_wall_type will select a random wall type from the set. If the set is empty, it will return an empty wall type
 fn random_wall_type(rng: &mut SmallRng, wall_types: &HashSet<WallType>) -> WallType {
     if wall_types.is_empty() {
-        return WallType::Empty;
+        return WallType::empty();
     }
     wall_types.iter().choose(rng).unwrap().clone()
 }
