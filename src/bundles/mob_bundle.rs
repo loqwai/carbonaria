@@ -21,7 +21,7 @@ pub struct MobBundle {
 type Position = (f32, f32);
 
 impl MobBundle {
-    pub fn new(asset_server: Res<AssetServer>, (x, y): Position) -> MobBundle {
+    pub fn new(asset_server: &Res<AssetServer>, (x, y): Position) -> MobBundle {
         MobBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("mob.png"),
