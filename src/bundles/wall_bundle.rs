@@ -26,6 +26,7 @@ enum WallTexture {
     Empty,
     Straight,
     Corner,
+    Tee,
 }
 
 fn filename_for_wall_texture(texture: WallTexture) -> String {
@@ -33,6 +34,7 @@ fn filename_for_wall_texture(texture: WallTexture) -> String {
         WallTexture::Empty => "wall-empty.png",
         WallTexture::Straight => "wall-straight.png",
         WallTexture::Corner => "wall-corner.png",
+        WallTexture::Tee => "wall-tee.png",
     }
     .into()
 }
@@ -42,6 +44,7 @@ fn texture_for_wall_type(wall_type: &WallType) -> String {
         TileType::Empty => filename_for_wall_texture(WallTexture::Empty),
         TileType::Straight => filename_for_wall_texture(WallTexture::Straight),
         TileType::Corner => filename_for_wall_texture(WallTexture::Corner),
+        TileType::Tee => filename_for_wall_texture(WallTexture::Tee),
     }
 }
 

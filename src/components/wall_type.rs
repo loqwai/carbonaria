@@ -8,11 +8,17 @@ pub enum TileType {
     Empty,
     Straight,
     Corner,
+    Tee,
 }
 
 impl TileType {
     pub fn all() -> HashSet<TileType> {
-        HashSet::from([TileType::Empty, TileType::Straight, TileType::Corner])
+        HashSet::from([
+            TileType::Empty,
+            TileType::Straight,
+            TileType::Corner,
+            TileType::Tee,
+        ])
     }
 }
 
@@ -96,6 +102,7 @@ impl WallType {
             TileType::Empty => Vec::new(),
             TileType::Straight => straight_piece(),
             TileType::Corner => corner_piece(),
+            TileType::Tee => tee_piece(),
         }
     }
 
@@ -134,6 +141,18 @@ fn corner_piece() -> Vec<CollisionShape> {
             (16.0, 16.0),
             (16.0, -32.0),
             (-16.0, -32.0),
+        ]),
+    ]
+}
+
+fn tee_piece() -> Vec<CollisionShape> {
+    vec![
+        cuboid(32.0, 16.0),
+        convex(vec![
+            (-16.0, 32.0),
+            (16.0, 32.0),
+            (16.0, -16.0),
+            (-16.0, -16.0),
         ]),
     ]
 }
@@ -208,6 +227,24 @@ fn ports_for_tile_type(tile_type: TileType) -> Vec<Port> {
             Port {
                 position: (-1, 0),
                 port_type: PortType::EmptyRequired,
+            },
+        ],
+        TileType::Tee => vec![
+            Port {
+                position: (0, 1),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: (1, 0),
+                port_type: PortType::Wall,
+            },
+            Port {
+                position: (0, -1),
+                port_type: PortType::EmptyRequired,
+            },
+            Port {
+                position: (-1, 0),
+                port_type: PortType::Wall,
             },
         ],
     }
