@@ -1,6 +1,6 @@
 # Idea
 
-A game that combines Heat Signature, & Castle Doctrine
+A game that combines Heat Signature & Castle Doctrine
 
 2D top down game,
 You control a ship that you can use to fly next to other ships.
@@ -30,6 +30,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [ ] When you hit things with your stick, they die.
 * [ ] If you get hit with a stick, it subtracts some health
 * [ ] If you run out of health, it's game over
+* [ ] You can see how many points you have
 * [ ] You can see how much health you have left
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
 * [ ] The camera is limited to a small circle so you can't see very far.
