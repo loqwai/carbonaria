@@ -23,3 +23,11 @@ pub struct Stick;
 
 #[derive(Component)]
 pub struct Wall;
+
+#[derive(Component)]
+pub struct Points(pub usize);
+impl Default for Points {
+    fn default() -> Self {
+        Points(0)
+    }
+}
