@@ -21,6 +21,7 @@ fn main() {
         .insert_resource(Config { dimensions: 16 })
         .insert_resource(SmallRng::from_entropy())
         .add_event::<events::SwingStickEvent>()
+        .add_event::<events::StickHitEvent>()
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_room)
         .add_startup_system(systems::spawn_player)
@@ -32,5 +33,6 @@ fn main() {
         .add_system(systems::begin_swing_stick_animation)
         .add_system(systems::maybe_end_swing_stick_animation)
         .add_system(systems::detect_stick_hits)
+        .add_system(systems::on_stick_hit_increment_points)
         .run();
 }
