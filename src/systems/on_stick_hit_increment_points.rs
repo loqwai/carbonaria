@@ -12,19 +12,20 @@ pub fn on_stick_hit_increment_points(
     for _ in events
         .iter()
         .filter_map(|e| match e {
-            CollisionEvent::Started(t1, t2) => Some((t1, t2)),
+            CollisionEvent::Started(t1, t2) => Some(vec![t1, t2]),
             CollisionEvent::Stopped(_, _) => None,
         })
-        .filter(|(maybe_stick, maybe_mob)| {
-            if let Err(_) = q_mobs.get(maybe_mob.rigid_body_entity()) {
-                return false;
-            }
-
-            match q_sticks.get(maybe_stick.rigid_body_entity()) {
-                Err(_) => false,
-                Ok(animation_player) => !animation_player.is_paused(),
-            }
+        .filter(|items| {
+            items
+                .iter()
+                .any(|t| q_mobs.get(t.rigid_body_entity()).is_ok())
         })
+        .filter_map(|items| {
+            items
+                .iter()
+                .find_map(|t| q_sticks.get(t.rigid_body_entity()).ok())
+        })
+        .filter(|animation_player| !animation_player.is_paused())
     {
         for mut points in q_points.iter_mut() {
             points.0 += 1;
