@@ -22,7 +22,6 @@ pub fn on_stick_hit_increment_points(
                     Err(_) => continue,
                     Ok(mut points) => {
                         points.0 += 1;
-                        println!("points: {}", points.0);
                     }
                 }
             }

@@ -31,3 +31,6 @@ impl Default for Points {
         Points(0)
     }
 }
+
+#[derive(Component)]
+pub struct ScoreUI;

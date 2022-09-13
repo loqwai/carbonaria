@@ -25,6 +25,7 @@ fn main() {
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_room)
         .add_startup_system(systems::spawn_player)
+        .add_startup_system(systems::spawn_score_ui)
         .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)
         .add_system(systems::move_player)
@@ -34,5 +35,6 @@ fn main() {
         .add_system(systems::maybe_end_swing_stick_animation)
         .add_system(systems::detect_stick_hits)
         .add_system(systems::on_stick_hit_increment_points)
+        .add_system(systems::update_score_ui)
         .run();
 }

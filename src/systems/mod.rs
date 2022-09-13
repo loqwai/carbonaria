@@ -8,7 +8,9 @@ mod spawn_mobs;
 mod spawn_next_tile_for_rooms;
 mod spawn_player;
 mod spawn_room;
+mod spawn_score_ui;
 mod swing_stick;
+mod update_score_ui;
 
 pub use detect_stick_hits::detect_stick_hits;
 pub use mob_swings_stick_if_player_gets_close::mob_swings_stick_if_player_gets_close;
@@ -20,5 +22,7 @@ pub use spawn_mobs::spawn_mobs;
 pub use spawn_next_tile_for_rooms::spawn_next_tile_for_rooms;
 pub use spawn_player::spawn_player;
 pub use spawn_room::spawn_room;
+pub use spawn_score_ui::spawn_score_ui;
 pub use swing_stick::begin_swing_stick_animation;
 pub use swing_stick::maybe_end_swing_stick_animation;
+pub use update_score_ui::update_score_ui;

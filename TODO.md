@@ -27,13 +27,13 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x] Some of the other things also have sticks
 * [x] Those other things try and hit you with their stick when you get close
 * [x] When you hit things with your stick, you get points
+* [x] You can see how many points you have
 * [ ] When you hit things with your stick, they die.
 * [ ] If you get hit with a stick, it subtracts some health
 * [ ] If you run out of health, it's game over
-* [ ] You can see how many points you have
 * [ ] You can see how much health you have left
 * [ ] There should be a place to go. Let's call it an exit
-* [ ] You should always be able to reach the exit 
+* [ ] You should always be able to reach the exit
 * [ ] When you reach the exit, a new level is generated
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
 * [ ] The camera is limited to a small circle so you can't see very far.
