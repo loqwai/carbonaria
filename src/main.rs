@@ -38,5 +38,6 @@ fn main() {
         .add_system(systems::on_stick_hit_kill)
         .add_system(systems::on_stick_hit_subtract_health)
         .add_system(systems::update_score_ui)
+        .add_system(systems::update_health_ui)
         .run();
 }

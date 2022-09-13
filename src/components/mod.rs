@@ -42,3 +42,6 @@ impl Default for Health {
         Health(10)
     }
 }
+
+#[derive(Component)]
+pub struct HealthTarget(pub Entity, pub Entity);

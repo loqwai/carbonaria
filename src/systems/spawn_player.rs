@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::bundles::{PlayerBundle, StickBundle};
+use crate::bundles::{HealthBundle, PlayerBundle, StickBundle};
 
 pub fn spawn_player(
     mut commands: Commands,
@@ -8,9 +8,13 @@ pub fn spawn_player(
     animations: ResMut<Assets<AnimationClip>>,
 ) {
     let player = commands.spawn_bundle(PlayerBundle::new(&asset_server)).id();
+
     let stick = commands
         .spawn_bundle(StickBundle::new(&asset_server, animations))
         .id();
 
     commands.entity(player).push_children(&[stick]);
+
+    let camera = commands.spawn_bundle(UiCameraBundle::default()).id();
+    commands.spawn_bundle(HealthBundle::new(&asset_server, player, camera));
 }

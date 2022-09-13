@@ -8,7 +8,7 @@ pub fn spawn_score_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
         .spawn_bundle(TextBundle {
             text: Text {
                 sections: vec![TextSection {
-                    value: "".to_string(),
+                    value: "dsadasd".to_string(),
                     style: TextStyle {
                         font: asset_server.load("fonts/10100.otf"),
                         font_size: 30.0,
@@ -18,7 +18,7 @@ pub fn spawn_score_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..Default::default()
             },
             style: Style {
-                position_type: PositionType::Absolute,
+                position_type: PositionType::Relative,
                 position: Rect {
                     top: Val::Px(5.0),
                     left: Val::Px(15.0),

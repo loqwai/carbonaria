@@ -12,6 +12,7 @@ mod spawn_player;
 mod spawn_room;
 mod spawn_score_ui;
 mod swing_stick;
+mod update_health_ui;
 mod update_score_ui;
 
 pub use detect_stick_hits::detect_stick_hits;
@@ -29,4 +30,5 @@ pub use spawn_room::spawn_room;
 pub use spawn_score_ui::spawn_score_ui;
 pub use swing_stick::begin_swing_stick_animation;
 pub use swing_stick::maybe_end_swing_stick_animation;
+pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
