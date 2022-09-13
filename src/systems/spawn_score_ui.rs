@@ -8,11 +8,11 @@ pub fn spawn_score_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
         .spawn_bundle(TextBundle {
             text: Text {
                 sections: vec![TextSection {
-                    value: "Score: 0".to_string(),
+                    value: "".to_string(),
                     style: TextStyle {
                         font: asset_server.load("fonts/10100.otf"),
-                        font_size: 20.0,
-                        color: Color::BLACK,
+                        font_size: 30.0,
+                        color: Color::WHITE,
                     },
                 }],
                 ..Default::default()

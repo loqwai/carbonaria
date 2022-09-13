@@ -28,7 +28,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x] Those other things try and hit you with their stick when you get close
 * [x] When you hit things with your stick, you get points
 * [x] You can see how many points you have
-* [ ] When you hit things with your stick, they die.
+* [x] When you hit things with your stick, they die.
 * [ ] If you get hit with a stick, it subtracts some health
 * [ ] If you run out of health, it's game over
 * [ ] You can see how much health you have left

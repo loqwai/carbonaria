@@ -3,6 +3,7 @@ mod mob_swings_stick_if_player_gets_close;
 mod move_player;
 mod on_click_swing_stick;
 mod on_stick_hit_increment_points;
+mod on_stick_hit_kill;
 mod spawn_camera;
 mod spawn_mobs;
 mod spawn_next_tile_for_rooms;
@@ -17,6 +18,7 @@ pub use mob_swings_stick_if_player_gets_close::mob_swings_stick_if_player_gets_c
 pub use move_player::move_player;
 pub use on_click_swing_stick::on_click_swing_stick;
 pub use on_stick_hit_increment_points::on_stick_hit_increment_points;
+pub use on_stick_hit_kill::on_stick_hit_kill;
 pub use spawn_camera::spawn_camera;
 pub use spawn_mobs::spawn_mobs;
 pub use spawn_next_tile_for_rooms::spawn_next_tile_for_rooms;
