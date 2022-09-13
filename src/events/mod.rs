@@ -7,5 +7,5 @@ pub struct SwingStickEvent {
 
 pub struct StickHitEvent {
     pub stick: Entity,
-    pub mob: Entity,
+    pub target: Entity,
 }

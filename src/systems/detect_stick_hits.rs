@@ -1,18 +1,14 @@
 use bevy::prelude::*;
 use heron::CollisionEvent;
 
-use crate::{
-    components::{Mob, Stick},
-    events::StickHitEvent,
-};
+use crate::{components::Stick, events::StickHitEvent};
 
 pub fn detect_stick_hits(
     q_sticks: Query<&Stick>,
-    q_mobs: Query<&Mob>,
     mut collision_events: EventReader<CollisionEvent>,
     mut stick_hit_events: EventWriter<StickHitEvent>,
 ) {
-    for (stick, mob) in collision_events
+    for (stick, target) in collision_events
         .iter()
         .filter_map(|e| match e {
             CollisionEvent::Started(t1, t2) => {
@@ -22,14 +18,14 @@ pub fn detect_stick_hits(
         })
         .filter_map(|items| {
             let stick = items.iter().find(|&t| q_sticks.get(*t).is_ok());
-            let mob = items.iter().find(|&t| q_mobs.get(*t).is_ok());
+            let target = items.iter().find(|&t| Some(t) != stick);
 
-            match (stick, mob) {
-                (Some(stick), Some(mob)) => Some((*stick, *mob)),
+            match (stick, target) {
+                (Some(stick), Some(target)) => Some((*stick, *target)),
                 _ => None,
             }
         })
     {
-        stick_hit_events.send(StickHitEvent { stick, mob })
+        stick_hit_events.send(StickHitEvent { stick, target })
     }
 }

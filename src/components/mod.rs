@@ -34,3 +34,11 @@ impl Default for Points {
 
 #[derive(Component)]
 pub struct ScoreUI;
+
+#[derive(Component)]
+pub struct Health(pub usize);
+impl Default for Health {
+    fn default() -> Self {
+        Health(10)
+    }
+}

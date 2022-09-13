@@ -4,7 +4,7 @@ use bevy::{
 };
 use heron::{CollisionShape, Damping, RigidBody, RotationConstraints, Velocity};
 
-use crate::components::{Player, Points};
+use crate::components::{Health, Player, Points};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
@@ -15,6 +15,7 @@ pub struct PlayerBundle {
     pub damping: Damping,
     pub rotation_constraints: RotationConstraints,
     pub points: Points,
+    pub health: Health,
 
     #[bundle]
     pub sprite_bundle: SpriteBundle,
@@ -45,6 +46,7 @@ impl Default for PlayerBundle {
                 allow_y: false,
                 allow_z: false,
             },
+            health: Default::default(),
             sprite_bundle: Default::default(),
             points: Default::default(),
         }
