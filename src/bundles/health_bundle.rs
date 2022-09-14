@@ -11,9 +11,9 @@ pub struct HealthBundle {
 }
 
 impl HealthBundle {
-    pub fn new(asset_server: &Res<AssetServer>, target: Entity) -> HealthBundle {
+    pub fn new(asset_server: &Res<AssetServer>) -> HealthBundle {
         HealthBundle {
-            target: HealthTarget(target),
+            target: HealthTarget,
             text_2d_bundle: Text2dBundle {
                 text: Text {
                     sections: vec![TextSection {
@@ -24,6 +24,14 @@ impl HealthBundle {
                             color: Color::WHITE,
                         },
                     }],
+                    alignment: TextAlignment {
+                        vertical: VerticalAlign::Bottom,
+                        horizontal: HorizontalAlign::Center,
+                    },
+                    ..Default::default()
+                },
+                transform: Transform {
+                    translation: Vec3::new(0.0, -40.0, 1.0),
                     ..Default::default()
                 },
                 ..Default::default()

@@ -13,7 +13,7 @@ pub fn spawn_player(
         .spawn_bundle(StickBundle::new(&asset_server, animations))
         .id();
 
-    commands.entity(player).push_children(&[stick]);
+    let health_ui = commands.spawn_bundle(HealthBundle::new(&asset_server)).id();
 
-    commands.spawn_bundle(HealthBundle::new(&asset_server, player));
+    commands.entity(player).push_children(&[stick, health_ui]);
 }
