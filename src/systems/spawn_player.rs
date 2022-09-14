@@ -15,6 +15,5 @@ pub fn spawn_player(
 
     commands.entity(player).push_children(&[stick]);
 
-    let camera = commands.spawn_bundle(UiCameraBundle::default()).id();
-    commands.spawn_bundle(HealthBundle::new(&asset_server, player, camera));
+    commands.spawn_bundle(HealthBundle::new(&asset_server, player));
 }

@@ -7,14 +7,14 @@ pub struct HealthBundle {
     pub target: HealthTarget,
 
     #[bundle]
-    pub text_bundle: TextBundle,
+    pub text_2d_bundle: Text2dBundle,
 }
 
 impl HealthBundle {
-    pub fn new(asset_server: &Res<AssetServer>, target: Entity, camera: Entity) -> HealthBundle {
+    pub fn new(asset_server: &Res<AssetServer>, target: Entity) -> HealthBundle {
         HealthBundle {
-            target: HealthTarget(target, camera),
-            text_bundle: TextBundle {
+            target: HealthTarget(target),
+            text_2d_bundle: Text2dBundle {
                 text: Text {
                     sections: vec![TextSection {
                         value: "asdsad".to_string(),
@@ -26,15 +26,6 @@ impl HealthBundle {
                     }],
                     ..Default::default()
                 },
-                // style: Style {
-                //     position_type: PositionType::Absolute,
-                //     // position: Rect {
-                //     //     top: Val::Px(0.0),
-                //     //     left: Val::Px(0.0),
-                //     //     ..default()
-                //     // },
-                //     ..Default::default()
-                // },
                 ..Default::default()
             },
         }

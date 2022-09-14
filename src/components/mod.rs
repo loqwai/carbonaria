@@ -44,4 +44,4 @@ impl Default for Health {
 }
 
 #[derive(Component)]
-pub struct HealthTarget(pub Entity, pub Entity);
+pub struct HealthTarget(pub Entity);
