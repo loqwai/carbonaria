@@ -37,5 +37,6 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [ ] When you reach the exit, a new level is generated
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
 * [ ] The camera is limited to a small circle so you can't see very far.
+* [ ] The camera follows the player.
 * [ ] The room defers generating tiles until they are about to come into view.
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
