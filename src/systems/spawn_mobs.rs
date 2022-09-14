@@ -1,8 +1,6 @@
-use bevy::{
-    core::Time,
-    prelude::{AnimationClip, AssetServer, Assets, BuildChildren, Commands, Res, ResMut},
-};
+use bevy::prelude::{AnimationClip, AssetServer, Assets, BuildChildren, Commands, Res, ResMut};
 
+use bevy::time::Time;
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
 

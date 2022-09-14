@@ -19,7 +19,7 @@ pub fn spawn_score_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             style: Style {
                 position_type: PositionType::Relative,
-                position: Rect {
+                position: UiRect {
                     top: Val::Px(5.0),
                     left: Val::Px(15.0),
                     ..default()

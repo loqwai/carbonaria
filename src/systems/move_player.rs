@@ -1,4 +1,4 @@
-use bevy::{ecs::system::QuerySingleError, input::Input, prelude::*};
+use bevy::{ecs::query::QuerySingleError, input::Input, prelude::*};
 use heron::Velocity;
 
 use crate::components::Player;
