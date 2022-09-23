@@ -1,4 +1,5 @@
 mod detect_stick_hits;
+mod follow_player_with_camera;
 mod mob_swings_stick_if_player_gets_close;
 mod move_player;
 mod on_click_swing_stick;
@@ -16,6 +17,7 @@ mod update_health_ui;
 mod update_score_ui;
 
 pub use detect_stick_hits::detect_stick_hits;
+pub use follow_player_with_camera::follow_player_with_camera;
 pub use mob_swings_stick_if_player_gets_close::mob_swings_stick_if_player_gets_close;
 pub use move_player::move_player;
 pub use on_click_swing_stick::on_click_swing_stick;

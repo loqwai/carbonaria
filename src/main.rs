@@ -30,6 +30,7 @@ fn main() {
         .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)
         .add_system(systems::move_player)
+        .add_system(systems::follow_player_with_camera)
         .add_system(systems::on_click_swing_stick)
         .add_system(systems::mob_swings_stick_if_player_gets_close)
         .add_system(systems::begin_swing_stick_animation)
