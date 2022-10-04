@@ -17,10 +17,13 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin::default())
-        .insert_resource(ImageSettings::default_nearest())
         .insert_resource(MobSpawnTimer(Timer::from_seconds(5.0, true)))
-        .insert_resource(Config { dimensions: 16 })
+        .insert_resource(Config {
+            dimensions: 16,
+            camera_follow_interpolation: 0.01,
+        })
         .insert_resource(SmallRng::from_entropy())
+        .insert_resource(ImageSettings::default_nearest())
         .add_event::<events::SwingStickEvent>()
         .add_event::<events::StickHitEvent>()
         .add_startup_system(systems::spawn_camera)
@@ -41,5 +44,6 @@ fn main() {
         .add_system(systems::on_stick_hit_subtract_health)
         .add_system(systems::update_score_ui)
         .add_system(systems::update_health_ui)
+        .add_system(systems::round_translations)
         .run();
 }

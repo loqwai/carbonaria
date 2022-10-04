@@ -33,12 +33,13 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x] If you run out of health, it's game over
 * [x] You can see how much health you have left
 * [x] The camera follows the player.
-* [ ] The camera follows the player with a bungee effect.
-* [ ] If the exit is off-screen, something should tell you where it is
+* [x] The camera follows the player with a bungee effect.
 * [ ] There should be a place to go. Let's call it an exit
+* [ ] If the exit is off-screen, something should tell you where it is
 * [ ] You should always be able to reach the exit
 * [ ] When you reach the exit, a new level is generated
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
 * [ ] The room defers generating tiles until they are about to come into view.
 * [ ] The camera is limited to a small circle so you can't see very far.
+* [ ] Figure out why some walls look weird while the camera is panning.
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
