@@ -41,6 +41,7 @@ fn main() {
         .add_system(systems::begin_swing_stick_animation)
         .add_system(systems::maybe_end_swing_stick_animation)
         .add_system(systems::detect_stick_hits)
+        .add_system(systems::on_exit_reset)
         .add_system(systems::on_stick_hit_increment_points)
         .add_system(systems::on_stick_hit_kill)
         .add_system(systems::on_stick_hit_subtract_health)

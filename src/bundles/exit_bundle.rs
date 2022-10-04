@@ -1,10 +1,14 @@
 use bevy::prelude::*;
+use heron::{CollisionShape, Collisions, RigidBody};
 
 use crate::components::Exit;
 
 #[derive(Bundle)]
 pub struct ExitBundle {
     pub exit: Exit,
+    pub rigid_body: RigidBody,
+    pub collision_shape: CollisionShape,
+    pub collisions: Collisions,
 
     #[bundle]
     pub sprite_bundle: SpriteBundle,
@@ -30,6 +34,12 @@ impl Default for ExitBundle {
     fn default() -> Self {
         Self {
             exit: Exit {},
+            rigid_body: RigidBody::Sensor,
+            collision_shape: CollisionShape::Cuboid {
+                half_extends: Vec3::new(32.0, 32.0, 0.0),
+                border_radius: None,
+            },
+            collisions: Default::default(),
             sprite_bundle: Default::default(),
         }
     }

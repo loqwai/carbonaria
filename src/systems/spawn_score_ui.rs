@@ -3,7 +3,6 @@ use bevy::prelude::*;
 use crate::components::ScoreUI;
 
 pub fn spawn_score_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
-    println!("spawn_score_ui");
     commands
         .spawn_bundle(TextBundle {
             text: Text {
