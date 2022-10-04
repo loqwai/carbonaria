@@ -17,7 +17,7 @@ where
 }
 
 pub fn random_position(config: &Res<Config>, rng: &mut ResMut<SmallRng>) -> Vec3 {
-    let max: f32 = config.dimensions.into();
+    let max: f32 = (config.dimensions / 2).into();
     let min: f32 = -max;
     let tile_size: f32 = config.tile_size.into();
 
