@@ -2,7 +2,11 @@ use bevy::prelude::*;
 
 use crate::{bundles::WallBundle, components::Room, resources::Config};
 
-pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config: Res<Config>) {
+pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config: Res<Config>, existing_rooms: Query<Entity, With<Room>>) {
+    if !existing_rooms.is_empty() {
+        return;
+    }
+
     let room = Room::new(config.dimensions);
 
     commands.spawn().insert(room.clone());
