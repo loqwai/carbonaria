@@ -2,8 +2,9 @@ use bevy::prelude::{AnimationClip, AssetServer, Assets, BuildChildren, Commands,
 
 use bevy::time::Time;
 use rand::rngs::SmallRng;
-use rand::{Rng, SeedableRng};
 
+use crate::resources::Config;
+use crate::util::random_position;
 use crate::{
     bundles::{MobBundle, StickBundle},
     resources::MobSpawnTimer,
@@ -15,16 +16,16 @@ pub fn spawn_mobs(
     mut timer: ResMut<MobSpawnTimer>,
     asset_server: Res<AssetServer>,
     animations: ResMut<Assets<AnimationClip>>,
+    config: Res<Config>,
+    mut rng: ResMut<SmallRng>,
 ) {
     timer.0.tick(time.delta());
 
     if timer.0.just_finished() {
-        let mut small_rng = SmallRng::from_entropy();
-        let x: f32 = small_rng.gen_range(-64.0..64.0);
-        let y: f32 = small_rng.gen_range(-64.0..64.0);
+        let position = random_position(&config, &mut rng);
 
         let mob = commands
-            .spawn_bundle(MobBundle::new(&asset_server, (x, y)))
+            .spawn_bundle(MobBundle::new(&asset_server, position))
             .id();
         let stick = commands
             .spawn_bundle(StickBundle::new(&asset_server, animations))

@@ -18,15 +18,13 @@ pub struct MobBundle {
     pub sprite_bundle: SpriteBundle,
 }
 
-type Position = (f32, f32);
-
 impl MobBundle {
-    pub fn new(asset_server: &Res<AssetServer>, (x, y): Position) -> MobBundle {
+    pub fn new(asset_server: &Res<AssetServer>, position: Vec3) -> MobBundle {
         MobBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("mob.png"),
                 transform: Transform {
-                    translation: Vec3::new(x, y, 0.0),
+                    translation: position,
                     ..Default::default()
                 },
                 ..Default::default()
