@@ -45,3 +45,6 @@ impl Default for Health {
 
 #[derive(Component)]
 pub struct HealthTarget;
+
+#[derive(Component)]
+pub struct Exit;

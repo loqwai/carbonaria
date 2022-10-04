@@ -20,6 +20,7 @@ fn main() {
         .insert_resource(MobSpawnTimer(Timer::from_seconds(5.0, true)))
         .insert_resource(Config {
             dimensions: 16,
+            tile_size: 64,
             camera_follow_interpolation: 0.01,
         })
         .insert_resource(SmallRng::from_entropy())
@@ -29,6 +30,7 @@ fn main() {
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_room)
         .add_startup_system(systems::spawn_player)
+        .add_startup_system(systems::spawn_exit)
         .add_startup_system(systems::spawn_score_ui)
         .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)
