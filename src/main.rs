@@ -45,6 +45,7 @@ fn main() {
         .add_system(systems::detect_exit)
         .add_system(systems::on_stick_hit_increment_points)
         .add_system(systems::on_reset_move_player_to_origin)
+        .add_system(systems::on_reset_despawn_all_mobs)
         .add_system(systems::on_stick_hit_kill)
         .add_system(systems::on_stick_hit_subtract_health)
         .add_system(systems::update_score_ui)
