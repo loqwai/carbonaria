@@ -14,5 +14,5 @@ pub fn detect_exit(
         return;
     }
 
-    reset_event_writer.send(ResetEvent {})
+    reset_event_writer.send(ResetEvent {});
 }
