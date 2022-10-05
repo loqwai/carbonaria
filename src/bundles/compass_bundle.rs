@@ -28,7 +28,7 @@ impl CompassBundle {
             name: name.clone(),
             compass: Compass{},
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("stick.png"),
+                texture: asset_server.load("compass.png"),
                 transform: Transform {
                     rotation: Quat::from_rotation_z(-PI),
                     ..Default::default()
