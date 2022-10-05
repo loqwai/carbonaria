@@ -29,12 +29,8 @@ impl CompassBundle {
             compass: Compass{},
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("compass.png"),
-                transform: Transform {
-                    rotation: Quat::from_rotation_z(-PI),
-                    ..Default::default()
-                },
                 sprite: Sprite {
-                    anchor: Anchor::Custom(Vec2::new(-20.0 / 32.0, 0.0)),
+                    anchor: Anchor::Custom(Vec2::new(0.0, -5.0 / 32.0)),
                     ..Default::default()
                 },
                 ..Default::default()

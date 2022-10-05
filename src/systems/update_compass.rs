@@ -20,8 +20,12 @@ pub fn update_compass(
 
                 let forward_dot_exit = compass_forward.dot(to_exit);
 
+                let compass_right = (compass.rotation * Vec3::X).xy();
+                let right_dot_exit = compass_right.dot(to_exit);
+                let rotation_sign = -f32::copysign(1.0, right_dot_exit);
+
                 let max_angle = forward_dot_exit.clamp(-1.0, 1.0).acos();
-                let rotation_angle =  (0.1 as f32).min(max_angle);
+                let rotation_angle =  rotation_sign * (0.1 as f32).min(max_angle);
                 compass.rotate_z(rotation_angle);
             }
         },
