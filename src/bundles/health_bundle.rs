@@ -31,7 +31,7 @@ impl HealthBundle {
                     ..Default::default()
                 },
                 transform: Transform {
-                    translation: Vec3::new(0.0, -40.0, 1.0),
+                    translation: Vec3::new(0.0, -40.0, -1.0),
                     ..Default::default()
                 },
                 ..Default::default()

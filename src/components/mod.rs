@@ -48,3 +48,6 @@ pub struct HealthTarget;
 
 #[derive(Component)]
 pub struct Exit;
+
+#[derive(Component)]
+pub struct Compass;
