@@ -1,7 +1,4 @@
-use bevy::{
-    prelude::{AssetServer, Bundle, Res},
-    sprite::SpriteBundle,
-};
+use bevy::{prelude::*, sprite::SpriteBundle};
 use heron::{CollisionShape, Damping, RigidBody, RotationConstraints, Velocity};
 
 use crate::components::{Health, Player, Points};
@@ -26,6 +23,10 @@ impl PlayerBundle {
         PlayerBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("player.png"),
+                transform: Transform {
+                    translation: Vec3::new(0.0, 0.0, 0.0),
+                    ..Default::default()
+                },
                 ..Default::default()
             },
             ..Default::default()
