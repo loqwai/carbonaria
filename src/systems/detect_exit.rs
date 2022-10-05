@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy::utils::HashSet;
 use heron::Collisions;
 
 use crate::components::{Exit, Player};
@@ -9,16 +10,12 @@ pub fn detect_exit(
     q_players: Query<Entity, With<Player>>,
     mut reset_event_writer: EventWriter<ResetEvent>,
 ) {
-    match q_players.get_single() {
-        Err(_) => return,
-        Ok(player) => {
-            let exit_happened = q_exits.iter().any(|collisions| collisions.contains(&player));
+    let players: HashSet<Entity> = q_players.iter().collect();
+    let collisions: HashSet<Entity> = q_exits.iter().flat_map(|cs| cs.entities()).collect();
 
-            if !exit_happened {
-                return;
-            }
-
-            reset_event_writer.send(ResetEvent {});
-        }
+    if players.is_disjoint(&collisions) {
+        return;
     }
+
+    reset_event_writer.send(ResetEvent {});
 }
