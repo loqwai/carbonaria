@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use bevy::prelude::*;
+use bevy::{prelude::*, render::primitives::Frustum};
 use rand::{rngs::SmallRng, seq::IteratorRandom};
 
 use crate::{
@@ -9,15 +9,20 @@ use crate::{
 };
 
 type Position = (i16, i16);
+/// ViewArea is defined by the upper left and lower right vertices
+type ViewArea = (Position, Position);
 
 pub fn spawn_next_tile_for_rooms(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut rooms_query: Query<&mut Room>,
     mut rng: ResMut<SmallRng>,
+    frustrums: Query<&Frustum, With<Camera>>,
 ) {
+    let view_area = view_area_from_frustrum(frustrums.get_single().unwrap());
+
     rooms_query.for_each_mut(|room| {
-        spawn_next_tile_for_room(&mut commands, &asset_server, rng.as_mut(), room)
+        spawn_next_tile_for_room(&mut commands, &asset_server, rng.as_mut(), room, &view_area)
     });
 }
 
@@ -26,6 +31,7 @@ fn spawn_next_tile_for_room(
     asset_server: &Res<AssetServer>,
     rng: &mut SmallRng,
     mut room: Mut<Room>,
+    view_area: &ViewArea,
 ) {
     if room.is_complete() {
         return;
@@ -33,7 +39,7 @@ fn spawn_next_tile_for_room(
 
     remove_impossible_options(commands, asset_server, &mut room);
 
-    match room.options_with_least_entropy() {
+    match room.options_with_least_entropy(view_area) {
         None => return,
         Some((pos, options)) => {
             let wall_type = random_wall_type(rng, &options);
@@ -41,6 +47,18 @@ fn spawn_next_tile_for_room(
             confirm_wall_type(commands, asset_server, &mut room, pos, wall_type);
         }
     }
+}
+
+fn view_area_from_frustrum(frustum: &Frustum) -> ViewArea {
+    let tile_size: f32 = 64.0;
+    let [left, right, top, bottom, _near, _far] = frustum.planes;
+
+    let x1 = -(left.d() / tile_size).round() as i16;
+    let y1 = -(top.d() / tile_size).round() as i16;
+    let x2 = (right.d() / tile_size).round() as i16;
+    let y2 = (bottom.d() / tile_size).round() as i16;
+
+    ((x1, y1), (x2, y2))
 }
 
 fn confirm_wall_type(

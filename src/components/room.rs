@@ -7,6 +7,10 @@ use bevy::prelude::Component;
 
 use super::wall_type::{Port, PortType, WallType};
 
+type Position = (i16, i16);
+/// ViewArea is defined by the upper left and lower right vertices
+type ViewArea = (Position, Position);
+
 #[derive(Clone, Component)]
 pub struct Room {
     pub dimensions: i16,
@@ -36,8 +40,20 @@ impl Room {
         self.known_tiles.contains_key(pos) || self.options_tiles.contains_key(pos)
     }
 
-    pub fn options_with_least_entropy(&self) -> Option<(Position, HashSet<WallType>)> {
-        let (position, options) = self.options_tiles.iter().min_by(entropy)?;
+    pub fn options_with_least_entropy(
+        &self,
+        view_area: &ViewArea,
+    ) -> Option<(Position, HashSet<WallType>)> {
+        let (position, options) = self
+            .options_tiles
+            .iter()
+            .filter(|(position, _)| {
+                let (x, y) = position;
+                let ((x1, y1), (x2, y2)) = view_area;
+
+                return (x1 <= x) && (x <= x2) && (y1 <= y) && (y <= y2);
+            })
+            .min_by(entropy)?;
 
         return Some((position.clone(), options.clone()));
     }
@@ -85,8 +101,6 @@ impl Room {
         !(min..=max).contains(n)
     }
 }
-
-type Position = (i16, i16);
 
 /// none_compatible returns true if none of the possible wall_types contain a port
 /// that could interface with our port.
