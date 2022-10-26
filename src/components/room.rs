@@ -5,6 +5,8 @@ use std::{
 
 use bevy::prelude::Component;
 
+use crate::util::is_inside_of;
+
 use super::wall_type::{Port, PortType, WallType};
 
 type Position = (i16, i16);
@@ -47,12 +49,7 @@ impl Room {
         let (position, options) = self
             .options_tiles
             .iter()
-            .filter(|(position, _)| {
-                let (x, y) = position;
-                let ((x1, y1), (x2, y2)) = view_area;
-
-                return (x1 <= x) && (x <= x2) && (y1 <= y) && (y <= y2);
-            })
+            .filter(|(position, _)| is_inside_of(view_area, position))
             .min_by(entropy)?;
 
         return Some((position.clone(), options.clone()));
@@ -78,7 +75,7 @@ impl Room {
     ) -> bool {
         for port in wall_type.ports(position) {
             match self.get_wall_types_for_position(&port.position) {
-                None => continue,
+                None => continue, // the position is unfilled, so every wall_type is valid for this port
                 Some(wall_types) => {
                     if none_compatible(position, &port.port_type, &port.position, &wall_types) {
                         return false;

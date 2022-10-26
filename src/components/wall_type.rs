@@ -178,7 +178,7 @@ fn ports_for_tile_type(tile_type: TileType) -> Vec<Port> {
         TileType::Empty => vec![
             Port {
                 position: (0, 1),
-                port_type: PortType::Empty,
+                port_type: PortType::EmptyRequired,
             },
             Port {
                 position: (1, 0),

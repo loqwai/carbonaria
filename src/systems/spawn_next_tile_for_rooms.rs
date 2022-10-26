@@ -6,6 +6,7 @@ use rand::{rngs::SmallRng, seq::IteratorRandom};
 use crate::{
     bundles::WallBundle,
     components::{Room, WallType},
+    util::is_inside_of,
 };
 
 type Position = (i16, i16);
@@ -37,7 +38,7 @@ fn spawn_next_tile_for_room(
         return;
     }
 
-    remove_impossible_options(commands, asset_server, &mut room);
+    remove_impossible_options(commands, asset_server, &mut room, view_area);
 
     match room.options_with_least_entropy(view_area) {
         None => return,
@@ -81,14 +82,16 @@ fn confirm_wall_type(
     }
 }
 
-/// update_options mutates the room's tiles to remove all
-/// options that are not allowed due to port mismatches.
 pub fn remove_impossible_options(
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
     room: &mut Room,
+    view_area: &ViewArea,
 ) {
     for (pos, options) in room.options_tiles.clone().iter_mut() {
+        if !is_inside_of(view_area, pos) {
+            continue;
+        }
         options.retain(|option| room.is_valid_wall_type_for_position(pos, &option));
         room.options_tiles.insert(*pos, options.clone());
 

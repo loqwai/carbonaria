@@ -26,3 +26,14 @@ pub fn random_position(config: &Res<Config>, rng: &mut ResMut<SmallRng>) -> Vec3
 
     Vec3::new(x, y, 0.0)
 }
+
+type Position = (i16, i16);
+/// ViewArea is defined by the upper left and lower right vertices
+type ViewArea = (Position, Position);
+
+pub fn is_inside_of(view_area: &ViewArea, position: &Position) -> bool {
+    let (x, y) = position;
+    let ((x1, y1), (x2, y2)) = view_area;
+
+    return (x1 <= x) && (x <= x2) && (y1 <= y) && (y <= y2);
+}

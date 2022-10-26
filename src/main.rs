@@ -21,7 +21,7 @@ fn main() {
         .insert_resource(Config {
             dimensions: 128,
             tile_size: 64,
-            camera_follow_interpolation: 0.01,
+            camera_follow_interpolation: 0.05,
             // camera_follow_interpolation: 1.0,
         })
         .insert_resource(SmallRng::from_entropy())
