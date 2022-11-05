@@ -62,3 +62,6 @@ impl Default for Speed {
         Speed(40.0)
     }
 }
+
+#[derive(Component)]
+pub struct Powerup;
