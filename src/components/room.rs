@@ -124,9 +124,8 @@ fn any_compatible(
 }
 
 /// compatible_neighbor returns true if the other walltype has a port facing us that
-/// can interface with our port.
-fn compatible_neighbor(
-    my_position: &Position,
+/// can interface with our port.  
+fn compatible_neighbor( my_position: &Position,
     my_port_type: &PortType,
     neighbor_position: &Position,
     neighbor_wall_type: &WallType,

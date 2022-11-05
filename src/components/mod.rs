@@ -51,3 +51,14 @@ pub struct Exit;
 
 #[derive(Component)]
 pub struct Compass;
+
+#[derive(Component)]
+pub struct SpeedUp;
+
+#[derive(Component)]
+pub struct Speed(pub f32);
+impl Default for Speed {
+    fn default() -> Self {
+        Speed(40.0)
+    }
+}

@@ -39,7 +39,10 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x] If the exit is off-screen, something should tell you where it is
 * [x] The room defers generating tiles until they are about to come into view.
 * [x] You should ~always~ usually be able to reach the exit
+* [ ] A Powerup you can pick up that makes you move faster
+* [ ] Mobs should spawn close to the player
+* [ ] Hitting the wall the stick should not count as a point
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
-* [ ] The camera is limited to a small circle so you can't see very far.
-* [ ] Figure out why some walls look weird while the camera is panning.
+* [x-ish] The camera is limited to a small circle so you can't see very far.
+* [ ] Figure out why some walls look weird
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator

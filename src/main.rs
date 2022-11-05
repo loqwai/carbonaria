@@ -33,6 +33,7 @@ fn main() {
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_player)
         .add_startup_system(systems::spawn_score_ui)
+        .add_startup_system(systems::spawn_speed_powerup)
         .add_system(systems::spawn_room)
         .add_system(systems::spawn_exit)
         .add_system(systems::spawn_next_tile_for_rooms)

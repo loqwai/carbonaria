@@ -20,12 +20,14 @@ mod spawn_next_tile_for_rooms;
 mod spawn_player;
 mod spawn_room;
 mod spawn_score_ui;
+mod spawn_speed_powerup;
 mod swing_stick;
 mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
 
 pub use detect_exit::detect_exit;
+pub use spawn_speed_powerup::spawn_speed_powerup;
 pub use detect_stick_hits::detect_stick_hits;
 pub use follow_player_with_camera::follow_player_with_camera;
 pub use mob_swings_stick_if_player_gets_close::mob_swings_stick_if_player_gets_close;
