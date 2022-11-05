@@ -1,4 +1,5 @@
 mod detect_exit;
+mod detect_powerup;
 mod detect_stick_hits;
 mod follow_player_with_camera;
 mod mob_swings_stick_if_player_gets_close;
@@ -25,8 +26,10 @@ mod swing_stick;
 mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
+mod update_speed_from_speedup;
 
 pub use detect_exit::detect_exit;
+pub use detect_powerup::detect_powerup;
 pub use spawn_speed_powerup::spawn_speed_powerup;
 pub use detect_stick_hits::detect_stick_hits;
 pub use follow_player_with_camera::follow_player_with_camera;
@@ -54,3 +57,4 @@ pub use swing_stick::maybe_end_swing_stick_animation;
 pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
+pub use update_speed_from_speedup::update_speed_from_speedup;
