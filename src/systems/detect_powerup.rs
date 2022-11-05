@@ -8,7 +8,7 @@ use bevy::prelude::*;
 pub fn detect_powerup(
     mut commands: Commands,
     q_things: Query<Entity, Without<Powerup>>,
-    q_powerups : Query<(&Collisions, Entity), With<Powerup>>,
+    q_powerups : Query<(&Collisions, Entity)>,
 ) {
     let things: HashSet<Entity> = q_things.iter().collect();
     let collisions: HashSet<Entity> = q_powerups.iter().flat_map(|(cs, _)| cs.entities()).collect();

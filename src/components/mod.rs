@@ -2,6 +2,7 @@ mod room;
 mod swing_stick_animation;
 mod wall_type;
 
+use bevy::ecs::component::ComponentId;
 use bevy::prelude::*;
 
 pub use room::Room;
@@ -63,5 +64,10 @@ impl Default for Speed {
     }
 }
 
+
 #[derive(Component)]
-pub struct Powerup;
+pub struct Powerup {
+    pub effect: Option<ComponentId>,
+}
+
+//https://github.com/bevyengine/bevy/discussions/3332
