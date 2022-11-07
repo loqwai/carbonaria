@@ -2,11 +2,12 @@ use crate::components::{Speed,Speedup};
 use bevy::prelude::*;
 
 pub fn update_speed_from_speedup(
-    mut q_speedup: Query<(&mut Speed, &Speedup)>,
+    mut q_speedup: Query<(&Parent, &Speedup)>,
+    mut q_thing_to_speedup: Query<&mut Speed>,
 ) {
-    for speed_component in q_speedup.iter_mut() {
-        // let target_health = q_healths.get(parent.get()).unwrap(); // Maybe Bevy 0.8+ only?
-       let mut speed = speed_component.0;
-       speed.0 = 800.0;
+    for (parent, _) in q_speedup.iter_mut() {
+        if let Ok(mut speed) = q_thing_to_speedup.get_mut(parent.get()) {
+            speed.0 = 800.0
+        }
     }
 }
