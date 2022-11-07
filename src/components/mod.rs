@@ -64,10 +64,9 @@ impl Default for Speed {
     }
 }
 
-
 #[derive(Component)]
 pub struct Powerup {
-    pub effect: Option<ComponentId>,
+    pub contains: Option<Entity>,
 }
 
 //https://github.com/bevyengine/bevy/discussions/3332

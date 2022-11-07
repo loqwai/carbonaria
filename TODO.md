@@ -46,3 +46,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x-ish] The camera is limited to a small circle so you can't see very far.
 * [ ] Figure out why some walls look weird
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
+
+Boring chores I want to remember to do.
+* [ ] Move from deprecated physics engine (Heron) to the authors recommended replacement, [bevy_rapier](https://rapier.rs/docs/user_guides/bevy_plugin/getting_started_bevy)
+  - [diff](https://github.com/rust-adventure/2d-platformer-sandbox-youtube-series/commit/cbb6e32f2e5338cbc49d1046b7f4a23a09d339c7) of someone else doing it in [this](https://www.youtube.com/watch?v=zvLWibkWcVg) Youtube vid.
