@@ -53,9 +53,6 @@ pub struct Exit;
 #[derive(Component)]
 pub struct Compass;
 
-#[derive(Component)]
-pub struct Speedup;
-
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Speed(pub f32);
@@ -65,9 +62,15 @@ impl Default for Speed {
     }
 }
 
+// Chest stuff
 #[derive(Component)]
 pub struct Pocket;
 
+#[derive(Component)]
+pub struct Speedup;
+
+#[derive(Component)]
+pub struct Wallbreaker;
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Chest {
@@ -78,7 +81,5 @@ impl Default for Chest {
         Chest { contents: None }
     }
 }
-#[derive(Component)]
-pub struct Wallbreaker;
 
 //https://github.com/bevyengine/bevy/discussions/3332
