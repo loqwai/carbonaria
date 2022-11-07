@@ -50,6 +50,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x-ish] The camera is limited to a small circle so you can't see very far.
 * [ ] Figure out why some walls look weird
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
+      - [chalk](https://rust-lang.github.io/chalk/book/engine.html) is a Prology language, built in to Rust, that the language uses for type inference!
 
 
 ## Polishing Up
