@@ -52,7 +52,7 @@ pub struct Exit;
 pub struct Compass;
 
 #[derive(Component)]
-pub struct SpeedUp;
+pub struct Speedup;
 
 #[derive(Component)]
 pub struct Speed(pub f32);
@@ -66,5 +66,9 @@ impl Default for Speed {
 pub struct Chest {
     pub contents: Option<Entity>,
 }
-
+impl Default for Chest {
+    fn default() -> Self {
+        Chest { contents: None }
+    }
+}
 //https://github.com/bevyengine/bevy/discussions/3332

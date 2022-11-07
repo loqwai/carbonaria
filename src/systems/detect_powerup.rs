@@ -1,7 +1,7 @@
-use bevy::{prelude::Entity, utils::HashSet};
+use bevy::{prelude::Entity};
 use heron::Collisions;
 
-use crate::components::{SpeedUp, Chest};
+use crate::components::{Chest};
 
 use bevy::prelude::*;
 
