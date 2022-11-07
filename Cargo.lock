@@ -1926,9 +1926,9 @@ dependencies = [
 
 [[package]]
 name = "heron"
-version = "4.0.1"
+version = "4.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98ee60c5d9ffa43a890ac6d1af89ce166474118a7781a3b38da9a9d0c8158671"
+checksum = "d4a85acd26ced0d87e50d28c9e1ecea6233edf801d93aea18d7842b846298691"
 dependencies = [
  "bevy",
  "cfg_aliases",
@@ -1939,9 +1939,9 @@ dependencies = [
 
 [[package]]
 name = "heron_core"
-version = "4.0.1"
+version = "4.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "647d223754211d94fcbe0a0931e41bde087fa750f222e2df0f6286f7adfb3e49"
+checksum = "aabbb6109411fa5b7d5df9392226b6a01efd5d005baeb40516059c747e2b6693"
 dependencies = [
  "bevy",
  "cfg_aliases",
@@ -1951,9 +1951,9 @@ dependencies = [
 
 [[package]]
 name = "heron_macros"
-version = "4.0.1"
+version = "4.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "acf3085d36ed8aed648efb7e4cf03246479dd572c504796e4f8b1fc5c8bcce2f"
+checksum = "886ae4ad03d103dbc642adb5d644a383f4709d16cb4bb7d4cff59c3826e2e86e"
 dependencies = [
  "quote 1.0.20",
  "syn 1.0.98",
@@ -1961,9 +1961,9 @@ dependencies = [
 
 [[package]]
 name = "heron_rapier"
-version = "4.0.1"
+version = "4.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d952ec87ec0e0269b167a236a890baeef475551a2897e1b842a3bd9cd779035"
+checksum = "e4672176f6c2783fc6c9b68c54dd1d7d9d80845890e57775459b5802cd126a27"
 dependencies = [
  "bevy",
  "cfg_aliases",
@@ -3290,9 +3290,9 @@ dependencies = [
 
 [[package]]
 name = "smallvec"
-version = "1.9.0"
+version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2fd0db749597d91ff862fd1d55ea87f7855a744a8425a64695b6fca237d1dad1"
+checksum = "a507befe795404456341dfab10cef66ead4c041f62b8b11bbb92bffe5d0953e0"
 dependencies = [
  "serde",
 ]
