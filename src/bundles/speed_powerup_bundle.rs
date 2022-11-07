@@ -1,11 +1,11 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
 use heron::{RigidBody, CollisionShape, Collisions};
 
-use crate::components::Powerup;
+use crate::components::Chest;
 
 #[derive(Bundle)]
 pub struct SpeedPowerupBundle {
-    pub powerup: Powerup,
+    pub powerup: Chest,
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub collisions: Collisions,
@@ -33,7 +33,7 @@ impl SpeedPowerupBundle {
 impl Default for SpeedPowerupBundle {
     fn default() -> Self {
         Self {
-            powerup: Powerup{effect: None},
+            powerup: Chest{contents: None},
             sprite_bundle: Default::default(),
             rigid_body: RigidBody::Sensor,
             collision_shape: CollisionShape::Sphere { radius: 16.0 },

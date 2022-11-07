@@ -1,23 +1,22 @@
 use bevy::{prelude::Entity, utils::HashSet};
 use heron::Collisions;
 
-use crate::components::{SpeedUp, Powerup};
+use crate::components::{SpeedUp, Chest};
 
 use bevy::prelude::*;
 
 pub fn detect_powerup(
     mut commands: Commands,
-    q_things: Query<Entity, Without<Powerup>>,
-    q_powerups : Query<(&Collisions, Entity)>,
+    q_pockets: Query<Entity, Without<Chest>>,
+    q_powerups : Query<(Entity, &mut Chest, &Collisions)>,
 ) {
-    let things: HashSet<Entity> = q_things.iter().collect();
-    let collisions: HashSet<Entity> = q_powerups.iter().flat_map(|(cs, _)| cs.entities()).collect();
-
-    things.intersection(&collisions).for_each(|thing| {
-        commands.entity(*thing).insert(SpeedUp);
-
-        q_powerups.for_each(|(_, powerup)| {
-            commands.entity(powerup).despawn();
-        })
-    });
+    for (chest_entity, chest, collisions) in q_powerups.iter() {
+        for pocket_entity in collisions.entities() {
+            if q_pockets.get(pocket_entity).is_ok() {
+                commands.entity(pocket_entity).push_children(&[chest.contents.unwrap()]);
+                commands.entity(chest_entity).despawn_recursive();
+                break;
+            }
+        }
+    }
 }
