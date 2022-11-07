@@ -7,6 +7,7 @@ pub fn add_inspector(app: &mut App) {
     add_plugin(WorldInspectorPlugin::new())
     .register_type::<Points>()
     .register_type::<Health>()
+    .register_type::<Speed>()
     .register_type::<Chest>()
     ;
 }
