@@ -9,6 +9,7 @@ mod systems;
 mod util;
 
 use bevy::{prelude::*, render::texture::ImageSettings};
+use bevy_inspector_egui::WorldInspectorPlugin;
 use heron::PhysicsPlugin;
 use rand::{rngs::SmallRng, SeedableRng};
 use resources::{Config, MobSpawnTimer};
@@ -16,6 +17,7 @@ use resources::{Config, MobSpawnTimer};
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(PhysicsPlugin::default())
         .insert_resource(MobSpawnTimer(Timer::from_seconds(5.0, true)))
         .insert_resource(Config {
