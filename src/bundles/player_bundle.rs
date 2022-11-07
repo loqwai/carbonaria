@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
 use heron::{CollisionShape, Damping, RigidBody, RotationConstraints, Velocity};
 
-use crate::components::{Health, Player, Points, Speed,};
+use crate::components::{Health, Player, Points, Speed, Pocket,};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
@@ -15,6 +15,7 @@ pub struct PlayerBundle {
     pub health: Health,
     pub speed: Speed,
     pub name: Name,
+    pub pockets: Pocket,
     #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
@@ -52,6 +53,7 @@ impl Default for PlayerBundle {
             sprite_bundle: Default::default(),
             points: Default::default(),
             speed: Default::default(),
+            pockets: Pocket,
             name: "player".into(), //probably not something we want to do in the future. But nice for the debugger
         }
     }

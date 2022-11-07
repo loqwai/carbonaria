@@ -75,4 +75,6 @@ impl Default for Chest {
         Chest { contents: None }
     }
 }
+#[derive(Component)]
+pub struct Pocket;
 //https://github.com/bevyengine/bevy/discussions/3332
