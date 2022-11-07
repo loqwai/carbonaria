@@ -1,5 +1,5 @@
 mod detect_exit;
-mod detect_powerup;
+mod detect_chest;
 mod detect_stick_hits;
 mod follow_player_with_camera;
 mod mob_swings_stick_if_player_gets_close;
@@ -29,7 +29,7 @@ mod update_score_ui;
 mod update_speed_from_speedup;
 
 pub use detect_exit::detect_exit;
-pub use detect_powerup::detect_powerup;
+pub use detect_chest::detect_chest;
 pub use spawn_speed_chest::spawn_speed_chest;
 pub use detect_stick_hits::detect_stick_hits;
 pub use follow_player_with_camera::follow_player_with_camera;
