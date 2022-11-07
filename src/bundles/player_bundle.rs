@@ -14,6 +14,7 @@ pub struct PlayerBundle {
     pub points: Points,
     pub health: Health,
     pub speed: Speed,
+    pub name: Name,
     #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
@@ -51,6 +52,7 @@ impl Default for PlayerBundle {
             sprite_bundle: Default::default(),
             points: Default::default(),
             speed: Default::default(),
+            name: "player".into(), //probably not something we want to do in the future. But nice for the debugger
         }
     }
 }
