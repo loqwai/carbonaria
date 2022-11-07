@@ -7,17 +7,18 @@ mod events;
 mod resources;
 mod systems;
 mod util;
+mod inspection_ui;
 
 use bevy::{prelude::*, render::texture::ImageSettings};
-use bevy_inspector_egui::WorldInspectorPlugin;
+
 use heron::PhysicsPlugin;
 use rand::{rngs::SmallRng, SeedableRng};
 use resources::{Config, MobSpawnTimer};
 
 fn main() {
-    App::new()
+    let mut app = App::new();
+    app
         .add_plugins(DefaultPlugins)
-        .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(PhysicsPlugin::default())
         .insert_resource(MobSpawnTimer(Timer::from_seconds(5.0, true)))
         .insert_resource(Config {
@@ -60,6 +61,8 @@ fn main() {
         .add_system(systems::round_translations)
         .add_system(systems::on_reset_despawn_all_mobs)
         .add_system(systems::on_reset_despawn_all_rooms)
-        .add_system(systems::on_reset_despawn_all_exits)
-        .run();
+        .add_system(systems::on_reset_despawn_all_exits);
+
+        inspection_ui::add_inspector(&mut app);
+        app.run();
 }

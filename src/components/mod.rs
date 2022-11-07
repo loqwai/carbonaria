@@ -23,7 +23,8 @@ pub struct Stick;
 #[derive(Component)]
 pub struct Wall;
 
-#[derive(Component)]
+#[derive(Component,Reflect)]
+#[reflect(Component)]
 pub struct Points(pub usize);
 impl Default for Points {
     fn default() -> Self {
@@ -34,7 +35,8 @@ impl Default for Points {
 #[derive(Component)]
 pub struct ScoreUI;
 
-#[derive(Component)]
+#[derive(Component, Reflect)]
+#[reflect(Component)]
 pub struct Health(pub usize);
 impl Default for Health {
     fn default() -> Self {
@@ -54,7 +56,8 @@ pub struct Compass;
 #[derive(Component)]
 pub struct Speedup;
 
-#[derive(Component)]
+#[derive(Component, Reflect)]
+#[reflect(Component)]
 pub struct Speed(pub f32);
 impl Default for Speed {
     fn default() -> Self {
@@ -62,7 +65,8 @@ impl Default for Speed {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Reflect)]
+#[reflect(Component)]
 pub struct Chest {
     pub contents: Option<Entity>,
 }
