@@ -65,6 +65,9 @@ impl Default for Speed {
     }
 }
 
+#[derive(Component)]
+pub struct Pocket;
+
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Chest {
@@ -76,5 +79,6 @@ impl Default for Chest {
     }
 }
 #[derive(Component)]
-pub struct Pocket;
+pub struct Wallbreaker;
+
 //https://github.com/bevyengine/bevy/discussions/3332

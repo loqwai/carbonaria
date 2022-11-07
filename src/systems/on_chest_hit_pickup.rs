@@ -5,7 +5,7 @@ use crate::components::{Chest, Pocket};
 
 use bevy::prelude::*;
 
-pub fn detect_chest(
+pub fn on_chest_hit_pickup(
     mut commands: Commands,
     q_pockets: Query<Entity, With<Pocket>>,
     q_powerups : Query<(Entity, &mut Chest, &Collisions)>,

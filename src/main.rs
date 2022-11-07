@@ -50,7 +50,7 @@ fn main() {
         .add_system(systems::maybe_end_swing_stick_animation)
         .add_system(systems::detect_stick_hits)
         .add_system(systems::detect_exit)
-        .add_system(systems::detect_chest)
+        .add_system(systems::on_chest_hit_pickup)
         .add_system(systems::on_stick_hit_increment_points)
         .add_system(systems::on_reset_move_player_to_origin)
         .add_system(systems::on_stick_hit_kill)
