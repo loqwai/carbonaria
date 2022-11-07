@@ -1,29 +1,32 @@
 use bevy::prelude::*;
-use heron::Collisions;
 
-use crate::{components::Wallbreaker, events::StickHitEvent};
+use crate::{
+    components::{Stick, Wall, Wallbreaker},
+    events::StickHitEvent,
+};
 
 pub fn on_stick_hit_wallbreaker(
     mut commands: Commands,
     mut events: EventReader<StickHitEvent>,
-    q_equipped_wallbreakers: Query<(Entity, Parent), With<Wallbreaker>>,
+    q_wallbreaker: Query<&Parent, With<Wallbreaker>>,
+    q_stick: Query<&Parent, With<Stick>>,
+    q_walls: Query<Entity, With<Wall>>,
 ) {
-    for event in events.iter() {
-        for (wallbreaker_entity, parent) in q_equipped_wallbreakers.iter() {
-            if parent.0 == event.stick {
-                commands.entity(wallbreaker_entity).despawn_recursive();
-            }
-        }
-    }
-    for (stick_entity, parent, collisions) in q_powerups.iter() {
-        for pocket_entity in collisions.entities() {
-            if q_pockets.get(pocket_entity).is_ok() {
-                commands
-                    .entity(pocket_entity)
-                    .push_children(&[chest.contents.unwrap()]); //This could be null and blow things up.
-                commands.entity(chest_entity).despawn_recursive();
-                break;
-            }
+    for wallbreaker_parent in q_wallbreaker.iter() {
+        for event in events.iter() {
+            match q_stick.get(event.stick) {
+                Err(_) => continue,
+                Ok(stick_parent) => {
+                    if stick_parent == wallbreaker_parent {
+                        match q_walls.get(event.target) {
+                            Err(_) => continue,
+                            Ok(wall_entity) => {
+                                commands.entity(wall_entity).despawn_recursive();
+                            }
+                        }
+                    }
+                }
+            };
         }
     }
 }

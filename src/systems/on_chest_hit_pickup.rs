@@ -8,7 +8,7 @@ use bevy::prelude::*;
 pub fn on_chest_hit_pickup(
     mut commands: Commands,
     q_pockets: Query<Entity, With<Pocket>>,
-    q_powerups : Query<(Entity, &mut Chest, &Collisions)>,
+    q_powerups : Query<(Entity, &Chest, &Collisions)>,
 ) {
     for (chest_entity, chest, collisions) in q_powerups.iter() {
         for pocket_entity in collisions.entities() {

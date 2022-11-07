@@ -4,7 +4,7 @@ use heron::{RigidBody, CollisionShape, Collisions};
 use crate::components::Chest;
 
 #[derive(Bundle)]
-pub struct SpeedChestBundle {
+pub struct ChestBundle {
     pub chest: Chest,
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
@@ -14,10 +14,10 @@ pub struct SpeedChestBundle {
     pub sprite_bundle: SpriteBundle,
 }
 
-impl SpeedChestBundle {
-    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, contents:Entity) -> SpeedChestBundle {
+impl ChestBundle {
+    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, contents:Entity) -> ChestBundle {
 
-        SpeedChestBundle {
+        ChestBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("powerup-speed.png"),
                 transform: Transform {
@@ -34,7 +34,7 @@ impl SpeedChestBundle {
     }
 }
 
-impl Default for SpeedChestBundle {
+impl Default for ChestBundle {
     fn default() -> Self {
         Self {
             sprite_bundle: Default::default(),

@@ -37,6 +37,7 @@ fn main() {
         .add_startup_system(systems::spawn_player)
         .add_startup_system(systems::spawn_score_ui)
         .add_startup_system(systems::spawn_speed_chest)
+        .add_startup_system(systems::spawn_wallbreaker_chest)
         .add_system(systems::spawn_room)
         .add_system(systems::spawn_exit)
         .add_system(systems::spawn_next_tile_for_rooms)
@@ -61,7 +62,9 @@ fn main() {
         .add_system(systems::round_translations)
         .add_system(systems::on_reset_despawn_all_mobs)
         .add_system(systems::on_reset_despawn_all_rooms)
-        .add_system(systems::on_reset_despawn_all_exits);
+        .add_system(systems::on_reset_despawn_all_exits)
+        .add_system(systems::on_stick_hit_wallbreaker)
+        ;
 
         inspection_ui::add_inspector(&mut app);
         app.run();
