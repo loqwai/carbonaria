@@ -12,6 +12,7 @@ pub fn on_stick_hit_wallbreaker(
     q_stick: Query<&Parent, With<Stick>>,
     q_walls: Query<Entity, With<Wall>>,
 ) {
+    //This would be way easier if the stick was a wallbreaker.
     for wallbreaker_parent in q_wallbreaker.iter() {
         for event in events.iter() {
             match q_stick.get(event.stick) {
