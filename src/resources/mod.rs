@@ -15,4 +15,5 @@ pub struct Config {
     /// to move completely in-sync with. Lower values like 0.1 or 0.01
     /// cause the camera to have a more natural feeling "bungee" effect
     pub camera_follow_interpolation: f32,
+    pub mob_speed: f32,
 }

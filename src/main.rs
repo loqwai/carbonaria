@@ -20,11 +20,12 @@ fn main() {
     app
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin::default())
-        .insert_resource(MobSpawnTimer(Timer::from_seconds(5.0, true)))
+        .insert_resource(MobSpawnTimer(Timer::from_seconds(0.5, true)))
         .insert_resource(Config {
             dimensions: 128,
             tile_size: 64,
             camera_follow_interpolation: 0.05,
+            mob_speed: 1.0,
             // camera_follow_interpolation: 1.0,
         })
         .insert_resource(SmallRng::from_entropy())
@@ -38,7 +39,7 @@ fn main() {
         .add_startup_system(systems::spawn_score_ui)
         .add_startup_system(systems::spawn_speed_chest)
         .add_startup_system(systems::spawn_wallbreaker_chest)
-        .add_system(systems::spawn_room)
+        // .add_system(systems::spawn_room)
         .add_system(systems::spawn_exit)
         .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)

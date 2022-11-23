@@ -29,6 +29,7 @@ mod update_score_ui;
 mod update_speed_from_speedup;
 mod on_stick_hit_wallbreaker;
 mod spawn_wallbreaker_chest;
+mod mob_follows_players;
 
 pub use detect_exit::detect_exit;
 pub use on_chest_hit_pickup::on_chest_hit_pickup;
