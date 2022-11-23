@@ -14,7 +14,7 @@ pub fn mob_follows_players(
     q_mob.for_each_mut(|mut mob| {
         let diff =  mob.translation - player.translation;
         let angle = diff.y.atan2(diff.x); // Add/sub FRAC_PI here optionally
-        mob.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), angle);
+        mob.rotation = Quat::from_axis_angle(Vec3::Z, angle);
         mob.translation -= diff.normalize();
     });
 }
