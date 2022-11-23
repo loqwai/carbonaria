@@ -63,3 +63,4 @@ pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
 pub use update_speed_from_speedup::update_speed_from_speedup;
 pub use on_stick_hit_wallbreaker::on_stick_hit_wallbreaker;
+pub use mob_follows_players::mob_follows_players;

@@ -43,6 +43,7 @@ fn main() {
         .add_system(systems::spawn_exit)
         .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)
+        .add_system(systems::mob_follows_players)
         .add_system(systems::update_speed_from_speedup)
         .add_system(systems::move_player)
         .add_system(systems::follow_player_with_camera)
