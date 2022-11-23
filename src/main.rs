@@ -25,7 +25,6 @@ fn main() {
             dimensions: 128,
             tile_size: 64,
             camera_follow_interpolation: 0.05,
-            mob_speed: 1.0,
             // camera_follow_interpolation: 1.0,
         })
         .insert_resource(SmallRng::from_entropy())
@@ -57,7 +56,7 @@ fn main() {
         .add_system(systems::on_stick_hit_increment_points)
         .add_system(systems::on_reset_move_player_to_origin)
         .add_system(systems::on_stick_hit_kill)
-        .add_system(systems::on_stick_hit_subtract_health)
+        // .add_system(systems::on_stick_hit_subtract_health)
         .add_system(systems::update_compass)
         .add_system(systems::update_score_ui)
         .add_system(systems::update_health_ui)

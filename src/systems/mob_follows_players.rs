@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::{components::{Player, Mob}, resources::Config};
+use crate::{
+    components::{Mob, Player},
+    resources::Config,
+};
 
 pub fn mob_follows_players(
     config: Res<Config>,
@@ -8,10 +11,10 @@ pub fn mob_follows_players(
     mut q_mob: Query<&mut Transform, (With<Mob>, Without<Player>)>,
 ) {
     let player = q_player.get_single().unwrap();
-    let target = player.translation;
-    q_mob.for_each_mut(|mut transform| {
-        let mob_location = transform.translation;
-        let direction = (target - mob_location).normalize();
-        transform.translation += direction * config.mob_speed;
+    q_mob.for_each_mut(|mut mob| {
+        let diff =  mob.translation - player.translation;
+        let angle = diff.y.atan2(diff.x); // Add/sub FRAC_PI here optionally
+        mob.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), angle);
+        mob.translation -= diff.normalize();
     });
 }
