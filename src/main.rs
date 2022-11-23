@@ -65,6 +65,7 @@ fn main() {
         .add_system(systems::on_reset_despawn_all_rooms)
         .add_system(systems::on_reset_despawn_all_exits)
         .add_system(systems::on_stick_hit_wallbreaker)
+        .add_system(systems::sync_mouse_position)
         ;
 
         inspection_ui::add_inspector(&mut app);

@@ -9,4 +9,5 @@ pub fn spawn_speed_chest(mut commands: Commands, asset_server: Res<AssetServer>)
         Vec3::new(128.0, 128.0, 0.0),
         speedup_entity,
     ));
+
 }

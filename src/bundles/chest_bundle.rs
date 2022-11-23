@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
-use heron::{RigidBody, CollisionShape, Collisions};
+use heron::{CollisionShape, Collisions, RigidBody};
 
-use crate::components::Chest;
+use crate::components::{Chest, MousePos};
 
 #[derive(Bundle)]
 pub struct ChestBundle {
@@ -9,14 +9,13 @@ pub struct ChestBundle {
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub collisions: Collisions,
-
+    pub mouse_pos: MousePos,
     #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 
 impl ChestBundle {
-    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, contents:Entity) -> ChestBundle {
-
+    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, contents: Entity) -> ChestBundle {
         ChestBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("powerup-speed.png"),
@@ -42,6 +41,7 @@ impl Default for ChestBundle {
             collision_shape: CollisionShape::Sphere { radius: 16.0 },
             collisions: Default::default(),
             chest: Chest::default(),
+            mouse_pos: MousePos,
         }
     }
 }

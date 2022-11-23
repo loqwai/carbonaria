@@ -81,5 +81,6 @@ impl Default for Chest {
         Chest { contents: None }
     }
 }
-
+#[derive(Component)]
+pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332

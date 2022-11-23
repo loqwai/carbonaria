@@ -6,7 +6,6 @@ use crate::{
 };
 
 pub fn mob_follows_players(
-    config: Res<Config>,
     q_player: Query<&Transform, With<Player>>,
     mut q_mob: Query<&mut Transform, (With<Mob>, Without<Player>)>,
 ) {

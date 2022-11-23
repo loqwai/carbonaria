@@ -30,7 +30,7 @@ mod update_speed_from_speedup;
 mod on_stick_hit_wallbreaker;
 mod spawn_wallbreaker_chest;
 mod mob_follows_players;
-
+mod sync_mouse_position;
 pub use detect_exit::detect_exit;
 pub use on_chest_hit_pickup::on_chest_hit_pickup;
 pub use spawn_speed_chest::spawn_speed_chest;
@@ -64,3 +64,4 @@ pub use update_score_ui::update_score_ui;
 pub use update_speed_from_speedup::update_speed_from_speedup;
 pub use on_stick_hit_wallbreaker::on_stick_hit_wallbreaker;
 pub use mob_follows_players::mob_follows_players;
+pub use sync_mouse_position::sync_mouse_position;
