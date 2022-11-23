@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::{
     components::{Mob, Player},
-    resources::Config,
 };
 
 pub fn mob_follows_players(
