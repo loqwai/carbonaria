@@ -1,8 +1,8 @@
-use crate::components::{Speed,Speedup};
+use crate::components::{Speed,Speed};
 use bevy::prelude::*;
 
 pub fn update_speed_from_speedup(
-    mut q_speedup: Query<(&Parent, &Speedup)>,
+    mut q_speedup: Query<(&Parent, &Speed)>,
     mut q_thing_to_speedup: Query<&mut Speed>,
 ) {
     for (parent, _) in q_speedup.iter_mut() {
