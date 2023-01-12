@@ -52,6 +52,28 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
       - [chalk](https://rust-lang.github.io/chalk/book/engine.html) is a Prology language, built in to Rust, that the language uses for type inference!
 
+## Theory of Roguelike fun
+1. define fun = combinatorial complexity that a user can interact with at play time (lol)
+1. Moving from constant->scalar increases complexity according to [The Transformation Priority Premise](https://en.wikipedia.org/wiki/Transformation_Priority_Premise)
+1. Therefore, going from constant->scalar on game objects users interact with can create more fun.
+
+## constant->scalar ideas
+* [ ] single powerup 'type' -> multiple powerup types (e.g. a one-tick powerup that adds health)
+* [ ] single weapon type -> multiple weapon types
+* [ ] single weapon equipped -> multiple weapons equipped (or equippable, in inventory)
+  - [ ] ability to detect which weapon is equipped
+  - [ ] ability of player to select equipped weapon
+  - [ ] ability to pick up weapons from chests
+
+* [ ] single enemy type -> multiple enemy types
+* [ ] single 'damage type' -> multiple damage types
+  - including damage resistances for entities, which can be offensive or defensive (resistances)
+  - e.g. damage / time, / area / fire/ice/acid/physical. That sort of thing.
+* [ ] single sprites for objects -> multiple sprites
+
+...etc.
+
+
 
 ## Polishing Up
 * [ ] Move from deprecated physics engine (Heron) to the authors recommended replacement, [bevy_rapier](https://rapier.rs/docs/user_guides/bevy_plugin/getting_started_bevy)
