@@ -1,4 +1,4 @@
-use crate::components::{Speed,Speed};
+use crate::components::Speed;
 use bevy::prelude::*;
 
 pub fn update_speed_from_speedup(
