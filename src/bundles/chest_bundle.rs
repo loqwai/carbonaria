@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
 use heron::{CollisionShape, Collisions, RigidBody};
 
-use crate::components::{Chest, MousePos};
+use crate::components::{Chest};
 
 #[derive(Bundle)]
 pub struct ChestBundle {
@@ -9,7 +9,6 @@ pub struct ChestBundle {
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub collisions: Collisions,
-    pub mouse_pos: MousePos,
     #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
@@ -40,8 +39,7 @@ impl Default for ChestBundle {
             rigid_body: RigidBody::Sensor,
             collision_shape: CollisionShape::Sphere { radius: 16.0 },
             collisions: Default::default(),
-            chest: Chest::default(),
-            mouse_pos: MousePos,
+            chest: Chest::default()
         }
     }
 }
