@@ -1,7 +1,7 @@
 use bevy::{ecs::query::QuerySingleError, input::Input, prelude::*};
 use heron::Velocity;
 
-use crate::components::Speed;
+use crate::components::{Player, Speed};
 
 #[derive(Debug, Error)]
 enum MovePlayerError {
@@ -10,7 +10,7 @@ enum MovePlayerError {
 
 pub fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    velocity_query: Query<(Entity, &mut Velocity)>,
+    velocity_query: Query<(Entity, &mut Velocity), With<Player>>,
     speed_query: Query<(&Speed, &Parent)>,
 ) {
     if let Err(e) = fallible_move_player(keyboard_input, velocity_query, speed_query) {
@@ -20,7 +20,7 @@ pub fn move_player(
 
 fn fallible_move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    mut velocity_query: Query<(Entity, &mut Velocity)>,
+    mut velocity_query: Query<(Entity, &mut Velocity), With<Player>>,
     speed_query: Query<(&Speed, &Parent)>,
 ) -> Result<(), MovePlayerError> {
     for (entity, mut velocity) in velocity_query.iter_mut() {
@@ -29,7 +29,7 @@ fn fallible_move_player(
         for (speed, parent) in speed_query.iter() {
             if parent.id() != entity.id() { continue }
 
-            entity_speed += speed.0;
+            entity_speed *= speed.0;
         }
 
         if keyboard_input.pressed(KeyCode::A) {

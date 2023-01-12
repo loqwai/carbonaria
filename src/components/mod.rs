@@ -56,6 +56,15 @@ pub struct Compass;
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Speed(pub f32);
+impl Speed {
+    pub fn fast() -> Speed {
+        Speed(2.0)
+    }
+
+    pub fn slow() -> Speed {
+        Speed(0.5)
+    }
+}
 impl Default for Speed {
     fn default() -> Self {
         Speed(40.0)

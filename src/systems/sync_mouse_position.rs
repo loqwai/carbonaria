@@ -31,7 +31,7 @@ pub fn sync_mouse_position(
         // matrix for undoing the projection and camera transform
         let ndc_to_world = camera_transform.compute_matrix() * camera.projection_matrix().inverse();
 
-        // use it to convert ndc to world-space coordinates
+        // use it to convert ndc to world-dwwspace coordinates
         let world_pos = ndc_to_world.project_point3(ndc.extend(-1.0));
 
         // reduce it to a 2D value
