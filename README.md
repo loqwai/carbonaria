@@ -48,6 +48,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [ ] Hitting the wall the stick should not count as a point
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
 * [x-ish] The camera is limited to a small circle so you can't see very far.
+* [ ] make pretty via AI.
 * [ ] Figure out why some walls look weird
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
       - [chalk](https://rust-lang.github.io/chalk/book/engine.html) is a Prology language, built in to Rust, that the language uses for type inference!
@@ -58,7 +59,10 @@ All modules must be accessable to boarders in order for you to be able to use th
 1. Therefore, going from constant->scalar on game objects users interact with can create more fun.
 
 ## constant->scalar ideas
-* [ ] single powerup 'type' -> multiple powerup types (e.g. a one-tick powerup that adds health)
+* [ ] single powerup 'type' -> multiple powerup types
+  - [x] permanent powerups
+  - [ ] 1-off powerups (e.g. a powerup that exists for 1 tick that adds health for a player on pickup)
+  - [ ] time-limited powerups
 * [ ] chests contain single powerup -> multiple powerups
 * [ ] single weapon type -> multiple weapon types
 * [ ] single weapon equipped -> multiple weapons equipped (or equippable, in inventory)
@@ -70,6 +74,7 @@ All modules must be accessable to boarders in order for you to be able to use th
   - including damage resistances for entities, which can be offensive or defensive (resistances)
   - e.g. damage / time, / area / fire/ice/acid/physical. That sort of thing.
 * [ ] single sprites for objects -> multiple sprites
+* [ ] constant player -> multiple players
 
 ...etc.
 
