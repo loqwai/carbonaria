@@ -60,7 +60,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 
 ## constant->scalar ideas
 * [ ] single powerup 'type' -> multiple powerup types
-  - [x] persistant powerups
+  - [x] persistent powerups
   - [ ] 1-off powerups (e.g. a powerup that exists for 1 tick that adds health for a player on pickup)
   - [ ] time-limited powerups
 * [ ] chests contain single powerup -> multiple powerups
