@@ -16,8 +16,6 @@ pub struct WallBundle {
     pub wall: Wall,
     pub wall_type: WallType,
     pub rigid_body: RigidBody,
-
-    #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 

@@ -16,8 +16,6 @@ pub struct StickBundle {
     pub collision_shape: CollisionShape,
     pub animation_player: AnimationPlayer,
     pub animation: SwingStickAnimation,
-
-    #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 

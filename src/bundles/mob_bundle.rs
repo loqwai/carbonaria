@@ -13,8 +13,6 @@ pub struct MobBundle {
     pub rigid_body: RigidBody,
     pub collision_shape: CollisionShape,
     pub velocity: Velocity,
-
-    #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 

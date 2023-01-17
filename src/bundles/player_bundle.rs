@@ -16,7 +16,6 @@ pub struct PlayerBundle {
     pub speed: Speed,
     pub name: Name,
     pub pockets: Pocket,
-    #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 

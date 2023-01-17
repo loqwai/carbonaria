@@ -10,7 +10,6 @@ pub struct ExitBundle {
     pub collision_shape: CollisionShape,
     pub collisions: Collisions,
 
-    #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 

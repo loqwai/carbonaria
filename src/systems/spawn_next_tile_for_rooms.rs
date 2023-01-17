@@ -1,11 +1,12 @@
 use std::collections::HashSet;
 
 use bevy::{prelude::*, render::primitives::Frustum};
-use rand::{rngs::SmallRng, seq::IteratorRandom};
+use rand::seq::IteratorRandom;
 
 use crate::{
     bundles::WallBundle,
     components::{Room, WallType},
+    resources::SmallRng,
     util::is_inside_of,
 };
 
@@ -114,11 +115,11 @@ fn spawn_tile(
     wall_type: WallType,
 ) {
     let wall = commands
-        .spawn_bundle(WallBundle::new(&asset_server, &wall_type, *position))
+        .spawn(WallBundle::new(&asset_server, &wall_type, *position))
         .id();
 
     for shape in wall_type.collision_shapes() {
-        let child = commands.spawn().insert(shape).id();
+        let child = commands.spawn_empty().insert(shape).id();
         commands.entity(wall).push_children(&[child]);
     }
 }
@@ -128,7 +129,7 @@ fn random_wall_type(rng: &mut SmallRng, wall_types: &HashSet<WallType>) -> WallT
     if wall_types.is_empty() {
         return WallType::empty();
     }
-    wall_types.iter().choose(rng).unwrap().clone()
+    wall_types.iter().choose(&mut rng.0).unwrap().clone()
 }
 
 fn neighbor_positions_for_position(position: &Position) -> HashSet<Position> {

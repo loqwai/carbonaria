@@ -27,7 +27,9 @@ fn fallible_move_player(
         let mut entity_speed: f32 = 40.0;
 
         for (speed, parent) in speed_query.iter() {
-            if parent.id() != entity.id() { continue }
+            if parent.get() != entity.id() {
+                continue;
+            }
 
             entity_speed *= speed.0;
         }

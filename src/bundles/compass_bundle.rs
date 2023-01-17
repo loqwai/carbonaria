@@ -11,8 +11,6 @@ use crate::components::Compass;
 pub struct CompassBundle {
     pub name: Name,
     pub compass: Compass,
-
-    #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
 

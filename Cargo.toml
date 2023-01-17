@@ -12,12 +12,10 @@ opt-level = 3
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { version = "0.8.1", features = ["dynamic"] }
-bevy-inspector-egui = "0.13.0"
+bevy = { version = "0.9.1", features = ["dynamic"] }
+bevy-inspector-egui = "0.17.0"
 derive-error = "0.0.5"
 bevy_rapier2d = "0.20.0"
 rand = { version = "0.8.5",  features = ["small_rng"] }
 
-[profile.dev.package.bevy_rapier2d]
-opt-level = 3
 

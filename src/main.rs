@@ -4,23 +4,25 @@ extern crate derive_error;
 mod bundles;
 mod components;
 mod events;
-mod inspection_ui;
 mod resources;
 mod systems;
 mod util;
 
-use bevy::{prelude::*, render::texture::ImageSettings};
-
+use bevy::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
-use rand::{rngs::SmallRng, SeedableRng};
-use resources::{Config, MobSpawnTimer};
+use resources::{Config, MobSpawnTimer, SmallRng};
 
 fn main() {
     let mut app = App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-        .insert_resource(MobSpawnTimer(Timer::from_seconds(0.5, true)))
+        .add_plugin(WorldInspectorPlugin)
+        .insert_resource(MobSpawnTimer(Timer::from_seconds(
+            0.5,
+            TimerMode::Repeating,
+        )))
         .insert_resource(Config {
             dimensions: 128,
             tile_size: 64,
@@ -28,7 +30,6 @@ fn main() {
             // camera_follow_interpolation: 1.0,
         })
         .insert_resource(SmallRng::from_entropy())
-        .insert_resource(ImageSettings::default_nearest())
         .add_event::<events::SwingStickEvent>()
         .add_event::<events::StickHitEvent>()
         .add_event::<events::ResetEvent>()
@@ -66,6 +67,5 @@ fn main() {
         .add_system(systems::on_stick_hit_wallbreaker)
         .add_system(systems::sync_mouse_position);
 
-    inspection_ui::add_inspector(&mut app);
     app.run();
 }

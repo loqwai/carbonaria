@@ -4,7 +4,7 @@ use crate::components::ScoreUI;
 
 pub fn spawn_score_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
-        .spawn_bundle(TextBundle {
+        .spawn(TextBundle {
             text: Text {
                 sections: vec![TextSection {
                     value: "dsadasd".to_string(),

@@ -5,8 +5,6 @@ use crate::components::HealthTarget;
 #[derive(Bundle)]
 pub struct HealthBundle {
     pub target: HealthTarget,
-
-    #[bundle]
     pub text_2d_bundle: Text2dBundle,
 }
 

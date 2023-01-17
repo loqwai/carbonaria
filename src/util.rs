@@ -1,7 +1,7 @@
 use std::time::Instant;
 
+use crate::resources::SmallRng;
 use bevy::prelude::*;
-use rand::rngs::SmallRng;
 use rand::Rng;
 
 use crate::resources::Config;

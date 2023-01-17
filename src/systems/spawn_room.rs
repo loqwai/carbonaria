@@ -9,15 +9,15 @@ pub fn spawn_room(mut commands: Commands, asset_server: Res<AssetServer>, config
 
     let room = Room::new(config.dimensions);
 
-    commands.spawn().insert(room.clone());
+    commands.spawn_empty().insert(room.clone());
 
     for (position, wall_type) in room.known_tiles.iter() {
         let wall = commands
-            .spawn_bundle(WallBundle::new(&asset_server, wall_type, *position))
+            .spawn(WallBundle::new(&asset_server, wall_type, *position))
             .id();
 
         for shape in wall_type.collision_shapes() {
-            let child = commands.spawn().insert(shape).id();
+            let child = commands.spawn_empty().insert(shape).id();
             commands.entity(wall).push_children(&[child]);
         }
     }
