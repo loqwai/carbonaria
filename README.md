@@ -55,8 +55,8 @@ All modules must be accessable to boarders in order for you to be able to use th
 
 ## Grand Unified Theory of Roguelike Fun (tm)
 1. define fun = combinatorial complexity that a user can interact with at play time (lol)
-1. Moving from constant->scalar increases complexity according to [The Transformation Priority Premise](https://en.wikipedia.org/wiki/Transformation_Priority_Premise)
-1. Therefore, going from constant->scalar on game objects users interact with can create more fun.
+2. Moving from constant->scalar increases complexity according to [The Transformation Priority Premise](https://en.wikipedia.org/wiki/Transformation_Priority_Premise)
+3. Therefore, going from constant->scalar on game objects users interact with can create more fun.
 
 ## constant->scalar ideas
 * [ ] single powerup 'type' -> multiple powerup types
