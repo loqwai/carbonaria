@@ -1,23 +1,27 @@
 use bevy::prelude::*;
 
 use crate::{
-    components::{Mob, Player}, events::MoveEvent,
+    components::{Chases, Team}, events::MoveEvent,
 };
 
 pub fn mob_follows_players(
-    q_player: Query<&Transform, With<Player>>,
-    mut q_mob: Query<(Entity, &mut Transform), (With<Mob>, Without<Player>)>,
+    chasers: Query<(Entity, &Team, &Transform), With<Chases>>,
+    targets: Query<(&Team, &Transform)>,
     mut move_events: EventWriter<MoveEvent>,
 ) {
-    let player = q_player.get_single().unwrap();
-    q_mob.for_each_mut(|(mob_entity, mut mob)| {
-        let diff =  player.translation - mob.translation;
-        let angle = diff.y.atan2(diff.x); // Add/sub FRAC_PI here optionally
-        mob.rotation = Quat::from_axis_angle(Vec3::Z, angle);
+    chasers.for_each(|(chaser_entity, chaser_team, chaser_transform)| {
+        match targets.iter().find(|(team, _)| team != &chaser_team) {
+            None => return,
+            Some((_, target_transform)) => {
+                let diff =  chaser_transform.translation - target_transform.translation;
+                let angle = diff.y.atan2(diff.x); // Add/sub FRAC_PI here optionally
 
-        move_events.send(MoveEvent{
-            target: mob_entity,
-            velocity: diff.normalize(),
-        });
+                move_events.send(MoveEvent{
+                    who: chaser_entity,
+                    velocity: diff.normalize() * -1.0,
+                    rotation: Quat::from_axis_angle(Vec3::Z, angle),
+                });
+            }
+        }
     });
 }

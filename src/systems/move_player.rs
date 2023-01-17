@@ -26,26 +26,30 @@ fn fallible_move_player(
     for (entity, _) in velocity_query.iter_mut() {
         if keyboard_input.pressed(KeyCode::A) {
             move_events.send(MoveEvent{
-                target: entity,
+                who: entity,
                 velocity: Vec3::new(-1.0, 0.0, 0.0),
+                rotation: Quat::default(),
             });
         }
         if keyboard_input.pressed(KeyCode::D) {
             move_events.send(MoveEvent{
-                target: entity,
+                who: entity,
                 velocity: Vec3::new(1.0, 0.0, 0.0),
+                rotation: Quat::default(),
             });
         }
         if keyboard_input.pressed(KeyCode::W) {
             move_events.send(MoveEvent{
-                target: entity,
+                who: entity,
                 velocity: Vec3::new(0.0, 1.0, 0.0),
+                rotation: Quat::default(),
             });
         }
         if keyboard_input.pressed(KeyCode::S) {
             move_events.send(MoveEvent{
-                target: entity,
+                who: entity,
                 velocity: Vec3::new(0.0, -1.0, 0.0),
+                rotation: Quat::default(),
             });
         }
     }

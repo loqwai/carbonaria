@@ -5,7 +5,7 @@ use bevy::{
 };
 use heron::{CollisionShape, RigidBody, Velocity};
 
-use crate::components::{Mob, Speed, Pocket};
+use crate::components::{Mob, Speed, Pocket, Team, Chases};
 
 #[derive(Bundle)]
 pub struct MobBundle {
@@ -15,7 +15,8 @@ pub struct MobBundle {
     pub velocity: Velocity,
     pub base_speed: Speed,
     pub pockets: Pocket,
-
+    pub team: Team,
+    pub chases: Chases,
     #[bundle]
     pub sprite_bundle: SpriteBundle,
 }
@@ -46,6 +47,8 @@ impl Default for MobBundle {
             base_speed: Speed::fast(),
             pockets: Default::default(),
             sprite_bundle: Default::default(),
+            team: Team(1),
+            chases: Default::default(),
         }
     }
 }

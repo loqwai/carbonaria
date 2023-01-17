@@ -15,6 +15,7 @@ pub struct ResetEvent {
 }
 
 pub struct MoveEvent {
-   pub target: Entity,
+   pub who: Entity,
    pub velocity: Vec3,
+   pub rotation: Quat,
 }
