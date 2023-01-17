@@ -4,7 +4,7 @@ use crate::{
     components::{Chases, Team}, events::MoveEvent,
 };
 
-pub fn mob_follows_players(
+pub fn chasers_follow_other_teams(
     chasers: Query<(Entity, &Team, &Transform), With<Chases>>,
     targets: Query<(&Team, &Transform)>,
     mut move_events: EventWriter<MoveEvent>,

@@ -79,6 +79,10 @@ All modules must be accessable to boarders in order for you to be able to use th
 ...etc.
 
 
+## Ideas
+
+Scale enemy difficulty by increasing the number of powerups they spawn with over time. Randomly chosen? All enemies in a wave share the same set?
+
 
 ## Polishing Up
 * [ ] Move from deprecated physics engine (Heron) to the authors recommended replacement, [bevy_rapier](https://rapier.rs/docs/user_guides/bevy_plugin/getting_started_bevy)
