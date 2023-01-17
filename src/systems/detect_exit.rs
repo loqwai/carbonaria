@@ -1,21 +1,33 @@
 use bevy::prelude::*;
-use bevy::utils::HashSet;
-use heron::Collisions;
+use bevy_rapier2d::prelude::CollisionEvent;
 
 use crate::components::{Exit, Player};
 use crate::events::ResetEvent;
 
 pub fn detect_exit(
-    q_exits: Query<&Collisions, With<Exit>>,
+    q_exits: Query<Entity, With<Exit>>,
     q_players: Query<Entity, With<Player>>,
+    mut exit_collision_event_reader: EventReader<CollisionEvent>,
     mut reset_event_writer: EventWriter<ResetEvent>,
 ) {
-    let players: HashSet<Entity> = q_players.iter().collect();
-    let collisions: HashSet<Entity> = q_exits.iter().flat_map(|cs| cs.entities()).collect();
+    let collision_happened = exit_collision_event_reader
+        .iter()
+        .any(|collision| match collision {
+            CollisionEvent::Started(a, b, _) => {
+                if q_players.contains(*a) && q_exits.contains(*b) {
+                    return true;
+                }
 
-    if players.is_disjoint(&collisions) {
-        return;
+                if q_players.contains(*b) && q_exits.contains(*b) {
+                    return true;
+                }
+
+                return false;
+            }
+            _ => false,
+        });
+
+    if collision_happened {
+        reset_event_writer.send(ResetEvent {});
     }
-
-    reset_event_writer.send(ResetEvent {});
 }

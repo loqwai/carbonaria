@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
-use bevy::prelude::{Component, Vec3};
-use heron::CollisionShape;
+use bevy::prelude::{Component, Vec2};
+use bevy_rapier2d::prelude::*;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum TileType {
@@ -95,11 +95,11 @@ impl WallType {
         return all;
     }
 
-    pub fn collision_shapes(&self) -> Vec<CollisionShape> {
+    pub fn collision_shape(&self) -> Collider {
         // Note: These aren't adjusted for rotation since our transform should do that for us.
 
         match self.tile_type {
-            TileType::Empty => Vec::new(),
+            TileType::Empty => Collider::compound(Vec::new()),
             TileType::Straight => straight_piece(),
             TileType::Corner => corner_piece(),
             TileType::Tee => tee_piece(),
@@ -124,53 +124,52 @@ fn shift_position((x, y): &Position, (dx, dy): (i16, i16)) -> Position {
     (x + dx, y + dy)
 }
 
-fn straight_piece() -> Vec<CollisionShape> {
-    vec![cuboid(32.0, 16.0)]
+fn straight_piece() -> Collider {
+    Collider::cuboid(32.0, 16.0)
 }
 
-fn corner_piece() -> Vec<CollisionShape> {
-    vec![
-        convex(vec![
-            (-16.0, 16.0),
-            (32.0, 16.0),
-            (32.0, -16.0),
-            (-16.0, -16.0),
-        ]),
-        convex(vec![
-            (-16.0, 16.0),
-            (16.0, 16.0),
-            (16.0, -32.0),
-            (-16.0, -32.0),
-        ]),
-    ]
+fn corner_piece() -> Collider {
+    Collider::compound(vec![
+        (
+            Vec2::ZERO,
+            0.0,
+            Collider::convex_hull(&vec![
+                Vec2::new(-16.0, 16.0),
+                Vec2::new(32.0, 16.0),
+                Vec2::new(32.0, -16.0),
+                Vec2::new(-16.0, -16.0),
+            ])
+            .unwrap(),
+        ),
+        (
+            Vec2::ZERO,
+            0.0,
+            Collider::convex_hull(&vec![
+                Vec2::new(-16.0, 16.0),
+                Vec2::new(16.0, 16.0),
+                Vec2::new(16.0, -32.0),
+                Vec2::new(-16.0, -32.0),
+            ])
+            .unwrap(),
+        ),
+    ])
 }
 
-fn tee_piece() -> Vec<CollisionShape> {
-    vec![
-        cuboid(32.0, 16.0),
-        convex(vec![
-            (-16.0, 32.0),
-            (16.0, 32.0),
-            (16.0, -16.0),
-            (-16.0, -16.0),
-        ]),
-    ]
-}
-
-fn convex(points: Vec<(f32, f32)>) -> CollisionShape {
-    let points: Vec<Vec3> = points.iter().map(|(x, y)| Vec3::new(*x, *y, 0.0)).collect();
-
-    CollisionShape::ConvexHull {
-        points,
-        border_radius: None,
-    }
-}
-
-fn cuboid(half_width: f32, half_height: f32) -> CollisionShape {
-    CollisionShape::Cuboid {
-        half_extends: Vec3::new(half_width, half_height, 0.0),
-        border_radius: None,
-    }
+fn tee_piece() -> Collider {
+    Collider::compound(vec![
+        (Vec2::ZERO, 0.0, Collider::cuboid(32.0, 16.0)),
+        (
+            Vec2::ZERO,
+            0.0,
+            Collider::convex_hull(&vec![
+                Vec2::new(-16.0, 32.0),
+                Vec2::new(16.0, 32.0),
+                Vec2::new(16.0, -16.0),
+                Vec2::new(-16.0, -16.0),
+            ])
+            .unwrap(),
+        ),
+    ])
 }
 
 fn ports_for_tile_type(tile_type: TileType) -> Vec<Port> {

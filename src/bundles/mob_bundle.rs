@@ -3,7 +3,7 @@ use bevy::{
     prelude::{AssetServer, Bundle, Res, Transform},
     sprite::SpriteBundle,
 };
-use heron::{CollisionShape, RigidBody, Velocity};
+use bevy_rapier2d::prelude::*;
 
 use crate::components::Mob;
 
@@ -11,7 +11,7 @@ use crate::components::Mob;
 pub struct MobBundle {
     pub mob: Mob,
     pub rigid_body: RigidBody,
-    pub collision_shape: CollisionShape,
+    pub collider: Collider,
     pub velocity: Velocity,
     pub sprite_bundle: SpriteBundle,
 }
@@ -37,7 +37,7 @@ impl Default for MobBundle {
         Self {
             mob: Mob,
             rigid_body: RigidBody::Dynamic,
-            collision_shape: CollisionShape::Sphere { radius: 16.0 },
+            collider: Collider::ball(16.0),
             velocity: Default::default(),
             sprite_bundle: Default::default(),
         }

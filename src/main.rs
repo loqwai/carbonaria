@@ -15,7 +15,7 @@ use bevy_rapier2d::prelude::*;
 use resources::{Config, MobSpawnTimer, SmallRng};
 
 fn main() {
-    let mut app = App::new()
+    App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugin(WorldInspectorPlugin)
@@ -65,7 +65,6 @@ fn main() {
         .add_system(systems::on_reset_despawn_all_rooms)
         .add_system(systems::on_reset_despawn_all_exits)
         .add_system(systems::on_stick_hit_wallbreaker)
-        .add_system(systems::sync_mouse_position);
-
-    app.run();
+        .add_system(systems::sync_mouse_position)
+        .run();
 }

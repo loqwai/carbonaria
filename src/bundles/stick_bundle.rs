@@ -4,7 +4,7 @@ use bevy::{
     prelude::*,
     sprite::{Anchor, SpriteBundle},
 };
-use heron::{CollisionShape, RigidBody};
+use bevy_rapier2d::prelude::*;
 
 use crate::components::{Stick, SwingStickAnimation};
 
@@ -13,7 +13,7 @@ pub struct StickBundle {
     pub name: Name,
     pub stick: Stick,
     pub rigid_body: RigidBody,
-    pub collision_shape: CollisionShape,
+    pub collider: Collider,
     pub animation_player: AnimationPlayer,
     pub animation: SwingStickAnimation,
     pub sprite_bundle: SpriteBundle,
@@ -52,15 +52,13 @@ impl Default for StickBundle {
             name: "stick".into(),
             stick: Stick,
             rigid_body: RigidBody::KinematicPositionBased,
-            collision_shape: CollisionShape::ConvexHull {
-                points: vec![
-                    Vec3::new(36.0, 2.0, 0.0),
-                    Vec3::new(44.0, 2.0, 0.0),
-                    Vec3::new(44.0, -2.0, 0.0),
-                    Vec3::new(36.0, -2.0, 0.0),
-                ],
-                border_radius: None,
-            },
+            collider: Collider::convex_hull(&vec![
+                Vec2::new(36.0, 2.0),
+                Vec2::new(44.0, 2.0),
+                Vec2::new(44.0, -2.0),
+                Vec2::new(36.0, -2.0),
+            ])
+            .unwrap(),
             animation_player: Default::default(),
             sprite_bundle: SpriteBundle {
                 ..Default::default()

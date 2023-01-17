@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use heron::CollisionEvent;
+use bevy_rapier2d::prelude::*;
 
 use crate::{components::Stick, events::StickHitEvent};
 
@@ -11,10 +11,8 @@ pub fn detect_stick_hits(
     for (stick, target) in collision_events
         .iter()
         .filter_map(|e| match e {
-            CollisionEvent::Started(t1, t2) => {
-                Some(vec![t1.rigid_body_entity(), t2.rigid_body_entity()])
-            }
-            CollisionEvent::Stopped(_, _) => None,
+            CollisionEvent::Started(t1, t2, _) => Some(vec![*t1, *t2]),
+            CollisionEvent::Stopped(_, _, _) => None,
         })
         .filter_map(|items| {
             let stick = items.iter().find(|&t| q_sticks.get(*t).is_ok());

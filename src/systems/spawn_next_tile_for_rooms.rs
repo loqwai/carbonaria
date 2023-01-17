@@ -114,14 +114,9 @@ fn spawn_tile(
     position: &Position,
     wall_type: WallType,
 ) {
-    let wall = commands
+    commands
         .spawn(WallBundle::new(&asset_server, &wall_type, *position))
-        .id();
-
-    for shape in wall_type.collision_shapes() {
-        let child = commands.spawn_empty().insert(shape).id();
-        commands.entity(wall).push_children(&[child]);
-    }
+        .insert(wall_type.collision_shape());
 }
 
 /// random_wall_type will select a random wall type from the set. If the set is empty, it will return an empty wall type

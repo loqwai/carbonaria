@@ -5,7 +5,7 @@ use bevy::{
     prelude::{AssetServer, Bundle, Res, Transform},
     sprite::SpriteBundle,
 };
-use heron::RigidBody;
+use bevy_rapier2d::prelude::RigidBody;
 
 use crate::components::{TileType, Wall, WallType};
 
@@ -86,7 +86,7 @@ impl Default for WallBundle {
         Self {
             wall: Wall,
             wall_type: WallType::empty(),
-            rigid_body: RigidBody::Static,
+            rigid_body: RigidBody::Fixed,
             sprite_bundle: Default::default(),
         }
     }

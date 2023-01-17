@@ -1,5 +1,5 @@
 use bevy::{ecs::query::QuerySingleError, input::Input, prelude::*};
-use heron::Velocity;
+use bevy_rapier2d::prelude::Velocity;
 
 use crate::components::{Player, Speed};
 
@@ -27,7 +27,7 @@ fn fallible_move_player(
         let mut entity_speed: f32 = 40.0;
 
         for (speed, parent) in speed_query.iter() {
-            if parent.get() != entity.id() {
+            if parent.get() != entity {
                 continue;
             }
 
@@ -35,17 +35,17 @@ fn fallible_move_player(
         }
 
         if keyboard_input.pressed(KeyCode::A) {
-            velocity.linear += Vec3::new(-entity_speed, 0.0, 0.0);
+            velocity.linvel += Vec2::new(-entity_speed, 0.0);
         }
         if keyboard_input.pressed(KeyCode::D) {
-            velocity.linear += Vec3::new(entity_speed, 0.0, 0.0);
+            velocity.linvel += Vec2::new(entity_speed, 0.0);
         }
 
         if keyboard_input.pressed(KeyCode::W) {
-            velocity.linear += Vec3::new(0.0, entity_speed, 0.0);
+            velocity.linvel += Vec2::new(0.0, entity_speed);
         }
         if keyboard_input.pressed(KeyCode::S) {
-            velocity.linear += Vec3::new(0.0, -entity_speed, 0.0);
+            velocity.linvel += Vec2::new(0.0, -entity_speed);
         }
     }
     Ok(())

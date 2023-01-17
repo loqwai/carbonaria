@@ -1,16 +1,16 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
-use heron::{CollisionShape, Damping, RigidBody, RotationConstraints, Velocity};
+use bevy_rapier2d::prelude::*;
 
-use crate::components::{Health, Player, Points, Speed, Pocket,};
+use crate::components::{Health, Player, Pocket, Points, Speed};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
     pub rigid_body: RigidBody,
-    pub collision_shape: CollisionShape,
+    pub collider: Collider,
     pub velocity: Velocity,
     pub damping: Damping,
-    pub rotation_constraints: RotationConstraints,
+    pub rotation_constraints: LockedAxes,
     pub points: Points,
     pub health: Health,
     pub speed: Speed,
@@ -40,14 +40,13 @@ impl Default for PlayerBundle {
         Self {
             player: Player,
             rigid_body: RigidBody::Dynamic,
-            collision_shape: CollisionShape::Sphere { radius: 16.0 },
+            collider: Collider::ball(16.0),
             velocity: Default::default(),
-            damping: Damping::from_linear(10.0),
-            rotation_constraints: RotationConstraints {
-                allow_x: false,
-                allow_y: false,
-                allow_z: false,
+            damping: Damping {
+                linear_damping: 10.0,
+                angular_damping: 0.0,
             },
+            rotation_constraints: LockedAxes::ROTATION_LOCKED,
             health: Default::default(),
             sprite_bundle: Default::default(),
             points: Default::default(),

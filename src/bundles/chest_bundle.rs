@@ -1,5 +1,5 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
-use heron::{CollisionShape, Collisions, RigidBody};
+use bevy_rapier2d::prelude::*;
 
 use crate::components::Chest;
 
@@ -7,8 +7,8 @@ use crate::components::Chest;
 pub struct ChestBundle {
     pub chest: Chest,
     pub rigid_body: RigidBody,
-    pub collision_shape: CollisionShape,
-    pub collisions: Collisions,
+    pub collider: Collider,
+    pub sensor: Sensor,
     pub sprite_bundle: SpriteBundle,
 }
 
@@ -35,10 +35,10 @@ impl Default for ChestBundle {
     fn default() -> Self {
         Self {
             sprite_bundle: Default::default(),
-            rigid_body: RigidBody::Sensor,
-            collision_shape: CollisionShape::Sphere { radius: 16.0 },
-            collisions: Default::default(),
-            chest: Chest::default(),
+            rigid_body: RigidBody::Fixed,
+            collider: Collider::ball(16.0),
+            chest: Default::default(),
+            sensor: Default::default(),
         }
     }
 }
