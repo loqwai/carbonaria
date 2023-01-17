@@ -4,22 +4,22 @@ extern crate derive_error;
 mod bundles;
 mod components;
 mod events;
+mod inspection_ui;
 mod resources;
 mod systems;
 mod util;
-mod inspection_ui;
 
 use bevy::{prelude::*, render::texture::ImageSettings};
 
-use heron::PhysicsPlugin;
+use bevy_rapier2d::prelude::*;
+
 use rand::{rngs::SmallRng, SeedableRng};
 use resources::{Config, MobSpawnTimer};
 
 fn main() {
-    let mut app = App::new();
-    app
+    let mut app = App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(PhysicsPlugin::default())
+        .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .insert_resource(MobSpawnTimer(Timer::from_seconds(0.5, true)))
         .insert_resource(Config {
             dimensions: 128,
@@ -64,9 +64,8 @@ fn main() {
         .add_system(systems::on_reset_despawn_all_rooms)
         .add_system(systems::on_reset_despawn_all_exits)
         .add_system(systems::on_stick_hit_wallbreaker)
-        .add_system(systems::sync_mouse_position)
-        ;
+        .add_system(systems::sync_mouse_position);
 
-        inspection_ui::add_inspector(&mut app);
-        app.run();
+    inspection_ui::add_inspector(&mut app);
+    app.run();
 }

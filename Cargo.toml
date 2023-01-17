@@ -15,6 +15,9 @@ opt-level = 3
 bevy = { version = "0.8.1", features = ["dynamic"] }
 bevy-inspector-egui = "0.13.0"
 derive-error = "0.0.5"
-heron = { version = "4.0.1", features = ["2d"] }
+bevy_rapier2d = "0.20.0"
 rand = { version = "0.8.5",  features = ["small_rng"] }
+
+[profile.dev.package.bevy_rapier2d]
+opt-level = 3
 
