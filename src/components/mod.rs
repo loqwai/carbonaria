@@ -67,12 +67,12 @@ impl Speed {
 }
 impl Default for Speed {
     fn default() -> Self {
-        Speed(40.0)
+        Speed(4.0)
     }
 }
 
 // Chest stuff
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Pocket;
 
 #[derive(Component)]
