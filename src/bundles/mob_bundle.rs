@@ -42,7 +42,7 @@ impl Default for MobBundle {
     fn default() -> Self {
         Self {
             mob: Mob,
-            rigid_body: RigidBody::Static,
+            rigid_body: RigidBody::Sensor,
             collision_shape: CollisionShape::Sphere { radius: 16.0 },
             velocity: Default::default(),
             base_speed: Speed::fast(),

@@ -20,7 +20,7 @@ fn main() {
     app
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin::default())
-        .insert_resource(MobSpawnTimer(Timer::from_seconds(0.5, true)))
+        .insert_resource(MobSpawnTimer(Timer::from_seconds(0.05, true)))
         .insert_resource(Config {
             dimensions: 128,
             tile_size: 64,
