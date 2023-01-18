@@ -6,7 +6,7 @@ use crate::components::{Health, Player, Pocket, Points, Speed, Team};
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
-    pub rigid_body: RigidBody,
+    pub sensor: Sensor,
     pub collider: Collider,
     pub velocity: Velocity,
     pub damping: Damping,
@@ -17,7 +17,9 @@ pub struct PlayerBundle {
     pub name: Name,
     pub pockets: Pocket,
     pub team: Team,
+    pub active_events: ActiveEvents,
     pub sprite_bundle: SpriteBundle,
+    pub rigid_body: RigidBody,
 }
 
 impl PlayerBundle {
@@ -40,7 +42,8 @@ impl Default for PlayerBundle {
     fn default() -> Self {
         Self {
             player: Player,
-            rigid_body: RigidBody::KinematicPositionBased,
+            rigid_body: RigidBody::Dynamic,
+            sensor: Default::default(),
             collider: Collider::ball(16.0),
             velocity: Default::default(),
             damping: Damping {
@@ -54,6 +57,7 @@ impl Default for PlayerBundle {
             speed: Default::default(),
             pockets: Pocket,
             team: Team(0),
+            active_events: ActiveEvents::COLLISION_EVENTS,
             name: "player".into(), //probably not something we want to do in the future. But nice for the debugger
         }
     }

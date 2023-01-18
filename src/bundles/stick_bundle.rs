@@ -12,11 +12,11 @@ use crate::components::{Stick, SwingStickAnimation};
 pub struct StickBundle {
     pub name: Name,
     pub stick: Stick,
-    pub rigid_body: RigidBody,
     pub collider: Collider,
     pub animation_player: AnimationPlayer,
     pub animation: SwingStickAnimation,
     pub sprite_bundle: SpriteBundle,
+    sensor: Sensor,
 }
 
 impl StickBundle {
@@ -51,7 +51,7 @@ impl Default for StickBundle {
         Self {
             name: "stick".into(),
             stick: Stick,
-            rigid_body: RigidBody::KinematicPositionBased,
+            sensor: Sensor,
             collider: Collider::convex_hull(&vec![
                 Vec2::new(36.0, 2.0),
                 Vec2::new(44.0, 2.0),

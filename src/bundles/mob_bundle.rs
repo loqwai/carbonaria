@@ -41,7 +41,7 @@ impl Default for MobBundle {
     fn default() -> Self {
         Self {
             mob: Mob,
-            rigid_body: RigidBody::KinematicPositionBased,
+            rigid_body: RigidBody::Dynamic,
             collider: Collider::ball(16.0),
             velocity: Default::default(),
             base_speed: Speed::fast(),
