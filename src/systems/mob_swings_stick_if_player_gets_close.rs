@@ -1,31 +1,30 @@
 use bevy::prelude::*;
 
 use crate::{
-    components::{Mob, Player, Stick},
+    components::{Team, Chases, Stick},
     events::SwingStickEvent,
 };
 
 pub fn mob_swings_stick_if_player_gets_close(
-    q_mob: Query<(&Transform, &Children), With<Mob>>,
-    q_player: Query<&Transform, With<Player>>,
-    q_stick: Query<Entity, With<Stick>>,
+    chasers: Query<(&Team, &Transform, &Children), With<Chases>>,
+    targets: Query<(&Team, &Transform)>,
+    sticks: Query<Entity, With<Stick>>,
     mut writer: EventWriter<SwingStickEvent>,
 ) {
-    let player = q_player
-        .get_single()
-        .map_err(|e| format!("Failed to find player to try and hit with a stick: {}", e))
-        .unwrap()
-        .translation;
+    chasers.for_each(|(chaser_team, chaser_transform, children)| {
+        match targets.iter().find(|(team, _)| team != &chaser_team) {
+            None => return,
+            Some((_, target_transform)) => {
+                if !is_close(chaser_transform.translation, target_transform.translation) {
+                    return;
+                }
+                for &child in children.iter() {
+                    // get the health of each child unit
+                    if let Ok(stick) = sticks.get(child) {
 
-    // player.transform
-    q_mob.for_each(|(transform, children)| {
-        if !is_close(player, transform.translation) {
-            return;
-        }
-
-        for &child in children.iter() {
-            if let Ok(stick) = q_stick.get(child) {
-                writer.send(SwingStickEvent { stick })
+                        writer.send(SwingStickEvent { stick });
+                    }
+                }
             }
         }
     });

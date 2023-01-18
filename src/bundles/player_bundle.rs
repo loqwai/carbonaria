@@ -41,7 +41,7 @@ impl Default for PlayerBundle {
     fn default() -> Self {
         Self {
             player: Player,
-            rigid_body: RigidBody::Dynamic,
+            rigid_body: RigidBody::Static,
             collision_shape: CollisionShape::Sphere { radius: 16.0 },
             velocity: Default::default(),
             damping: Damping::from_linear(10.0),
