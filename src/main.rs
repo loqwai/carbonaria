@@ -42,7 +42,7 @@ fn main() {
         .add_startup_system(systems::resize_window)
         .add_startup_system(systems::spawn_camera)
         .add_startup_system(systems::spawn_player)
-        .add_startup_system(systems::spawn_score_ui)
+        .add_startup_system(systems::spawn_ui)
         .add_startup_system(systems::spawn_speed_chest)
         .add_startup_system(systems::spawn_wallbreaker_chest)
         .add_startup_system(systems::spawn_powerups)
