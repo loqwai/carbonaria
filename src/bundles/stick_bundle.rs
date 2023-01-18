@@ -53,7 +53,7 @@ impl Default for StickBundle {
         Self {
             name: "stick".into(),
             stick: Stick,
-            rigid_body: RigidBody::KinematicPositionBased,
+            rigid_body: RigidBody::Static,
             collision_shape: CollisionShape::ConvexHull {
                 points: vec![
                     Vec3::new(36.0, 2.0, 0.0),
