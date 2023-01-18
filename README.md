@@ -85,7 +85,7 @@ Scale enemy difficulty by increasing the number of powerups they spawn with over
 
 
 ## Polishing Up
-* [ ] Move from deprecated physics engine (Heron) to the authors recommended replacement, [bevy_rapier](https://rapier.rs/docs/user_guides/bevy_plugin/getting_started_bevy)
+* [x] Move from deprecated physics engine (Heron) to the authors recommended replacement, [bevy_rapier](https://rapier.rs/docs/user_guides/bevy_plugin/getting_started_bevy)
   - [diff](https://github.com/rust-adventure/2d-platformer-sandbox-youtube-series/commit/cbb6e32f2e5338cbc49d1046b7f4a23a09d339c7) of someone else doing it in [this](https://www.youtube.com/watch?v=zvLWibkWcVg) Youtube vid.
 
 [rust svg/react rendering](https://docs.rs/dioxus-html/0.2.1/dioxus_html/struct.svg.html)
