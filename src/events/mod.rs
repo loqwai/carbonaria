@@ -1,4 +1,4 @@
-use bevy::prelude::Entity;
+use bevy::prelude::*;
 
 #[derive(Debug)]
 pub struct SwingStickEvent {
@@ -12,4 +12,10 @@ pub struct StickHitEvent {
 
 pub struct ResetEvent {
 
+}
+
+pub struct MoveEvent {
+   pub who: Entity,
+   pub velocity: Vec3,
+   pub rotation: Quat,
 }

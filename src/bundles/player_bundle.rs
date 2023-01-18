@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::SpriteBundle};
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Health, Player, Pocket, Points, Speed};
+use crate::components::{Health, Player, Pocket, Points, Speed, Team};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
@@ -16,6 +16,7 @@ pub struct PlayerBundle {
     pub speed: Speed,
     pub name: Name,
     pub pockets: Pocket,
+    pub team: Team,
     pub sprite_bundle: SpriteBundle,
 }
 
@@ -39,7 +40,7 @@ impl Default for PlayerBundle {
     fn default() -> Self {
         Self {
             player: Player,
-            rigid_body: RigidBody::Dynamic,
+            rigid_body: RigidBody::KinematicPositionBased,
             collider: Collider::ball(16.0),
             velocity: Default::default(),
             damping: Damping {
@@ -52,6 +53,7 @@ impl Default for PlayerBundle {
             points: Default::default(),
             speed: Default::default(),
             pockets: Pocket,
+            team: Team(0),
             name: "player".into(), //probably not something we want to do in the future. But nice for the debugger
         }
     }

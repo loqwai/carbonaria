@@ -53,6 +53,9 @@ pub struct Exit;
 #[derive(Component)]
 pub struct Compass;
 
+#[derive(Component, Default)]
+pub struct Chases;
+
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Speed(pub f32);
@@ -67,12 +70,12 @@ impl Speed {
 }
 impl Default for Speed {
     fn default() -> Self {
-        Speed(40.0)
+        Speed(4.0)
     }
 }
 
 // Chest stuff
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Pocket;
 
 #[derive(Component)]
@@ -90,6 +93,9 @@ impl Default for Chest {
         Chest { contents: None }
     }
 }
+#[derive(Component, Default, PartialEq, Reflect)]
+#[reflect(Component)]
+pub struct Team(pub usize);
 #[derive(Component)]
 pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332

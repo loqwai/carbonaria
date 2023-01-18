@@ -10,6 +10,9 @@ pub fn on_stick_hit_subtract_health(
         match q_health.get_mut(event.target) {
             Err(_) => continue,
             Ok(mut health) => {
+                if health.0 == 0 {
+                    continue;
+                }
                 health.0 -= 1;
                 println!("health: {}", health.0);
             }

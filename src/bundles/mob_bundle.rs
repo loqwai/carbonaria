@@ -5,7 +5,7 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::components::Mob;
+use crate::components::{Chases, Health, Mob, Pocket, Speed, Team};
 
 #[derive(Bundle)]
 pub struct MobBundle {
@@ -13,6 +13,11 @@ pub struct MobBundle {
     pub rigid_body: RigidBody,
     pub collider: Collider,
     pub velocity: Velocity,
+    pub base_speed: Speed,
+    pub pockets: Pocket,
+    pub team: Team,
+    pub health: Health,
+    pub chases: Chases,
     pub sprite_bundle: SpriteBundle,
 }
 
@@ -36,10 +41,15 @@ impl Default for MobBundle {
     fn default() -> Self {
         Self {
             mob: Mob,
-            rigid_body: RigidBody::Dynamic,
+            rigid_body: RigidBody::KinematicPositionBased,
             collider: Collider::ball(16.0),
             velocity: Default::default(),
+            base_speed: Speed::fast(),
+            pockets: Default::default(),
             sprite_bundle: Default::default(),
+            team: Team(1),
+            health: Default::default(),
+            chases: Default::default(),
         }
     }
 }
