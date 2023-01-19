@@ -70,6 +70,7 @@ fn main() {
         .add_system(systems::on_stick_hit_increment_points)
         .add_system(systems::on_reset_move_player_to_origin)
         .add_system(systems::on_stick_hit_subtract_health)
+        .add_system(systems::on_damager_hit_subtract_health)
         .add_system(systems::update_compass)
         .add_system(systems::update_score_ui)
         .add_system(systems::update_health_ui)

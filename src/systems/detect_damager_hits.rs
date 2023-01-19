@@ -9,7 +9,6 @@ use crate::{
 use bevy::prelude::*;
 
 pub fn detect_damager_hits(
-    mut commands: Commands,
     mut collision_events: EventReader<CollisionEvent>,
     mut damager_hit_events: EventWriter<DamagerHitEvent>,
     healthies: Query<Entity, With<Health>>,
