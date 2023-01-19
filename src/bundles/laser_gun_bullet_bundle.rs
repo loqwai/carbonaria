@@ -2,6 +2,7 @@ use bevy::{
     prelude::*,
     sprite::{ SpriteBundle},
 };
+use bevy_rapier2d::prelude::*;
 
 use crate::components::{LaserGunBullet, Speed};
 
@@ -10,6 +11,9 @@ pub struct LaserGunBulletBundle {
     pub name: Name,
     pub tag: LaserGunBullet,
     pub sprite_bundle: SpriteBundle,
+    pub collider: Collider,
+    pub sensor: Sensor,
+    pub active_events: ActiveEvents,
     pub speed: Speed,
 }
 
@@ -43,6 +47,9 @@ impl Default for LaserGunBulletBundle {
             sprite_bundle: SpriteBundle {
                 ..Default::default()
             },
+            collider: Collider::cuboid(2.0, 2.0),
+            sensor: Sensor,
+            active_events: ActiveEvents::COLLISION_EVENTS,
         }
     }
 }
