@@ -19,6 +19,7 @@ pub struct MobBundle {
     pub health: Health,
     pub chases: Chases,
     pub sprite_bundle: SpriteBundle,
+    pub axis_constraints: LockedAxes,
 }
 
 impl MobBundle {
@@ -47,6 +48,7 @@ impl Default for MobBundle {
             base_speed: Speed::fast(),
             pockets: Default::default(),
             sprite_bundle: Default::default(),
+            axis_constraints: LockedAxes::empty(),
             team: Team(1),
             health: Default::default(),
             chases: Default::default(),
