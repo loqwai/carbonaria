@@ -1,11 +1,11 @@
-use bevy::prelude::{AnimationClip, AssetServer, Assets, BuildChildren, Commands, Res, ResMut};
+use bevy::prelude::{AssetServer, BuildChildren, Commands, Res, ResMut};
 
 use bevy::time::Time;
 
 use crate::resources::{Config, SmallRng};
 use crate::util::random_position;
 use crate::{
-    bundles::{MobBundle, StickBundle},
+    bundles::{MobBundle, LaserGunBundle},
     resources::MobSpawnTimer,
 };
 
@@ -14,7 +14,6 @@ pub fn spawn_mobs(
     time: Res<Time>,
     mut timer: ResMut<MobSpawnTimer>,
     asset_server: Res<AssetServer>,
-    animations: ResMut<Assets<AnimationClip>>,
     config: Res<Config>,
     mut rng: ResMut<SmallRng>,
 ) {
@@ -24,9 +23,9 @@ pub fn spawn_mobs(
         let position = random_position(&config, &mut rng);
 
         let mob = commands.spawn(MobBundle::new(&asset_server, position)).id();
-        let stick = commands
-            .spawn(StickBundle::new(&asset_server, animations))
+        let laser_gun = commands
+            .spawn(LaserGunBundle::new(&asset_server))
             .id();
-        commands.entity(mob).push_children(&[stick]);
+        commands.entity(mob).push_children(&[laser_gun]);
     }
 }

@@ -25,11 +25,11 @@ fn main() {
             ..Default::default()
         })
         .insert_resource(MobSpawnTimer(Timer::from_seconds(
-            0.5,
+            1.0,
             TimerMode::Repeating,
         )))
         .insert_resource(Config {
-            dimensions: 128,
+            dimensions: 32,
             tile_size: 64,
             camera_follow_interpolation: 0.05,
             // camera_follow_interpolation: 1.0,
@@ -47,6 +47,8 @@ fn main() {
         .add_startup_system(systems::spawn_wallbreaker_chest)
         .add_startup_system(systems::spawn_powerups)
         // .add_system(systems::spawn_room)
+        .add_system(systems::shoot_gun)
+        .add_system(systems::move_bullet)
         .add_system(systems::spawn_exit)
         .add_system(systems::spawn_next_tile_for_rooms)
         .add_system(systems::spawn_mobs)

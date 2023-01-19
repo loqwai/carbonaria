@@ -57,7 +57,6 @@ pub struct Compass;
 pub struct Chases;
 
 #[derive(Component, Reflect)]
-#[reflect(Component)]
 pub struct Speed(pub f32);
 impl Speed {
     pub fn fast() -> Speed {
@@ -99,3 +98,10 @@ pub struct Team(pub usize);
 #[derive(Component)]
 pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332
+
+#[derive(Component,Reflect)]
+pub struct LaserGun;
+
+#[derive(Component,Reflect)]
+pub struct LaserGunBullet;
+
