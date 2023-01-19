@@ -100,8 +100,10 @@ pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332
 
 #[derive(Component,Reflect)]
-pub struct LaserGun;
-
+pub struct LaserGun{
+    pub cooldown: f32,
+    pub cooldown_max: f32,
+}
 #[derive(Component,Reflect)]
 pub struct LaserGunBullet;
 

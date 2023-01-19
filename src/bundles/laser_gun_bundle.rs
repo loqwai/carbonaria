@@ -44,7 +44,10 @@ impl Default for LaserGunBundle {
     fn default() -> Self {
         Self {
             name: "stick".into(),
-            stick: LaserGun,
+            stick: LaserGun{
+                cooldown: 0.0,
+                cooldown_max: 32.0,
+            },
             sprite_bundle: SpriteBundle {
                 ..Default::default()
             },
