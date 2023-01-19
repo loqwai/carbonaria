@@ -9,6 +9,10 @@ pub struct StickHitEvent {
     pub stick: Entity,
     pub target: Entity,
 }
+pub struct DamagerHitEvent {
+    pub damager: Entity,
+    pub target: Entity,
+}
 
 pub struct ResetEvent {
 

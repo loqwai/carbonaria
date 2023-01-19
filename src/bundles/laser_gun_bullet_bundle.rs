@@ -4,7 +4,7 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{LaserGunBullet, Speed};
+use crate::components::{LaserGunBullet, Speed,Damage};
 
 #[derive(Bundle)]
 pub struct LaserGunBulletBundle {
@@ -15,6 +15,7 @@ pub struct LaserGunBulletBundle {
     pub sensor: Sensor,
     pub active_events: ActiveEvents,
     pub speed: Speed,
+    pub damage: Damage,
 }
 
 impl LaserGunBulletBundle {
@@ -48,6 +49,7 @@ impl Default for LaserGunBulletBundle {
                 ..Default::default()
             },
             collider: Collider::cuboid(2.0, 2.0),
+            damage: Damage(1),
             sensor: Sensor,
             active_events: ActiveEvents::COLLISION_EVENTS,
         }

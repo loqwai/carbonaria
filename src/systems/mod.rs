@@ -1,6 +1,7 @@
 mod chasers_follow_other_teams;
 mod detect_exit;
 mod detect_stick_hits;
+mod detect_damager_hits;
 mod follow_player_with_camera;
 mod mob_swings_stick_if_player_gets_close;
 mod move_player;
@@ -37,6 +38,7 @@ mod update_score_ui;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use detect_exit::detect_exit;
 pub use detect_stick_hits::detect_stick_hits;
+pub use detect_damager_hits::detect_damager_hits;
 pub use follow_player_with_camera::follow_player_with_camera;
 pub use mob_swings_stick_if_player_gets_close::mob_swings_stick_if_player_gets_close;
 pub use move_bullet::move_bullet;
