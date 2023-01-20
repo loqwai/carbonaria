@@ -37,3 +37,9 @@ pub fn is_inside_of(view_area: &ViewArea, position: &Position) -> bool {
 
     return (x1 <= x) && (x <= x2) && (y1 <= y) && (y <= y2);
 }
+pub fn look_at_target(looker: Vec3, target: Vec3) -> (Quat, Vec3) {
+    let diff = looker - target;
+    let angle = diff.y.atan2(diff.x); // Add/sub FRAC_PI here optionally
+    let rotation = Quat::from_axis_angle(Vec3::Z, angle);
+    return (rotation, diff.normalize()*-1.0);
+}
