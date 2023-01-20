@@ -14,6 +14,10 @@ pub fn shoot_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        commands.spawn(LaserGunBulletBundle::new(&asset_server, &transform));
+        // TODO: replace magic numbers
+        commands.spawn(LaserGunBulletBundle::new(
+            &asset_server,
+            &transform.mul_transform(Transform::from_translation(Vec3::new(50.0, 1.0, 1.0))),
+        ));
     })
 }

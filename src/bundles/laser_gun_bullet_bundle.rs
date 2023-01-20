@@ -45,7 +45,7 @@ impl Default for LaserGunBulletBundle {
         Self {
             name: "laser gun bullet".into(),
             tag: LaserGunBullet,
-            speed: Speed(4.0),
+            speed: Speed(10.0),
             health: Health(1),
             sprite_bundle: SpriteBundle {
                 ..Default::default()

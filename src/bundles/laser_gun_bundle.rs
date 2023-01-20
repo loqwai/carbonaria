@@ -46,7 +46,7 @@ impl Default for LaserGunBundle {
             name: "laser-gun".into(),
             gun: LaserGun{
                 cooldown: 0,
-                cooldown_max: 32,
+                cooldown_max: 99,
             },
             sprite_bundle: SpriteBundle {
                 ..Default::default()

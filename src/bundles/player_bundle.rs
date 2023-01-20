@@ -51,7 +51,7 @@ impl Default for PlayerBundle {
                 angular_damping: 0.0,
             },
             axis_constraints: LockedAxes::ROTATION_LOCKED,
-            health: Health(100),
+            health: Default::default(),
             sprite_bundle: Default::default(),
             points: Default::default(),
             speed: Default::default(),
