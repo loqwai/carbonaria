@@ -47,6 +47,7 @@ fn main() {
         .add_startup_system(systems::spawn_speed_chest)
         .add_startup_system(systems::spawn_wallbreaker_chest)
         .add_startup_system(systems::spawn_powerups)
+        .add_startup_system(systems::spawn_crosshairs)
         // .add_system(systems::spawn_room)
         .add_system(systems::shoot_gun)
         .add_system(systems::move_bullet)
