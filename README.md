@@ -43,7 +43,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x] A Powerup you can pick up that makes you move faster
 * [x] A Powerup you can pick up that makes you move slower
 * [x] A Powerup you can pick up that allows you to smash through walls?
-* [x] Chests you can pick up that give you powerups
+* [x] Chests you can pick up that give you mods
 * [ ] Mobs should spawn close to the player
 * [ ] Hitting the wall the stick should not count as a point
 * [ ] Those things with sticks can also move around and will chase you if you get close to them
@@ -83,6 +83,24 @@ All modules must be accessable to boarders in order for you to be able to use th
 ## Ideas
 
 Scale enemy difficulty by increasing the number of powerups they spawn with over time. Randomly chosen? All enemies in a wave share the same set?
+
+### Chaining Mods?
+Maybe powerups = mods
+
+* [ ] Mods should point to an entity it "affects" that has a component that can be modified by the mod.
+* [ ] Multiple mods should be able to affect the same entity.
+* [ ] Mods should be able to be stacked.
+### Mod Stacking?
+1. [ ] Entity starts with an empty representation of whatever component the mod affects.
+1. [ ] That component is cleared at the start of each tick.
+1. [ ] That component represents the computed value of the mod stack.
+1. [ ] The first 'mod' is the base value of the component for the entity
+  - e.g., if the mod is a speed mod, the base value is the entity's speed. This can change based on a 'class' of fighter, mage, or whatever we do.
+1. [ ] Each subsequent mod is added to the base value of the component for the entity
+* [ ] systems run in order(?), so adding/subtracting mods should run before multipliers, etc.
+*. [ ] _Could every hit be a mod that subtracts health?_ That could prove the model.
+*. [ ] 'Bullets' could just be payloads for mods. Literally our 'chests' with a velocity. The collision w/chests logic would deliver the mod!
+
 
 
 ## Polishing Up
