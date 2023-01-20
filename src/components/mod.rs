@@ -101,8 +101,8 @@ pub struct MousePos;
 
 #[derive(Component,Reflect)]
 pub struct LaserGun{
-    pub cooldown: f32,
-    pub cooldown_max: f32,
+    pub cooldown: usize,
+    pub cooldown_max: usize,
 }
 #[derive(Component,Reflect)]
 pub struct LaserGunBullet;

@@ -8,8 +8,8 @@ pub fn shoot_gun(
     mut guns: Query<(&mut LaserGun, &GlobalTransform)>,
 ) {
     guns.for_each_mut(|(mut gun, transform)| {
-        if gun.cooldown > 0.0 {
-            gun.cooldown -= 1.0;
+        if gun.cooldown > 0 {
+            gun.cooldown -= 1;
             return;
         }
 
