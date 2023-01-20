@@ -25,7 +25,7 @@ fn main() {
             ..Default::default()
         })
         .insert_resource(MobSpawnTimer(Timer::from_seconds(
-            3.0,
+            10.0,
             TimerMode::Repeating,
         )))
         .insert_resource(Config {
