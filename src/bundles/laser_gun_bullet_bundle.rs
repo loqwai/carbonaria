@@ -4,7 +4,7 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{LaserGunBullet, Speed,Damage};
+use crate::components::{LaserGunBullet, Speed,Damage, Health};
 
 #[derive(Bundle)]
 pub struct LaserGunBulletBundle {
@@ -16,6 +16,7 @@ pub struct LaserGunBulletBundle {
     pub active_events: ActiveEvents,
     pub speed: Speed,
     pub damage: Damage,
+    pub health: Health,
 }
 
 impl LaserGunBulletBundle {
@@ -45,6 +46,7 @@ impl Default for LaserGunBulletBundle {
             name: "laser gun bullet".into(),
             tag: LaserGunBullet,
             speed: Speed(20.0),
+            health: Health(1),
             sprite_bundle: SpriteBundle {
                 ..Default::default()
             },

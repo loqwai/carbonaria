@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use crate::{components::{Health, Damage}, events::DamagerHitEvent};
 
 pub fn on_damager_hit_subtract_health (
+    mut commands: Commands,
     mut events: EventReader<DamagerHitEvent>,
     mut targets: Query<&mut Health>,
     damagers: Query<&Damage>,
@@ -17,6 +18,7 @@ pub fn on_damager_hit_subtract_health (
                 // get the damage from the damager
                 let damage = damagers.get(event.damager).unwrap().0;
                 health.0 -= damage;
+                // commands.entity(event.damager).despawn_recursive();
                 println!("damager: target: {:?}, health: {}", event.target, health.0);
             }
         }

@@ -43,7 +43,7 @@ impl LaserGunBundle {
 impl Default for LaserGunBundle {
     fn default() -> Self {
         Self {
-            name: "stick".into(),
+            name: "laser-gun".into(),
             gun: LaserGun{
                 cooldown: 0,
                 cooldown_max: 32,
