@@ -10,7 +10,7 @@ use crate::components::LaserGun;
 #[derive(Bundle)]
 pub struct LaserGunBundle {
     pub name: Name,
-    pub stick: LaserGun,
+    pub gun: LaserGun,
     pub sprite_bundle: SpriteBundle,
 }
 
@@ -44,7 +44,7 @@ impl Default for LaserGunBundle {
     fn default() -> Self {
         Self {
             name: "stick".into(),
-            stick: LaserGun{
+            gun: LaserGun{
                 cooldown: 0,
                 cooldown_max: 32,
             },
