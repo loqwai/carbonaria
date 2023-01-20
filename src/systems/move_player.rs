@@ -34,6 +34,8 @@ fn fallible_move_player(
 ) -> Result<(), MovePlayerError> {
     for (entity,player_pos, _) in velocity_query.iter_mut() {
         let mut rotation = Quat::default();
+        let mut velocity = Vec3::default();
+
         match mouse_query.get_single() {
             Ok(mouse_pos) => {
                 let (r,_) = look_at_target(player_pos.translation, mouse_pos.translation);
@@ -42,33 +44,22 @@ fn fallible_move_player(
             Err(_) => {todo!()},
         }
         if keyboard_input.pressed(KeyCode::A) {
-            move_events.send(MoveEvent {
-                who: entity,
-                velocity: Vec3::new(-1.0, 0.0, 0.0),
-                rotation,
-            });
+            velocity = Vec3::new(-1.0, 0.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::D) {
-            move_events.send(MoveEvent {
-                who: entity,
-                velocity: Vec3::new(1.0, 0.0, 0.0),
-                rotation,
-            });
+            velocity = Vec3::new(1.0, 0.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::W) {
-            move_events.send(MoveEvent {
-                who: entity,
-                velocity: Vec3::new(0.0, 1.0, 0.0),
-                rotation,
-            });
+            velocity = Vec3::new(0.0, 1.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::S) {
-            move_events.send(MoveEvent {
-                who: entity,
-                velocity: Vec3::new(0.0, -1.0, 0.0),
-                rotation,
-            });
+            velocity = Vec3::new(0.0, -1.0, 0.0);
         }
+        move_events.send(MoveEvent{
+            who: entity,
+            velocity,
+            rotation,
+        });
     }
     Ok(())
 }
