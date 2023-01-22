@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::components::{Health, Modifier, Modifies};
-
+// consider genericing this to take a component type that is multipliable, etc
 pub fn compute_health(
     modifiers: Query<(&Health, &Modifies), With<Modifier>>,
     mut healthies: Query<&mut Health, Without<Modifier>>,
