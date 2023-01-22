@@ -40,7 +40,7 @@ pub struct ScoreUI;
 pub struct Health(pub usize);
 impl Default for Health {
     fn default() -> Self {
-        Health(10)
+        Health(0)
     }
 }
 
