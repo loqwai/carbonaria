@@ -37,7 +37,7 @@ pub struct ScoreUI;
 
 #[derive(Component, Reflect)]
 #[reflect(Component)]
-pub struct Health(pub usize);
+pub struct Health(pub i32);
 impl Default for Health {
     fn default() -> Self {
         Health(0)
@@ -108,5 +108,5 @@ pub struct LaserGun{
 pub struct LaserGunBullet;
 
 #[derive(Component,Reflect)]
-pub struct Damage(pub usize);
+pub struct Damage(pub i32);
 

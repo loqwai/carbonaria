@@ -37,6 +37,7 @@ mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
 mod on_damager_hit_subtract_health;
+pub mod compute_health;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use detect_exit::detect_exit;
 pub use detect_stick_hits::detect_stick_hits;
