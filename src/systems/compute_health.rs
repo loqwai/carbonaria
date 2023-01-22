@@ -3,7 +3,6 @@ use bevy::prelude::*;
 use crate::components::{Health, Modifier, Modifies};
 
 pub fn compute_health(
-    mut commands: Commands,
     modifiers: Query<(&Health, &Modifies), With<Modifier>>,
     mut healthies: Query<&mut Health, Without<Modifier>>,
 ) {

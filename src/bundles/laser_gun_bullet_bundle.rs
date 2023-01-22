@@ -4,12 +4,13 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{LaserGunBullet, Speed,Damage, Health};
+use crate::components::{LaserGunBullet, Speed,Damage, Health, Modifier};
 
 #[derive(Bundle)]
 pub struct LaserGunBulletBundle {
     pub name: Name,
     pub tag: LaserGunBullet,
+    pub modifier: Modifier,
     pub sprite_bundle: SpriteBundle,
     pub collider: Collider,
     pub sensor: Sensor,
@@ -45,6 +46,7 @@ impl Default for LaserGunBulletBundle {
         Self {
             name: "laser gun bullet".into(),
             tag: LaserGunBullet,
+            modifier: Modifier,
             speed: Speed(10.0),
             health: Health(1),
             sprite_bundle: SpriteBundle {
