@@ -1,18 +1,14 @@
 use bevy::prelude::*;
 
-use crate::components::Health;
+use crate::components::{Health, Modifier, Modifies};
 
-#[derive(Component, Reflect)]
-pub struct Modifier {
-    pub affects: Entity,
-}
 pub fn compute_health(
     mut commands: Commands,
-    modifiers: Query<(&Health, &Modifier)>,
+    modifiers: Query<(&Health, &Modifies), With<Modifier>>,
     mut healthies: Query<&mut Health, Without<Modifier>>,
 ) {
     modifiers.for_each(|(mods, modifies)| {
-        let target = commands.get_entity(modifies.affects).unwrap().id();
+        let target = modifies.0;
         let mut health = healthies.get_component_mut::<Health>(target).unwrap();
         health.0 += mods.0;
     });
@@ -36,8 +32,8 @@ fn did_add_health() {
     // Setup test entities
     let player = app.world.spawn(Health(555)).id();
 
-    app.world.spawn((Health(10), Modifier { affects: player }));
-    app.world.spawn((Health(-20), Modifier { affects: player }));
+    app.world.spawn((Health(10), Modifier, Modifies(player)));
+    app.world.spawn((Health(-20), Modifier, Modifies(player)));
     // Run systems
     app.update();
 
