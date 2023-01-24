@@ -26,10 +26,9 @@ impl LaserGunBulletBundle {
     ) -> LaserGunBulletBundle {
         LaserGunBulletBundle {
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("stick.png"),
+                texture: asset_server.load("bullet.png"),
                 transform: transform.clone().into(),
                 sprite: Sprite {
-                    // anchor: Anchor::Custom(Vec2::new(-20.0 / 32.0, 0.0)),
                     custom_size: Some(Vec2::new(40.0, 20.0)),
                     ..Default::default()
                 },

@@ -23,7 +23,7 @@ impl LaserGunBundle {
         LaserGunBundle {
             name: name.clone(),
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("laser-gun.png"),
+                texture: asset_server.load("gun.png"),
                 transform: Transform {
                     rotation: Quat::from_rotation_z(-PI),
                     ..Default::default()
