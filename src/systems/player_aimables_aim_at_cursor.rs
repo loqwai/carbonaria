@@ -20,7 +20,7 @@ pub fn player_aimables_aim_at_cursor(
             .filter_map(|&child| aimables.get(child).ok())
             .for_each(|(aimable, aimable_transform)| {
                 let (rotation, _) =
-                    look_at_target(mouse.translation, aimable_transform.translation);
+                    look_at_target(aimable_transform.translation, mouse.translation);
 
                 rotate_events.send(RotateEvent {
                     who: aimable,
