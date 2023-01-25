@@ -11,16 +11,16 @@ pub fn move_player(
         let mut direction = Vec3::default();
 
         if keyboard_input.pressed(KeyCode::A) {
-            direction = Vec3::new(-1.0, 0.0, 0.0);
+            direction += Vec3::new(-1.0, 0.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::D) {
-            direction = Vec3::new(1.0, 0.0, 0.0);
+            direction += Vec3::new(1.0, 0.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::W) {
-            direction = Vec3::new(0.0, 1.0, 0.0);
+            direction += Vec3::new(0.0, 1.0, 0.0);
         }
         if keyboard_input.pressed(KeyCode::S) {
-            direction = Vec3::new(0.0, -1.0, 0.0);
+            direction += Vec3::new(0.0, -1.0, 0.0);
         }
 
         move_events.send(MoveEvent {
