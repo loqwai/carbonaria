@@ -1,15 +1,4 @@
-mod room;
-mod swing_stick_animation;
-mod wall_type;
 use bevy::prelude::*;
-
-pub use room::Room;
-pub use swing_stick_animation::SwingStickAnimation;
-pub use wall_type::Port;
-pub use wall_type::PortType;
-pub use wall_type::QuarterRotation;
-pub use wall_type::TileType;
-pub use wall_type::WallType;
 
 #[derive(Component)]
 pub struct Mob;
@@ -23,7 +12,7 @@ pub struct Stick;
 #[derive(Component)]
 pub struct Wall;
 
-#[derive(Component,Reflect)]
+#[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Points(pub usize);
 impl Default for Points {
@@ -99,14 +88,16 @@ pub struct Team(pub usize);
 pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332
 
-#[derive(Component,Reflect)]
-pub struct LaserGun{
+#[derive(Component, Reflect)]
+pub struct LaserGun {
     pub cooldown: usize,
     pub cooldown_max: usize,
 }
-#[derive(Component,Reflect)]
+#[derive(Component, Reflect)]
 pub struct LaserGunBullet;
 
-#[derive(Component,Reflect)]
+#[derive(Component, Reflect)]
 pub struct Damage(pub usize);
 
+#[derive(Component)]
+pub struct Aimable;
