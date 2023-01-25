@@ -12,6 +12,15 @@ use bevy_rapier2d::prelude::*;
 use resources::{Config, MobSpawnTimer, SmallRng};
 
 fn main() {
+    let uiSystemSet = SystemSet::new()
+        .with_system(systems::update_compass)
+        .with_system(systems::update_score_ui)
+        .with_system(systems::update_health_ui)
+        .with_system(systems::sync_mouse_position)
+        .with_system(systems::player_aimables_aim_at_cursor)
+        .with_system(systems::follow_player_with_camera)
+        ;
+
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
@@ -44,28 +53,20 @@ fn main() {
         .add_startup_system(systems::spawn_wallbreaker_chest)
         .add_startup_system(systems::spawn_powerups)
         .add_startup_system(systems::spawn_crosshairs)
+        .add_system_set(uiSystemSet)
         .add_system(systems::shoot_gun)
         .add_system(systems::move_bullet)
         .add_system(systems::spawn_exit)
         .add_system(systems::spawn_mobs)
         .add_system(systems::chasers_follow_other_teams)
-        .add_system(systems::player_aimables_aim_at_cursor)
         .add_system(systems::move_player)
         .add_system(systems::move_thing)
         .add_system(systems::rotate_thing)
-        .add_system(systems::follow_player_with_camera)
         .add_system(systems::detect_exit)
         .add_system(systems::detect_damager_hits)
         .add_system(systems::team_powerup_assigns_team)
         .add_system(systems::on_0_health_kill)
         .add_system(systems::on_chest_hit_pickup)
-        .add_system(systems::on_reset_move_player_to_origin)
         .add_system(systems::on_damager_hit_subtract_health)
-        .add_system(systems::update_compass)
-        .add_system(systems::update_score_ui)
-        .add_system(systems::update_health_ui)
-        .add_system(systems::on_reset_despawn_all_mobs)
-        .add_system(systems::on_reset_despawn_all_exits)
-        .add_system(systems::sync_mouse_position)
         .run();
 }
