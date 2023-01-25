@@ -1,9 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{
-    components::{LaserGunBullet, Speed},
-    events::MoveEvent,
-};
+use crate::{components::Speed, events::MoveEvent};
 
 pub fn move_thing(
     mut moveable: Query<(&mut Transform, &Speed)>,
