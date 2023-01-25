@@ -19,10 +19,9 @@ pub fn move_thing(
 
                     entity_speed *= speed.0;
                 }
-                if event.velocity != Vec3::default() {
-                    transform.translation += event.velocity.normalize() * entity_speed;
+                if event.direction != Vec3::default() {
+                    transform.translation += event.direction.normalize() * entity_speed;
                 }
-                transform.rotation = event.rotation;
             }
             Err(_) => return,
         };
