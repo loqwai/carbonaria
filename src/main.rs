@@ -13,17 +13,25 @@ use components::Tick;
 use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
+
+#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+pub enum AppState {
+    // Reset,
+    InGame,
+}
+
 fn main() {
     // group ui systems together bc we want to run them as fast as possible
-    let ui_system_set = SystemSet::new()
+    let ui_system_set = SystemSet::on_update(AppState::InGame)
         .with_system(systems::update_compass)
         .with_system(systems::update_score_ui)
         .with_system(systems::update_health_ui)
         .with_system(systems::sync_mouse_position)
         .with_system(systems::player_aimables_aim_at_cursor)
-        .with_system(systems::follow_player_with_camera);
+        .with_system(systems::follow_player_with_camera)
+        .with_system(systems::on_click_and_no_player_reset);
 
-    let game_loop_system_set = SystemSet::new()
+    let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         //https://bevy-cheatbook.github.io/programming/run-criteria.html
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
         .with_system(systems::count_ticks) //this may be off by one
@@ -41,6 +49,18 @@ fn main() {
         .with_system(systems::on_0_health_kill)
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::on_damager_hit_subtract_health);
+
+    let startup_system_set = SystemSet::on_enter(AppState::InGame)
+        .with_system(systems::spawn_camera)
+        .with_system(systems::spawn_player)
+        .with_system(systems::spawn_ui)
+        .with_system(systems::spawn_speed_chest)
+        .with_system(systems::spawn_wallbreaker_chest)
+        .with_system(systems::spawn_powerups)
+        .with_system(systems::spawn_crosshairs);
+
+    let cleanup_system_set =
+        SystemSet::on_exit(AppState::InGame).with_system(systems::remove_all_entities);
 
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
@@ -63,15 +83,11 @@ fn main() {
         .add_event::<events::MoveEvent>()
         .add_event::<events::RotateEvent>()
         .add_event::<events::DamagerHitEvent>()
+        .add_state(AppState::InGame)
         .add_startup_system(systems::resize_window)
-        .add_startup_system(systems::spawn_camera)
-        .add_startup_system(systems::spawn_player)
-        .add_startup_system(systems::spawn_ui)
-        .add_startup_system(systems::spawn_speed_chest)
-        .add_startup_system(systems::spawn_wallbreaker_chest)
-        .add_startup_system(systems::spawn_powerups)
-        .add_startup_system(systems::spawn_crosshairs)
+        .add_system_set(startup_system_set)
         .add_system_set(ui_system_set)
         .add_system_set(game_loop_system_set)
+        .add_system_set(cleanup_system_set)
         .run();
 }
