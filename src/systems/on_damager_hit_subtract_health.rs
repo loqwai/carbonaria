@@ -20,7 +20,7 @@ pub fn on_damager_hit_subtract_health(
                 // get the damage from the damager
                 let damage = damagers.get(event.damager).unwrap().0;
                 health.0 -= damage;
-                println!("damager: target: {:?}, health: {}", event.target, health.0);
+                // println!("damager: target: {:?}, health: {}", event.target, health.0);
             }
         }
     }
