@@ -53,6 +53,7 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [ ] Try using an ASP language like Gringo or FlatZinc to build the room generator
       - [chalk](https://rust-lang.github.io/chalk/book/engine.html) is a Prology language, built in to Rust, that the language uses for type inference!
 * [ ] Import maps via [LDtk](https://ldtk.io) (bevy plugin is [here](https://github.com/Trouv/bevy_ecs_ldtk)
+* [x] Add a way to restart the game
 
 ## Grand Unified Theory of Roguelike Fun (tm)
 1. define fun = combinatorial complexity that a user can interact with at play time (lol)
