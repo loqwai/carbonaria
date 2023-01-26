@@ -1,0 +1,12 @@
+<!-- https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page -->
+<!DOCTYPE html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+  <script type="module">
+    import init from "./wasm_example.js";
+    var res = await init();
+    res.start();
+  </script>
+</body>
