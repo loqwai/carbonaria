@@ -1,7 +1,6 @@
 use bevy::{
     prelude::*,
     sprite::{Anchor, SpriteBundle},
-    time::FixedTimestep,
 };
 
 use crate::components::{Aimable, LaserGun};
