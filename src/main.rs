@@ -29,6 +29,7 @@ fn main() {
         .with_system(systems::sync_mouse_position)
         .with_system(systems::player_aimables_aim_at_cursor)
         .with_system(systems::follow_player_with_camera)
+        .with_system(systems::on_no_players_show_game_over)
         .with_system(systems::on_click_and_no_player_reset);
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)

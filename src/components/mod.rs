@@ -24,6 +24,9 @@ impl Default for Points {
 #[derive(Component)]
 pub struct ScoreUI;
 
+#[derive(Component)]
+pub struct GameOverUI;
+
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Health(pub usize);
@@ -102,5 +105,5 @@ pub struct Damage(pub usize);
 #[derive(Component)]
 pub struct Aimable;
 
-#[derive(Reflect,Resource)]
+#[derive(Reflect, Resource)]
 pub struct Tick(pub usize);

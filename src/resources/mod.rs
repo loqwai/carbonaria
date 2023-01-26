@@ -1,7 +1,4 @@
-use bevy::{
-    prelude::{Deref, DerefMut, Resource},
-    time::Timer,
-};
+use bevy::prelude::{Deref, DerefMut, Resource};
 use rand::SeedableRng;
 
 #[derive(Resource)]
