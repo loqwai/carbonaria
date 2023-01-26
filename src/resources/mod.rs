@@ -5,9 +5,6 @@ use bevy::{
 use rand::SeedableRng;
 
 #[derive(Resource)]
-pub struct MobSpawnTimer(pub Timer);
-
-#[derive(Resource)]
 pub struct Config {
     /// dimensions defines the size of the room that is
     /// generated. The room will always be square, and will be
@@ -21,6 +18,7 @@ pub struct Config {
     /// to move completely in-sync with. Lower values like 0.1 or 0.01
     /// cause the camera to have a more natural feeling "bungee" effect
     pub camera_follow_interpolation: f32,
+    pub mob_spawn_interval: usize,
 }
 
 #[derive(Deref, DerefMut, Resource)]

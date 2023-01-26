@@ -101,3 +101,6 @@ pub struct Damage(pub usize);
 
 #[derive(Component)]
 pub struct Aimable;
+
+#[derive(Reflect,Resource)]
+pub struct Tick(pub usize);
