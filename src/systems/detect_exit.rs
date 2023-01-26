@@ -1,14 +1,16 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::CollisionEvent;
 
-use crate::components::{Exit, Player};
-use crate::events::ResetEvent;
+use crate::{
+    components::{Exit, Player},
+    AppState,
+};
 
 pub fn detect_exit(
     q_exits: Query<Entity, With<Exit>>,
     q_players: Query<Entity, With<Player>>,
     mut exit_collision_event_reader: EventReader<CollisionEvent>,
-    mut reset_event_writer: EventWriter<ResetEvent>,
+    mut app_state: ResMut<State<AppState>>,
 ) {
     let collision_happened = exit_collision_event_reader
         .iter()
@@ -28,6 +30,7 @@ pub fn detect_exit(
         });
 
     if collision_happened {
-        reset_event_writer.send(ResetEvent {});
+        // TODO carryover their score & health?
+        app_state.restart().unwrap()
     }
 }

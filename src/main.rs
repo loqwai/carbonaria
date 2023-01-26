@@ -16,7 +16,6 @@ const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
 
 #[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum AppState {
-    // Reset,
     InGame,
 }
 
@@ -80,7 +79,6 @@ fn main() {
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
-        .add_event::<events::ResetEvent>()
         .add_event::<events::MoveEvent>()
         .add_event::<events::RotateEvent>()
         .add_event::<events::DamagerHitEvent>()

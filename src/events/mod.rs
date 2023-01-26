@@ -5,8 +5,6 @@ pub struct DamagerHitEvent {
     pub target: Entity,
 }
 
-pub struct ResetEvent {}
-
 pub struct MoveEvent {
     pub who: Entity,
     pub direction: Vec3,
