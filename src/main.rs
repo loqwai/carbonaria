@@ -77,7 +77,7 @@ fn main() {
             dimensions: 32,
             tile_size: 64,
             camera_follow_interpolation: 0.05,
-            mob_spawn_interval: 1099990,
+            mob_spawn_interval: 100,
             powerup_spawn_interval: 10,
         })
         .insert_resource(Tick(0))

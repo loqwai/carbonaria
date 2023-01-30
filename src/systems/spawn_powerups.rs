@@ -8,6 +8,10 @@ use rand::seq::SliceRandom;
 lazy_static! {
     static ref POWERUPS: Vec<Powerup> = vec![
         Powerup::Speed(Speed::fast()),
+        Powerup::Speed(Speed::fast()),
+        Powerup::Speed(Speed::fast()),
+        Powerup::Speed(Speed::fast()),
+        Powerup::Speed(Speed::fast()),
         Powerup::Speed(Speed::slow()),
         Powerup::Team(Team(0)),
         Powerup::Team(Team(1)),

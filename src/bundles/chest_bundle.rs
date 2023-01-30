@@ -16,7 +16,7 @@ impl ChestBundle {
     pub fn new(asset_server: &Res<AssetServer>, position: Vec3, contents: Entity) -> ChestBundle {
         ChestBundle {
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("powerup-speed.png"),
+                texture: asset_server.load("speed-chest.png"),
                 transform: Transform {
                     translation: position,
                     ..Default::default()
