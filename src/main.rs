@@ -49,15 +49,13 @@ fn main() {
         .with_system(systems::team_powerup_assigns_team)
         .with_system(systems::on_0_health_kill)
         .with_system(systems::on_chest_hit_pickup)
+        .with_system(systems::spawn_powerups)
         .with_system(systems::on_damager_hit_subtract_health);
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
         .with_system(systems::spawn_camera)
         .with_system(systems::spawn_player)
         .with_system(systems::spawn_ui)
-        .with_system(systems::spawn_speed_chest)
-        .with_system(systems::spawn_wallbreaker_chest)
-        .with_system(systems::spawn_powerups)
         .with_system(systems::spawn_crosshairs);
 
     let cleanup_system_set =
@@ -77,7 +75,7 @@ fn main() {
             tile_size: 64,
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 10,
-            powerup_spawn_interval: 120,
+            powerup_spawn_interval: 10,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
