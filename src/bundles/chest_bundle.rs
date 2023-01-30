@@ -16,6 +16,10 @@ impl ChestBundle {
     pub fn new(asset_server: &Res<AssetServer>, position: Vec3, texture: &str, contents: Entity) -> ChestBundle {
         ChestBundle {
             sprite_bundle: SpriteBundle {
+                sprite: Sprite {
+                    custom_size: Some(Vec2::new(64.0, 64.0)),
+                    ..Default::default()
+                },
                 texture: asset_server.load( format!("chests/{}.png", texture)),
                 transform: Transform {
                     translation: position,

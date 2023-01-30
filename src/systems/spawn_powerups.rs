@@ -26,6 +26,7 @@ enum Powerup {
     Health(Health),
 }
 
+
 pub fn spawn_powerups(
     mut commands: Commands,
     ticker: Res<Tick>,
@@ -38,16 +39,16 @@ pub fn spawn_powerups(
         return;
     }
 
-    let powerup_entity = match POWERUPS.choose(&mut rng.0).unwrap().clone() {
-        Powerup::Speed(s) => commands.spawn(s).id(),
-        Powerup::Team(t) => commands.spawn(t).id(),
-        Powerup::Health(h) => commands.spawn(h).id(),
+    let (powerup_entity, sprite) = match POWERUPS.choose(&mut rng.0).unwrap().clone() {
+        Powerup::Speed(s) => (commands.spawn(s).id(), "fast"),
+        Powerup::Team(t) => (commands.spawn(t).id(), "team"),
+        Powerup::Health(h) => (commands.spawn(h).id(), "health"),
     };
     let position = random_position(&config, &mut rng);
     commands.spawn(ChestBundle::new(
         &asset_server,
         position,
-        "fast",
+        sprite,
         powerup_entity,
     ));
 
