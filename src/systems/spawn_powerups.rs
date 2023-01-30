@@ -16,56 +16,20 @@ pub fn spawn_powerups(
     if ticks % config.powerup_spawn_interval != 0 {
         return;
     }
-    match rng.gen_range(0..4) {
-        0 => {
-            let powerup = Speed::fast();
-            let powerup_entity = commands.spawn(powerup).id();
-            let sprite = "fast";
-            let position = random_position(&config, &mut rng);
-            commands.spawn(ChestBundle::new(
-                &asset_server,
-                position,
-                &sprite,
-                powerup_entity,
-            ));
-        }
-        1 => {
-            let powerup = Speed::slow();
-            let powerup_entity = commands.spawn(powerup).id();
-            let sprite = "slow";
-            let position = random_position(&config, &mut rng);
-            commands.spawn(ChestBundle::new(
-                &asset_server,
-                position,
-                &sprite,
-                powerup_entity,
-            ));
-        }
-        2 => {
-            let powerup = Team(1);
-            let powerup_entity = commands.spawn(powerup).id();
-            let sprite = "team";
-            let position = random_position(&config, &mut rng);
-            commands.spawn(ChestBundle::new(
-                &asset_server,
-                position,
-                &sprite,
-                powerup_entity,
-            ));
-        }
-        3 => {
-            let powerup = Health(1);
-            let powerup_entity = commands.spawn(powerup).id();
-            let sprite = "health";
-            let position = random_position(&config, &mut rng);
-            commands.spawn(ChestBundle::new(
-                &asset_server,
-                position,
-                &sprite,
-                powerup_entity,
-            ));
-        },
-        _ => (),
-    }
+    let (powerup, sprite) = match rng.gen_range(0..4) {
+        0 => (commands.spawn(Speed::fast()).id(), "fast"),
+        1 => (commands.spawn(Speed::slow()).id(), "team"),
+        2 => (commands.spawn(Team(1)).id(), "team"),
+        3 => (commands.spawn(Health(1)).id(), "health"),
+        n => panic!("Generated a number not between 0 & 4: {}", n)
+    };
+
+    let position = random_position(&config, &mut rng);
+    commands.spawn(ChestBundle::new(
+        &asset_server,
+        position,
+        sprite,
+        powerup,
+    ));
 }
 
