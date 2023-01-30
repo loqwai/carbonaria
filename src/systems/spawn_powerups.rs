@@ -3,29 +3,7 @@ use crate::resources::{Config, SmallRng};
 use crate::util::random_position;
 use crate::{bundles::ChestBundle};
 use bevy::prelude::*;
-use rand::seq::SliceRandom;
-
-lazy_static! {
-    static ref POWERUPS: Vec<Powerup> = vec![
-        Powerup::Speed(Speed::fast()),
-        Powerup::Speed(Speed::fast()),
-        Powerup::Speed(Speed::fast()),
-        Powerup::Speed(Speed::fast()),
-        Powerup::Speed(Speed::fast()),
-        Powerup::Speed(Speed::slow()),
-        Powerup::Team(Team(0)),
-        Powerup::Team(Team(1)),
-        Powerup::Health(Health(10)),
-    ];
-}
-
-#[derive(Clone)]
-enum Powerup {
-    Speed(Speed),
-    Team(Team),
-    Health(Health),
-}
-
+use rand::Rng;
 
 pub fn spawn_powerups(
     mut commands: Commands,
@@ -38,19 +16,56 @@ pub fn spawn_powerups(
     if ticks % config.powerup_spawn_interval != 0 {
         return;
     }
-
-    let (powerup_entity, sprite) = match POWERUPS.choose(&mut rng.0).unwrap().clone() {
-        Powerup::Speed(s) => (commands.spawn(s).id(), "fast"),
-        Powerup::Team(t) => (commands.spawn(t).id(), "team"),
-        Powerup::Health(h) => (commands.spawn(h).id(), "health"),
-    };
-    let position = random_position(&config, &mut rng);
-    commands.spawn(ChestBundle::new(
-        &asset_server,
-        position,
-        sprite,
-        powerup_entity,
-    ));
-
+    match rng.gen_range(0..4) {
+        0 => {
+            let powerup = Speed::fast();
+            let powerup_entity = commands.spawn(powerup).id();
+            let sprite = "fast";
+            let position = random_position(&config, &mut rng);
+            commands.spawn(ChestBundle::new(
+                &asset_server,
+                position,
+                &sprite,
+                powerup_entity,
+            ));
+        }
+        1 => {
+            let powerup = Speed::slow();
+            let powerup_entity = commands.spawn(powerup).id();
+            let sprite = "slow";
+            let position = random_position(&config, &mut rng);
+            commands.spawn(ChestBundle::new(
+                &asset_server,
+                position,
+                &sprite,
+                powerup_entity,
+            ));
+        }
+        2 => {
+            let powerup = Team(1);
+            let powerup_entity = commands.spawn(powerup).id();
+            let sprite = "team";
+            let position = random_position(&config, &mut rng);
+            commands.spawn(ChestBundle::new(
+                &asset_server,
+                position,
+                &sprite,
+                powerup_entity,
+            ));
+        }
+        3 => {
+            let powerup = Health(1);
+            let powerup_entity = commands.spawn(powerup).id();
+            let sprite = "health";
+            let position = random_position(&config, &mut rng);
+            commands.spawn(ChestBundle::new(
+                &asset_server,
+                position,
+                &sprite,
+                powerup_entity,
+            ));
+        },
+        _ => (),
+    }
 }
 

@@ -9,7 +9,6 @@ pub struct PlayerBundle {
     pub sensor: Sensor,
     pub collider: Collider,
     pub velocity: Velocity,
-    pub damping: Damping,
     pub axis_constraints: LockedAxes,
     pub points: Points,
     pub health: Health,
@@ -26,9 +25,9 @@ impl PlayerBundle {
     pub fn new(asset_server: &Res<AssetServer>) -> PlayerBundle {
         PlayerBundle {
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("hover_mech.png"),
-                transform: Transform {
-                    translation: Vec3::new(0.0, 0.0, 0.0),
+                texture: asset_server.load("player.png"),
+                sprite: Sprite {
+                    custom_size: Some(Vec2::new(256.0, 256.0)),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -44,13 +43,9 @@ impl Default for PlayerBundle {
             player: Player,
             rigid_body: RigidBody::Dynamic,
             sensor: Default::default(),
-            collider: Collider::ball(16.0),
+            collider: Collider::ball(128.0),
             velocity: Default::default(),
-            damping: Damping {
-                linear_damping: 10.0,
-                angular_damping: 0.0,
-            },
-            axis_constraints: LockedAxes::ROTATION_LOCKED,
+            axis_constraints: LockedAxes::all(),
             health: Default::default(),
             sprite_bundle: Default::default(),
             points: Default::default(),
