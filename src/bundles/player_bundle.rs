@@ -26,7 +26,7 @@ impl PlayerBundle {
     pub fn new(asset_server: &Res<AssetServer>) -> PlayerBundle {
         PlayerBundle {
             sprite_bundle: SpriteBundle {
-                texture: asset_server.load("hover-mech.png"),
+                texture: asset_server.load("hover_mech.png"),
                 transform: Transform {
                     translation: Vec3::new(0.0, 0.0, 0.0),
                     ..Default::default()
