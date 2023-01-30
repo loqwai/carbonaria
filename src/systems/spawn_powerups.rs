@@ -47,6 +47,7 @@ pub fn spawn_powerups(
     commands.spawn(ChestBundle::new(
         &asset_server,
         position,
+        "fast",
         powerup_entity,
     ));
 

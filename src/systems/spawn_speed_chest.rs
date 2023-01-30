@@ -12,6 +12,7 @@ fn spawn_speed_up(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     commands.spawn(ChestBundle::new(
         &asset_server,
         Vec3::new(128.0, 128.0, 0.0),
+        "speed",
         speedup_entity,
     ));
 }
@@ -21,6 +22,7 @@ fn spawn_speed_down(commands: &mut Commands, asset_server: &Res<AssetServer>) {
     commands.spawn(ChestBundle::new(
         &asset_server,
         Vec3::new(0.0, 128.0, 0.0),
+        "slow",
         speedup_entity,
     ));
 }
