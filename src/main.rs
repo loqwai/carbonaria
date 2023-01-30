@@ -6,7 +6,7 @@ mod systems;
 mod util;
 
 use bevy::{prelude::*, time::FixedTimestep};
-// use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
 use components::Tick;
@@ -67,7 +67,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugin(RapierDebugRenderPlugin::default()) // the physics debug UI
-        // .add_plugin(WorldInspectorPlugin)
+        .add_plugin(WorldInspectorPlugin)
         .insert_resource(RapierConfiguration {
             gravity: Vec2::ZERO,
             ..Default::default()
@@ -77,6 +77,7 @@ fn main() {
             tile_size: 64,
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 10,
+            powerup_spawn_interval: 120,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())

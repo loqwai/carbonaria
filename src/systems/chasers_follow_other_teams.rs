@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     components::{Chases, Team},
-    events::{MoveEvent, RotateEvent},
+    events::{MoveEvent},
     util::look_at_target,
 };
 
@@ -15,8 +15,13 @@ pub fn chasers_follow_other_teams(
         match targets.iter().find(|(team, _)| team != &chaser_team) {
             None => return,
             Some((_, target_transform)) => {
-                let (direction) =
+                let (_, direction) =
                     look_at_target(chaser_transform.translation, target_transform.translation);
+
+                move_events.send(MoveEvent {
+                    who: chaser_entity,
+                    direction,
+                });
             }
         }
     });
