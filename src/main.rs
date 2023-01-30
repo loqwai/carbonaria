@@ -26,7 +26,6 @@ fn main() {
         .with_system(systems::update_score_ui)
         .with_system(systems::update_health_ui)
         .with_system(systems::sync_mouse_position)
-        .with_system(systems::player_aimables_aim_at_cursor)
         .with_system(systems::follow_player_with_camera)
         .with_system(systems::on_no_players_show_game_over)
         .with_system(systems::on_click_and_no_player_reset);
@@ -40,6 +39,8 @@ fn main() {
         .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mobs)
         .with_system(systems::chasers_follow_other_teams)
+        .with_system(systems::player_aimables_aim_at_cursor)
+        .with_system(systems::chaser_aimables_aim_at_other_teams)
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::rotate_thing)

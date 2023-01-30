@@ -1,5 +1,6 @@
 mod chasers_follow_other_teams;
 mod count_ticks;
+mod chaser_aimables_aim_at_other_teams;
 mod detect_damager_hits;
 mod detect_exit;
 mod follow_player_with_camera;
@@ -62,3 +63,4 @@ pub use team_powerup_assigns_team::team_powerup_assigns_team;
 pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
+pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
