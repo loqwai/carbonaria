@@ -27,7 +27,7 @@ pub struct ScoreUI;
 #[derive(Component)]
 pub struct GameOverUI;
 
-#[derive(Component, Reflect)]
+#[derive(Clone, Component, Reflect)]
 #[reflect(Component)]
 pub struct Health(pub usize);
 impl Default for Health {
@@ -48,11 +48,11 @@ pub struct Compass;
 #[derive(Component, Default)]
 pub struct Chases;
 
-#[derive(Component, Reflect)]
+#[derive(Clone, Component, Reflect)]
 pub struct Speed(pub f32);
 impl Speed {
     pub fn fast() -> Speed {
-        Speed(2.0)
+        Speed(1.1)
     }
 
     pub fn slow() -> Speed {
@@ -84,7 +84,7 @@ impl Default for Chest {
         Chest { contents: None }
     }
 }
-#[derive(Component, Default, PartialEq, Reflect)]
+#[derive(Clone, Component, Default, PartialEq, Reflect)]
 #[reflect(Component)]
 pub struct Team(pub usize);
 #[derive(Component)]
