@@ -77,8 +77,8 @@ fn main() {
             tile_size: 64,
             // camera_follow_interpolation: 0.05,
             camera_follow_interpolation: 1.00,
-            mob_spawn_interval: 10,
-            powerup_spawn_interval: 100,
+            mob_spawn_interval: 1,
+            powerup_spawn_interval: 1,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
