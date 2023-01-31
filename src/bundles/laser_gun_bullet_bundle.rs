@@ -27,11 +27,11 @@ impl LaserGunBulletBundle {
         LaserGunBulletBundle {
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("bullet.png"),
-                transform: transform.clone().into(),
                 sprite: Sprite {
-                    custom_size: Some(Vec2::new(40.0, 20.0)),
+                    custom_size: Some(Vec2::new(128.0, 128.0)),
                     ..Default::default()
                 },
+                transform: transform.clone().into(),
                 ..Default::default()
             },
             ..Default::default()
@@ -49,7 +49,7 @@ impl Default for LaserGunBulletBundle {
             sprite_bundle: SpriteBundle {
                 ..Default::default()
             },
-            collider: Collider::cuboid(2.0, 2.0),
+            collider: Collider::ball(64.0),
             damage: Damage(1),
             sensor: Sensor,
             active_events: ActiveEvents::COLLISION_EVENTS,

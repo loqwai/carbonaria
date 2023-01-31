@@ -12,7 +12,7 @@ pub fn move_bullet(
 ) {
     bullets.for_each(|(entity, transform)| {
         let direction = transform.rotation * Vec3::X;
-        let rotation = transform.rotation.clone();
+        let rotation = transform.rotation;
 
         move_events.send(MoveEvent {
             who: entity,
