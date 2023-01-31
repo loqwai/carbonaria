@@ -19,7 +19,7 @@ pub fn spawn_mobs(
         return;
     }
     let position = random_position(&config, &mut rng);
-    let mob = commands.spawn(MobBundle::new(&asset_server, position)).id();
+    let mob = commands.spawn(MobBundle::new(&asset_server, position, config.scale)).id();
     let laser_gun = commands.spawn(LaserGunBundle::new(&asset_server)).id();
     commands.entity(mob).push_children(&[laser_gun]);
 }

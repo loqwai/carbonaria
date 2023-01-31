@@ -10,6 +10,9 @@ pub struct Config {
     pub dimensions: i16,
     /// tile_size indicates the size of each wall in pixels.
     pub tile_size: i16,
+    /// scale indicates how zoomed in we are. A scale of 1.0 will render
+    /// the player at 256x256
+    pub scale: f32,
     /// camera_follow_interpolation defines how quickly the camera
     /// will follow the player. A value of 1.0 will cause the camera
     /// to move completely in-sync with. Lower values like 0.1 or 0.01

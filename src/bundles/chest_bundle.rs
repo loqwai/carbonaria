@@ -3,6 +3,8 @@ use bevy_rapier2d::prelude::*;
 
 use crate::components::Chest;
 
+const RADIUS: f32 = 64.0;
+
 #[derive(Bundle)]
 pub struct ChestBundle {
     pub chest: Chest,
@@ -13,11 +15,15 @@ pub struct ChestBundle {
 }
 
 impl ChestBundle {
-    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, texture: &str, contents: Entity) -> ChestBundle {
+    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, scale: f32, texture: &str, contents: Entity) -> ChestBundle {
         ChestBundle {
+            active_events: ActiveEvents::COLLISION_EVENTS,
+            chest: Chest { contents: Some(contents), },
+            collider: Collider::ball(RADIUS * scale),
+            sensor: Sensor,
             sprite_bundle: SpriteBundle {
                 sprite: Sprite {
-                    custom_size: Some(Vec2::new(128.0, 128.0)),
+                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
                     ..Default::default()
                 },
                 texture: asset_server.load( format!("chests/{}.png", texture)),
@@ -27,22 +33,6 @@ impl ChestBundle {
                 },
                 ..Default::default()
             },
-            chest: Chest {
-                contents: Some(contents),
-            },
-            ..Default::default()
-        }
-    }
-}
-
-impl Default for ChestBundle {
-    fn default() -> Self {
-        Self {
-            sprite_bundle: Default::default(),
-            collider: Collider::ball(64.0),
-            chest: Default::default(),
-            sensor: Default::default(),
-            active_events: ActiveEvents::COLLISION_EVENTS,
         }
     }
 }

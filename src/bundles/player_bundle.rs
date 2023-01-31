@@ -1,59 +1,60 @@
-use bevy::{prelude::*, sprite::SpriteBundle};
+use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::components::{Health, Player, Pocket, Points, Speed, Team};
+
+const BASE_SPEED: f32 = 16.0;
+const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
     pub sensor: Sensor,
     pub collider: Collider,
-    pub velocity: Velocity,
     pub axis_constraints: LockedAxes,
     pub points: Points,
     pub health: Health,
-    pub speed: Speed,
+    pub base_speed: Speed,
     pub name: Name,
     pub pockets: Pocket,
     pub team: Team,
     pub active_events: ActiveEvents,
-    pub sprite_bundle: SpriteBundle,
+    pub sprite_sheet_bundle: SpriteSheetBundle,
     pub rigid_body: RigidBody,
 }
 
 impl PlayerBundle {
-    pub fn new(asset_server: &Res<AssetServer>) -> PlayerBundle {
+    pub fn new(
+        asset_server: &Res<AssetServer>, 
+        texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        scale: f32, 
+    ) -> PlayerBundle {
+        let texture = asset_server.load("player-sprite-sheet.png");
+        let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 2, None, None);
+        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
         PlayerBundle {
-            sprite_bundle: SpriteBundle {
-                texture: asset_server.load("player.png"),
-                sprite: Sprite {
-                    custom_size: Some(Vec2::new(256.0, 256.0)),
+            active_events: ActiveEvents::COLLISION_EVENTS,
+            axis_constraints: LockedAxes::all(),
+            base_speed: Speed(BASE_SPEED * scale),
+            collider: Collider::ball(RADIUS * scale),
+            health: Health(100),
+            name: "player".into(),
+            player: Player,
+            pockets: Pocket,
+            points: Points(0),
+            rigid_body: RigidBody::Dynamic,
+            sprite_sheet_bundle: SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle,
+                sprite: TextureAtlasSprite{
+                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                    index: 7,
                     ..Default::default()
                 },
                 ..Default::default()
             },
-            ..Default::default()
-        }
-    }
-}
-
-impl Default for PlayerBundle {
-    fn default() -> Self {
-        Self {
-            player: Player,
-            rigid_body: RigidBody::Dynamic,
-            sensor: Default::default(),
-            collider: Collider::ball(128.0),
-            velocity: Default::default(),
-            axis_constraints: LockedAxes::all(),
-            health: Health(100),
-            sprite_bundle: Default::default(),
-            points: Default::default(),
-            speed: Default::default(),
-            pockets: Pocket,
+            sensor: Sensor,
             team: Team(0),
-            active_events: ActiveEvents::COLLISION_EVENTS,
-            name: "player".into(), //probably not something we want to do in the future. But nice for the debugger
         }
     }
 }

@@ -30,6 +30,7 @@ pub fn on_damager_hit_subtract_health(
                 if health.0 <= 0 {
                     commands.entity(event.target).despawn_recursive();
                 }
+                commands.entity(event.damager).despawn_recursive();
                 // println!("damager: target: {:?}, health: {}", event.target, health.0);
             }
         }

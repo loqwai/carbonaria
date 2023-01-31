@@ -75,10 +75,10 @@ fn main() {
         .insert_resource(Config {
             dimensions: 32,
             tile_size: 64,
-            // camera_follow_interpolation: 0.05,
-            camera_follow_interpolation: 1.00,
-            mob_spawn_interval: 1,
-            powerup_spawn_interval: 1,
+            scale: 0.5, // 1.0 means the player is 256x256 px
+            camera_follow_interpolation: 0.05,
+            mob_spawn_interval: 100,
+            powerup_spawn_interval: 100,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
