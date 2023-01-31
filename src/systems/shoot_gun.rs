@@ -1,11 +1,12 @@
 use bevy::prelude::*;
 
-use crate::{bundles::LaserGunBulletBundle, components::LaserGun};
+use crate::{bundles::LaserGunBulletBundle, components::LaserGun, resources::Config};
 
 pub fn shoot_gun(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut guns: Query<(&mut LaserGun, &GlobalTransform)>,
+    config: Res<Config>,
 ) {
     guns.for_each_mut(|(mut gun, transform)| {
         if gun.cooldown > 0 {
@@ -18,6 +19,7 @@ pub fn shoot_gun(
         commands.spawn(LaserGunBulletBundle::new(
             &asset_server,
             &transform.mul_transform(Transform::from_translation(Vec3::new(200.0, 1.0, 1.0))),
+            config.scale,
         ));
     })
 }

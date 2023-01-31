@@ -6,6 +6,8 @@ use bevy_rapier2d::prelude::*;
 
 use crate::components::{LaserGunBullet, Speed,Damage, Health, TimeToLive};
 
+const RADIUS: f32 = 64.0;
+
 #[derive(Bundle)]
 pub struct LaserGunBulletBundle {
     pub name: Name,
@@ -24,36 +26,26 @@ impl LaserGunBulletBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
         transform: &GlobalTransform,
+        scale: f32,
     ) -> LaserGunBulletBundle {
         LaserGunBulletBundle {
+            active_events: ActiveEvents::COLLISION_EVENTS,
+            collider: Collider::ball(RADIUS * scale),
+            damage: Damage(1),
+            health: Health(1),
+            name: "laser gun bullet".into(),
+            sensor: Sensor,
+            speed: Speed(10.0),
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("bullet.png"),
                 sprite: Sprite {
-                    custom_size: Some(Vec2::new(128.0, 128.0)),
+                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
                     ..Default::default()
                 },
                 transform: transform.clone().into(),
                 ..Default::default()
             },
-            ..Default::default()
-        }
-    }
-}
-
-impl Default for LaserGunBulletBundle {
-    fn default() -> Self {
-        Self {
-            name: "laser gun bullet".into(),
             tag: LaserGunBullet,
-            speed: Speed(10.0),
-            health: Health(1),
-            sprite_bundle: SpriteBundle {
-                ..Default::default()
-            },
-            collider: Collider::ball(64.0),
-            damage: Damage(1),
-            sensor: Sensor,
-            active_events: ActiveEvents::COLLISION_EVENTS,
             time_to_live: TimeToLive(100),
         }
     }
