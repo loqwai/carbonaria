@@ -21,10 +21,15 @@ pub fn on_damager_hit_subtract_health(
                 }
 
                 // get the damage from the damager
-                let damage = damagers.get(event.damager).unwrap().0;
-                health.0 -= damage;
-
-                commands.entity(event.damager).despawn_recursive();
+                match damagers.get(event.damager) {
+                    Err(_) => continue,
+                    Ok(damage) => {
+                        health.0 -= damage.0;
+                    }
+                }
+                if health.0 <= 0 {
+                    commands.entity(event.target).despawn_recursive();
+                }
                 // println!("damager: target: {:?}, health: {}", event.target, health.0);
             }
         }
