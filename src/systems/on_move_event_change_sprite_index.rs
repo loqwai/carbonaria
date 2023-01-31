@@ -1,5 +1,3 @@
-use std::f32::consts::PI;
-
 use bevy::prelude::*;
 
 use crate::{events::MoveEvent, util::vector_angle};
