@@ -32,7 +32,8 @@ fn main() {
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         //https://bevy-cheatbook.github.io/programming/run-criteria.html
-        .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+        .with_run_criteria(FixedTimestep::step(TIME_STEP as f64).with_label("foo"))
+        // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
         .with_system(systems::move_bullet)
@@ -73,7 +74,8 @@ fn main() {
         .insert_resource(Config {
             dimensions: 32,
             tile_size: 64,
-            camera_follow_interpolation: 0.05,
+            // camera_follow_interpolation: 0.05,
+            camera_follow_interpolation: 1.00,
             mob_spawn_interval: 1000,
             powerup_spawn_interval: 100,
         })

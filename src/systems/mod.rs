@@ -29,6 +29,7 @@ mod team_powerup_assigns_team;
 mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
+use bevy::{prelude::Res, time::FixedTimesteps};
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use count_ticks::count_ticks;
 pub use detect_damager_hits::detect_damager_hits;
@@ -60,3 +61,11 @@ pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
+
+
+pub fn debug_time(time: Res<FixedTimesteps>){
+    match time.get("foo") {
+        None => panic!("Time does not exist"),
+        Some(state) => println!("{:.2}%", state.overstep_percentage() * 100.0),
+    }
+}

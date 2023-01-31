@@ -11,7 +11,7 @@ pub struct Team(pub usize);
 pub struct Speed(pub f32);
 impl Speed {
     pub fn fast() -> Speed {
-        Speed(1.1)
+        Speed(1.2)
     }
 
     pub fn slow() -> Speed {
@@ -21,7 +21,7 @@ impl Speed {
 
 impl Default for Speed {
     fn default() -> Self {
-        Speed(4.0)
+        Speed(16.0)
     }
 }
 
