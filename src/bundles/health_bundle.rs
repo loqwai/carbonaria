@@ -18,7 +18,7 @@ impl HealthBundle {
                         value: "asdsad".to_string(),
                         style: TextStyle {
                             font: asset_server.load("fonts/10100.otf"),
-                            font_size: 30.0,
+                            font_size: 72.0,
                             color: Color::WHITE,
                         },
                     }],
@@ -28,8 +28,8 @@ impl HealthBundle {
                     },
                     ..Default::default()
                 },
-                transform: Transform {
-                    translation: Vec3::new(0.0, -40.0, 0.0),
+            transform: Transform {
+                    translation: Vec3::new(0.0, -150.0, 0.0),
                     ..Default::default()
                 },
                 ..Default::default()

@@ -17,7 +17,7 @@ pub fn shoot_gun(
         // TODO: replace magic numbers
         commands.spawn(LaserGunBulletBundle::new(
             &asset_server,
-            &transform.mul_transform(Transform::from_translation(Vec3::new(50.0, 1.0, 1.0))),
+            &transform.mul_transform(Transform::from_translation(Vec3::new(200.0, 1.0, 1.0))),
         ));
     })
 }

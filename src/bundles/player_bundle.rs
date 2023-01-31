@@ -46,7 +46,7 @@ impl Default for PlayerBundle {
             collider: Collider::ball(128.0),
             velocity: Default::default(),
             axis_constraints: LockedAxes::all(),
-            health: Default::default(),
+            health: Health(100),
             sprite_bundle: Default::default(),
             points: Default::default(),
             speed: Default::default(),
