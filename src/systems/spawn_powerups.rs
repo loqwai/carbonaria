@@ -18,7 +18,7 @@ pub fn spawn_powerups(
     }
     let (powerup, sprite) = match rng.gen_range(0..4) {
         0 => (commands.spawn(Speed::fast()).id(), "fast"),
-        1 => (commands.spawn(Speed::slow()).id(), "team"),
+        1 => (commands.spawn(Speed::slow()).id(), "slow"),
         2 => (commands.spawn(Team(1)).id(), "team"),
         3 => (commands.spawn(Health(1)).id(), "health"),
         n => panic!("Generated a number not between 0 & 4: {}", n)

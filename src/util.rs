@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::{time::Instant, f32::consts::PI};
 
 use crate::resources::SmallRng;
 use bevy::prelude::*;
@@ -32,4 +32,18 @@ pub fn look_at_target(looker: Vec3, target: Vec3) -> (Quat, Vec3) {
     let angle = diff.y.atan2(diff.x); // Add/sub FRAC_PI here optionally
     let rotation = Quat::from_axis_angle(Vec3::Z, angle);
     return (rotation, diff.normalize());
+}
+
+/// returns the angle of the vector in radians
+pub fn vector_angle(direction: Vec3) -> f32 {
+    let x = direction.x;
+    let y = direction.y;
+    
+    let mut angle = x.atan2(y);
+
+    if angle < 0.0 {
+        angle += PI * 2.0;
+    }
+
+    angle
 }
