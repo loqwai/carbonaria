@@ -1,4 +1,4 @@
-use bevy::{prelude::*, sprite::SpriteBundle};
+use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::components::{Health, Player, Pocket, Points, Speed, Team};
@@ -19,12 +19,20 @@ pub struct PlayerBundle {
     pub pockets: Pocket,
     pub team: Team,
     pub active_events: ActiveEvents,
-    pub sprite_bundle: SpriteBundle,
+    pub sprite_sheet_bundle: SpriteSheetBundle,
     pub rigid_body: RigidBody,
 }
 
 impl PlayerBundle {
-    pub fn new(asset_server: &Res<AssetServer>, scale: f32) -> PlayerBundle {
+    pub fn new(
+        asset_server: &Res<AssetServer>, 
+        texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        scale: f32, 
+    ) -> PlayerBundle {
+        let texture = asset_server.load("player-sprite-sheet.png");
+        let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 2, None, None);
+        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
         PlayerBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
             axis_constraints: LockedAxes::all(),
@@ -36,10 +44,11 @@ impl PlayerBundle {
             pockets: Pocket,
             points: Points(0),
             rigid_body: RigidBody::Dynamic,
-            sprite_bundle: SpriteBundle {
-                texture: asset_server.load("player.png"),
-                sprite: Sprite {
+            sprite_sheet_bundle: SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle,
+                sprite: TextureAtlasSprite{
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                    index: 7,
                     ..Default::default()
                 },
                 ..Default::default()

@@ -75,7 +75,7 @@ fn main() {
         .insert_resource(Config {
             dimensions: 32,
             tile_size: 64,
-            scale: 0.25, // 1.0 means the player is 256x256 px
+            scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 100,
             powerup_spawn_interval: 100,
