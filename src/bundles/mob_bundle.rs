@@ -7,6 +7,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::components::{Chases, Health, Mob, Pocket, Speed, Team};
 
+const BASE_SPEED: f32 = 10.0;
 const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
@@ -27,7 +28,7 @@ impl MobBundle {
     pub fn new(asset_server: &Res<AssetServer>, position: Vec3, scale: f32) -> MobBundle {
         MobBundle {
             axis_constraints: LockedAxes::all(),
-            base_speed: Speed::fast(),
+            base_speed: Speed(BASE_SPEED * scale),
             chases: Chases,
             collider: Collider::ball(RADIUS * scale),
             health: Health(2),

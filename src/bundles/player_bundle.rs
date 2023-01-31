@@ -3,6 +3,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::components::{Health, Player, Pocket, Points, Speed, Team};
 
+const BASE_SPEED: f32 = 16.0;
 const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
@@ -13,7 +14,7 @@ pub struct PlayerBundle {
     pub axis_constraints: LockedAxes,
     pub points: Points,
     pub health: Health,
-    pub speed: Speed,
+    pub base_speed: Speed,
     pub name: Name,
     pub pockets: Pocket,
     pub team: Team,
@@ -27,6 +28,7 @@ impl PlayerBundle {
         PlayerBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
             axis_constraints: LockedAxes::all(),
+            base_speed: Speed(BASE_SPEED * scale),
             collider: Collider::ball(RADIUS * scale),
             health: Health(100),
             name: "player".into(),
@@ -43,7 +45,6 @@ impl PlayerBundle {
                 ..Default::default()
             },
             sensor: Sensor,
-            speed: Speed(16.0),
             team: Team(0),
         }
     }

@@ -6,6 +6,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::components::{LaserGunBullet, Speed,Damage, Health, TimeToLive};
 
+const BASE_SPEED: f32 = 20.0;
 const RADIUS: f32 = 64.0;
 
 #[derive(Bundle)]
@@ -35,7 +36,7 @@ impl LaserGunBulletBundle {
             health: Health(1),
             name: "laser gun bullet".into(),
             sensor: Sensor,
-            speed: Speed(10.0),
+            speed: Speed(BASE_SPEED * scale),
             sprite_bundle: SpriteBundle {
                 texture: asset_server.load("bullet.png"),
                 sprite: Sprite {
