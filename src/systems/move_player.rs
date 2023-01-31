@@ -8,24 +8,28 @@ pub fn move_player(
     mut move_events: EventWriter<MoveEvent>,
 ) {
     for player in players.iter() {
-        let mut direction = Vec3::default();
+        let mut directions: Vec<Vec3> = Vec::new();
 
         if keyboard_input.pressed(KeyCode::A) {
-            direction += Vec3::new(-1.0, 0.0, 0.0);
+            directions.push(Vec3::new(-1.0, 0.0, 0.0));
         }
         if keyboard_input.pressed(KeyCode::D) {
-            direction += Vec3::new(1.0, 0.0, 0.0);
+            directions.push(Vec3::new(1.0, 0.0, 0.0));
         }
         if keyboard_input.pressed(KeyCode::W) {
-            direction += Vec3::new(0.0, 1.0, 0.0);
+            directions.push(Vec3::new(0.0, 1.0, 0.0));
         }
         if keyboard_input.pressed(KeyCode::S) {
-            direction += Vec3::new(0.0, -1.0, 0.0);
+            directions.push(Vec3::new(0.0, -1.0, 0.0));
+        }
+
+        if directions.is_empty() {
+            continue;
         }
 
         move_events.send(MoveEvent {
             who: player,
-            direction,
+            direction: directions.iter().sum(),
         });
     }
 }

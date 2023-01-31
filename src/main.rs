@@ -28,12 +28,14 @@ fn main() {
         .with_system(systems::sync_mouse_position)
         .with_system(systems::follow_player_with_camera)
         .with_system(systems::on_no_players_show_game_over)
-        .with_system(systems::on_click_and_no_player_reset);
+        .with_system(systems::on_click_and_no_player_reset)
+        .with_system(systems::on_move_event_change_sprite_index);
+
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         //https://bevy-cheatbook.github.io/programming/run-criteria.html
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64).with_label("foo"))
-        .with_system(systems::debug_time)
+        // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
         .with_system(systems::move_bullet)
