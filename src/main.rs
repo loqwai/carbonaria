@@ -33,7 +33,7 @@ fn main() {
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         //https://bevy-cheatbook.github.io/programming/run-criteria.html
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64).with_label("foo"))
-        // .with_system(systems::debug_time)
+        .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
         .with_system(systems::move_bullet)
@@ -51,7 +51,8 @@ fn main() {
         .with_system(systems::on_0_health_kill)
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::spawn_powerups)
-        .with_system(systems::on_damager_hit_subtract_health);
+        .with_system(systems::on_damager_hit_subtract_health)
+        .with_system(systems::time_to_live);
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
         .with_system(systems::spawn_camera)

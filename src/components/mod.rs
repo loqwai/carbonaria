@@ -76,5 +76,9 @@ pub struct Damage(pub usize);
 #[derive(Component)]
 pub struct Aimable;
 
+#[derive(Component, Reflect)]
+pub struct TimeToLive(pub usize);
+
+
 #[derive(Reflect, Resource)]
 pub struct Tick(pub usize);
