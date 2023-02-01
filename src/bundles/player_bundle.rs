@@ -25,9 +25,9 @@ pub struct PlayerBundle {
 
 impl PlayerBundle {
     pub fn new(
-        asset_server: &Res<AssetServer>, 
+        asset_server: &Res<AssetServer>,
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
-        scale: f32, 
+        scale: f32,
     ) -> PlayerBundle {
         let texture = asset_server.load("player-sprite-sheet.png");
         let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 2, None, None);
@@ -38,7 +38,7 @@ impl PlayerBundle {
             axis_constraints: LockedAxes::all(),
             base_speed: Speed(BASE_SPEED * scale),
             collider: Collider::ball(RADIUS * scale),
-            health: Health(100),
+            health: Health(5),
             name: "player".into(),
             player: Player,
             pockets: Pocket,

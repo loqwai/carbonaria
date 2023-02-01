@@ -50,14 +50,14 @@ fn main() {
         .with_system(systems::health_powerup_add_health)
         .with_system(systems::move_rate_of_fire_powerup_to_gun)
         .with_system(systems::rotate_thing)
-        .with_system(systems::detect_exit)
+        // .with_system(systems::detect_exit)
         .with_system(systems::detect_damager_hits)
         .with_system(systems::team_powerup_assigns_team)
-        .with_system(systems::on_0_health_kill)
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::spawn_powerups)
         .with_system(systems::on_damager_hit_subtract_health)
-        .with_system(systems::time_to_live);
+        .with_system(systems::time_to_live)
+        ;
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
         .with_system(systems::spawn_camera)
@@ -96,5 +96,10 @@ fn main() {
         .add_system_set(ui_system_set)
         .add_system_set(game_loop_system_set)
         .add_system_set(cleanup_system_set)
+        .add_stage_after(
+            CoreStage::Update,
+            "cleanup",
+            SystemStage::single_threaded().with_system(systems::on_0_health_kill),
+        )
         .run();
 }
