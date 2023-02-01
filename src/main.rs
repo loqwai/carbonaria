@@ -47,6 +47,7 @@ fn main() {
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_change_sprite_index)
+        .with_system(systems::health_powerup_add_health)
         .with_system(systems::move_rate_of_fire_powerup_to_gun)
         .with_system(systems::rotate_thing)
         .with_system(systems::detect_exit)

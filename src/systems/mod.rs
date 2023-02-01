@@ -18,6 +18,7 @@ mod player_aimables_aim_at_cursor;
 mod remove_all_entities;
 mod resize_window;
 mod rotate_thing;
+mod health_powerup_add_health;
 mod shoot_gun;
 mod spawn_camera;
 mod spawn_crosshairs;
@@ -67,6 +68,7 @@ pub use update_score_ui::update_score_ui;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use time_to_live::time_to_live;
 pub use move_rate_of_fire_powerup_to_gun::move_rate_of_fire_powerup_to_gun;
+pub use health_powerup_add_health::health_powerup_add_health;
 
 pub fn debug_time(time: Res<FixedTimesteps>){
     match time.get("foo") {
