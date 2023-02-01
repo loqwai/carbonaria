@@ -33,7 +33,6 @@ mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
 mod time_to_live;
-use bevy::{prelude::Res, time::FixedTimesteps};
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use count_ticks::count_ticks;
 pub use detect_damager_hits::detect_damager_hits;
@@ -70,9 +69,21 @@ pub use time_to_live::time_to_live;
 pub use move_rate_of_fire_powerup_to_gun::move_rate_of_fire_powerup_to_gun;
 pub use health_powerup_add_health::health_powerup_add_health;
 
+use bevy::{prelude::*, time::FixedTimesteps};
+use crate::components::{Health, Player};
+
 pub fn debug_time(time: Res<FixedTimesteps>){
     match time.get("foo") {
         None => panic!("Time does not exist"),
         Some(state) => println!("{:.2}%", state.overstep_percentage() * 100.0),
+    }
+}
+
+pub fn on_health_100_you_win(players: Query<&Health, With<Player>> ){
+    for player in players.iter(){
+        if player.0 == 100{
+            println!("You win!");
+            std::process::exit(1);
+        }
     }
 }

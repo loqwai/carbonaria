@@ -57,6 +57,7 @@ fn main() {
         .with_system(systems::spawn_powerups)
         .with_system(systems::on_damager_hit_subtract_health)
         .with_system(systems::time_to_live)
+        .with_system(systems::on_health_100_you_win)
         ;
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
