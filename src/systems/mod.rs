@@ -3,6 +3,7 @@ mod count_ticks;
 mod chaser_aimables_aim_at_other_teams;
 mod detect_damager_hits;
 mod detect_exit;
+mod move_rate_of_fire_powerup_to_gun;
 mod follow_player_with_camera;
 mod move_bullet;
 mod move_player;
@@ -65,6 +66,7 @@ pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use time_to_live::time_to_live;
+pub use move_rate_of_fire_powerup_to_gun::move_rate_of_fire_powerup_to_gun;
 
 pub fn debug_time(time: Res<FixedTimesteps>){
     match time.get("foo") {

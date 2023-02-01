@@ -9,21 +9,6 @@ pub struct Team(pub usize);
 
 #[derive(Clone, Component, Reflect)]
 pub struct Speed(pub f32);
-impl Speed {
-    pub fn fast() -> Speed {
-        Speed(1.2)
-    }
-
-    pub fn slow() -> Speed {
-        Speed(0.5)
-    }
-}
-
-impl Default for Speed {
-    fn default() -> Self {
-        Speed(16.0)
-    }
-}
 
 
 #[derive(Clone, Component, Reflect)]
@@ -34,3 +19,6 @@ impl Default for Health {
         Health(10)
     }
 }
+
+#[derive(Clone, Component)]
+pub struct RateOfFire(pub usize);

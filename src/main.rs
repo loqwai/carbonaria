@@ -46,6 +46,8 @@ fn main() {
         .with_system(systems::chaser_aimables_aim_at_other_teams)
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
+        .with_system(systems::on_move_event_change_sprite_index)
+        .with_system(systems::move_rate_of_fire_powerup_to_gun)
         .with_system(systems::rotate_thing)
         .with_system(systems::detect_exit)
         .with_system(systems::detect_damager_hits)
@@ -80,7 +82,7 @@ fn main() {
             scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 100,
-            powerup_spawn_interval: 100,
+            powerup_spawn_interval: 10,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
