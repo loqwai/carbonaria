@@ -1,7 +1,7 @@
 use bevy::{
     math::Vec3,
     prelude::*,
-    sprite::{SpriteBundle, Sprite},
+    sprite::SpriteSheetBundle,
 };
 use bevy_rapier2d::prelude::*;
 
@@ -20,12 +20,21 @@ pub struct MobBundle {
     pub team: Team,
     pub health: Health,
     pub chases: Chases,
-    pub sprite_bundle: SpriteBundle,
+    pub sprite_sheet_bundle: SpriteSheetBundle,
     pub axis_constraints: LockedAxes,
 }
 
 impl MobBundle {
-    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, scale: f32) -> MobBundle {
+    pub fn new(
+        asset_server: &Res<AssetServer>, 
+        texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        position: Vec3, 
+        scale: f32,
+    ) -> MobBundle {
+        let texture = asset_server.load("mob-sprite-sheet.png");
+        let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 2, None, None);
+        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
         MobBundle {
             axis_constraints: LockedAxes::all(),
             base_speed: Speed(BASE_SPEED * scale),
@@ -35,14 +44,12 @@ impl MobBundle {
             mob: Mob,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,
-            sprite_bundle: SpriteBundle {
-                sprite: Sprite {
+            sprite_sheet_bundle: SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle,
+                transform: Transform { translation: position, ..Default::default()  },
+                sprite: TextureAtlasSprite{
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    ..Default::default()
-                },
-                texture: asset_server.load("mob.png"),
-                transform: Transform {
-                    translation: position,
+                    index: 7,
                     ..Default::default()
                 },
                 ..Default::default()
