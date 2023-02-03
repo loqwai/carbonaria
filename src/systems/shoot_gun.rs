@@ -20,7 +20,7 @@ pub fn shoot_gun(
         commands.spawn(LaserGunBulletBundle::new(
             &asset_server,
             &mut texture_atlases,
-            &transform.mul_transform(Transform::from_translation(Vec3::new(225.0 * config.scale, 1.0, 1.0))),
+            &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
             config.scale,
         ));
     })
