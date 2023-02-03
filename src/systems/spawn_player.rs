@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::{CompassBundle, HealthBundle, LaserGunBundle, PlayerBundle}, resources::Config};
+use crate::{bundles::{CompassBundle, HealthBundle, PlayerBundle}, resources::Config};
 
 pub fn spawn_player(
     mut commands: Commands,

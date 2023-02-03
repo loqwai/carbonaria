@@ -79,6 +79,9 @@ pub struct Aimable;
 #[derive(Component, Reflect)]
 pub struct TimeToLive(pub usize);
 
+#[derive(Component, Deref)]
+pub struct Direction(pub Quat);
+
 
 #[derive(Reflect, Resource)]
 pub struct Tick(pub usize);
