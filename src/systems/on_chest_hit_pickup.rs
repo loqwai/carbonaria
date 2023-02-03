@@ -1,13 +1,14 @@
 use bevy::prelude::Entity;
 use bevy_rapier2d::prelude::CollisionEvent;
 
-use crate::components::{Chest, Pocket};
+use crate::{components::{Chest, Pocket}, events::DespawnEvent};
 
 use bevy::prelude::*;
 
 pub fn on_chest_hit_pickup(
     mut commands: Commands,
     mut collision_events: EventReader<CollisionEvent>,
+    mut despawn_events: EventWriter<DespawnEvent>,
     q_pockets: Query<Entity, With<Pocket>>,
     q_chests: Query<&Chest>,
 ) {
@@ -33,7 +34,7 @@ pub fn on_chest_hit_pickup(
                 None => return,
                 Some(contents) => {
                     commands.entity(pocket_entity).push_children(&[contents]);
-                    commands.entity(chest_entity).despawn_recursive();
+                    despawn_events.send(DespawnEvent { entity: chest_entity });
                 }
             }
         });

@@ -1,11 +1,14 @@
+use crate::{
+    components::{LaserGun, RateOfFire},
+    events::DespawnEvent,
+};
 use bevy::prelude::*;
-use crate::components::{RateOfFire, LaserGun};
 
 pub fn move_rate_of_fire_powerup_to_gun(
-    mut commands: Commands,
     rate_of_fires: Query<(Entity, &RateOfFire, &Parent)>,
     childrens: Query<&Children>,
     mut guns: Query<&mut LaserGun>,
+    mut despawn_events: EventWriter<DespawnEvent>,
 ) {
     rate_of_fires.for_each(|(entity, rate_of_fire, parent)| {
         for child in childrens.get(parent.get()).unwrap() {
@@ -17,6 +20,6 @@ pub fn move_rate_of_fire_powerup_to_gun(
                 }
             }
         }
-        commands.entity(entity).despawn_recursive();
+        despawn_events.send(DespawnEvent { entity });
     });
 }

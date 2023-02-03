@@ -1,16 +1,16 @@
 use bevy::prelude::*;
 
-use crate::{components::{Health}};
+use crate::{components::Health, events::DespawnEvent};
 
 pub fn on_0_health_kill(
-    mut commands: Commands,
+    mut despawn_events: EventWriter<DespawnEvent>,
     things: Query<(Entity, &Health)>,
 ) {
-    for (thing, health) in things.iter() {
+    for (entity, health) in things.iter() {
         if health.0 > 0 {
             continue;
         }
 
-        commands.entity(thing).despawn_recursive();
+        despawn_events.send(DespawnEvent { entity });
     }
 }

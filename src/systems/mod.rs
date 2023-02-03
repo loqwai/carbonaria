@@ -1,12 +1,14 @@
-mod chasers_follow_other_teams;
-mod count_ticks;
 mod chaser_aimables_aim_at_other_teams;
+mod chasers_follow_other_teams;
+mod consume_despawn_entity_events;
+mod count_ticks;
 mod detect_damager_hits;
 mod detect_exit;
-mod move_rate_of_fire_powerup_to_gun;
 mod follow_player_with_camera;
+mod health_powerup_add_health;
 mod move_bullet;
 mod move_player;
+mod move_rate_of_fire_powerup_to_gun;
 mod move_thing;
 mod on_0_health_kill;
 mod on_chest_hit_pickup;
@@ -18,7 +20,6 @@ mod player_aimables_aim_at_cursor;
 mod remove_all_entities;
 mod resize_window;
 mod rotate_thing;
-mod health_powerup_add_health;
 mod shoot_gun;
 mod spawn_camera;
 mod spawn_crosshairs;
@@ -29,17 +30,21 @@ mod spawn_powerups;
 mod spawn_ui;
 mod sync_mouse_position;
 mod team_powerup_assigns_team;
+mod time_to_live;
 mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
-mod time_to_live;
+pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
+pub use consume_despawn_entity_events::consume_despawn_entity_events;
 pub use count_ticks::count_ticks;
 pub use detect_damager_hits::detect_damager_hits;
 pub use detect_exit::detect_exit;
 pub use follow_player_with_camera::follow_player_with_camera;
+pub use health_powerup_add_health::health_powerup_add_health;
 pub use move_bullet::move_bullet;
 pub use move_player::move_player;
+pub use move_rate_of_fire_powerup_to_gun::move_rate_of_fire_powerup_to_gun;
 pub use move_thing::move_thing;
 pub use on_0_health_kill::on_0_health_kill;
 pub use on_chest_hit_pickup::on_chest_hit_pickup;
@@ -61,27 +66,24 @@ pub use spawn_powerups::spawn_powerups;
 pub use spawn_ui::spawn_ui;
 pub use sync_mouse_position::sync_mouse_position;
 pub use team_powerup_assigns_team::team_powerup_assigns_team;
+pub use time_to_live::time_to_live;
 pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
-pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
-pub use time_to_live::time_to_live;
-pub use move_rate_of_fire_powerup_to_gun::move_rate_of_fire_powerup_to_gun;
-pub use health_powerup_add_health::health_powerup_add_health;
 
-use bevy::{prelude::*, time::FixedTimesteps};
 use crate::components::{Health, Player};
+use bevy::{prelude::*, time::FixedTimesteps};
 
-pub fn debug_time(time: Res<FixedTimesteps>){
+pub fn debug_time(time: Res<FixedTimesteps>) {
     match time.get("foo") {
         None => panic!("Time does not exist"),
         Some(state) => println!("{:.2}%", state.overstep_percentage() * 100.0),
     }
 }
 
-pub fn on_health_100_you_win(players: Query<&Health, With<Player>> ){
-    for player in players.iter(){
-        if player.0 == 100{
+pub fn on_health_100_you_win(players: Query<&Health, With<Player>>) {
+    for player in players.iter() {
+        if player.0 == 100 {
             println!("You win!");
             std::process::exit(1);
         }

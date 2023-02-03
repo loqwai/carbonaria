@@ -14,3 +14,7 @@ pub struct RotateEvent {
     pub who: Entity,
     pub rotation: Quat,
 }
+
+pub struct DespawnEvent {
+    pub entity: Entity,
+}
