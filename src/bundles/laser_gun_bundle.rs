@@ -14,13 +14,13 @@ pub struct LaserGunBundle {
 }
 
 impl LaserGunBundle {
-    pub fn new() -> LaserGunBundle {
+    pub fn new(cooldown: usize) -> LaserGunBundle {
         LaserGunBundle {
             aimable: Aimable,
             global_transform: GlobalTransform::default(),
             gun: LaserGun {
                 cooldown: 0,
-                cooldown_max: 99,
+                cooldown_max: cooldown,
             },
             name: "laser gun".into(),
             transform: Transform::default(),

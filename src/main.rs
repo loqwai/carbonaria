@@ -39,7 +39,7 @@ fn main() {
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
         .with_system(systems::move_bullet)
-        .with_system(systems::spawn_exit)
+        // .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mobs)
         .with_system(systems::chasers_follow_other_teams)
         .with_system(systems::player_aimables_aim_at_cursor)
@@ -90,7 +90,7 @@ fn main() {
             scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 100,
-            powerup_spawn_interval: 10,
+            powerup_spawn_interval: 100,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())

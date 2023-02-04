@@ -47,3 +47,10 @@ pub fn vector_angle(direction: Vec3) -> f32 {
 
     angle
 }
+
+pub fn index_for_direction(direction: Vec3, len: usize) -> usize {
+    let angle = vector_angle(direction).to_degrees().round() as usize;
+    let partition_size = 360 / len;
+
+    (angle / partition_size) % len
+}

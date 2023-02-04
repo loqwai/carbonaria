@@ -38,7 +38,7 @@ impl PlayerBundle {
             axis_constraints: LockedAxes::all(),
             base_speed: Speed(BASE_SPEED * scale),
             collider: Collider::ball(RADIUS * scale),
-            health: Health(5),
+            health: Health(75),
             name: "player".into(),
             player: Player,
             pockets: Pocket,

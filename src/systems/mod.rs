@@ -3,7 +3,7 @@ mod chasers_follow_other_teams;
 mod consume_despawn_entity_events;
 mod count_ticks;
 mod detect_damager_hits;
-mod detect_exit;
+// mod detect_exit;
 mod follow_player_with_camera;
 mod health_powerup_add_health;
 mod move_bullet;
@@ -23,7 +23,7 @@ mod rotate_thing;
 mod shoot_gun;
 mod spawn_camera;
 mod spawn_crosshairs;
-mod spawn_exit;
+// mod spawn_exit;
 mod spawn_mobs;
 mod spawn_player;
 mod spawn_powerups;
@@ -39,7 +39,7 @@ pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use consume_despawn_entity_events::consume_despawn_entity_events;
 pub use count_ticks::count_ticks;
 pub use detect_damager_hits::detect_damager_hits;
-pub use detect_exit::detect_exit;
+// pub use detect_exit::detect_exit;
 pub use follow_player_with_camera::follow_player_with_camera;
 pub use health_powerup_add_health::health_powerup_add_health;
 pub use move_bullet::move_bullet;
@@ -59,7 +59,7 @@ pub use rotate_thing::rotate_thing;
 pub use shoot_gun::shoot_gun;
 pub use spawn_camera::spawn_camera;
 pub use spawn_crosshairs::spawn_crosshairs;
-pub use spawn_exit::spawn_exit;
+// pub use spawn_exit::spawn_exit;
 pub use spawn_mobs::spawn_mobs;
 pub use spawn_player::spawn_player;
 pub use spawn_powerups::spawn_powerups;
@@ -72,14 +72,7 @@ pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
 
 use crate::components::{Health, Player};
-use bevy::{prelude::*, time::FixedTimesteps};
-
-pub fn debug_time(time: Res<FixedTimesteps>) {
-    match time.get("foo") {
-        None => panic!("Time does not exist"),
-        Some(state) => println!("{:.2}%", state.overstep_percentage() * 100.0),
-    }
-}
+use bevy::prelude::*;
 
 pub fn on_health_100_you_win(players: Query<&Health, With<Player>>) {
     for player in players.iter() {

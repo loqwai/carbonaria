@@ -11,7 +11,7 @@ pub fn spawn_player(
     let player = commands.spawn(PlayerBundle::new(&asset_server, &mut texture_atlases, config.scale)).id();
     let compass = commands.spawn(CompassBundle::new(&asset_server)).id();
     let health_ui = commands.spawn(HealthBundle::new(&asset_server)).id();
-    let laser_gun = commands.spawn(LaserGunBundle::new()).id();
+    let laser_gun = commands.spawn(LaserGunBundle::new(60)).id();
 
     commands
         .entity(player)
