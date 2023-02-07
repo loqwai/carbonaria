@@ -2,6 +2,7 @@
 name = "carbonaria"
 version = "1.0.0"
 edition = "2021"
+default-run = "main"
 
 [profile.dev]
 opt-level = 0
@@ -21,3 +22,12 @@ derive-error = "0.0.5"
 bevy_rapier2d = "0.20.0"
 rand = { version = "0.8.5",  features = ["small_rng"] }
 bevy-inspector-egui = "0.17.0"
+
+[[bin]]
+name = "game"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+
