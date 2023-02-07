@@ -15,7 +15,13 @@ pub struct ChestBundle {
 }
 
 impl ChestBundle {
-    pub fn new(asset_server: &Res<AssetServer>, position: Vec3, scale: f32, texture: &str, contents: Entity) -> ChestBundle {
+    pub fn new(
+        asset_server: &Res<AssetServer>,
+        position: Vec3,
+        scale: f32,
+        texture: &str,
+        contents: Entity,
+    ) -> ChestBundle {
         ChestBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
             chest: Chest { contents: Some(contents), },

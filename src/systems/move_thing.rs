@@ -4,7 +4,7 @@ use crate::{components::Speed, events::MoveEvent};
 
 pub fn move_thing(
     mut moveable: Query<(&mut Transform, &Speed)>,
-    // seperate children so we can still move things without children
+    // separate children so we can still move things without children
     moveable_children: Query<&Children, (With<Transform>, With<Speed>)>,
 
     speed_query: Query<&Speed>,

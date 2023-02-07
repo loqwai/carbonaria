@@ -4,7 +4,7 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::{components::{Direction, LaserGunBullet, Speed,Damage, Health, TimeToLive}, util::index_for_direction};
+use crate::{components::{Direction, LaserGunBullet, Speed,Damage, Health}, util::index_for_direction};
 
 const BASE_SPEED: f32 = 20.0;
 const RADIUS: f32 = 64.0;
@@ -21,7 +21,6 @@ pub struct LaserGunBulletBundle {
     pub speed: Speed,
     pub damage: Damage,
     pub health: Health,
-    pub time_to_live: TimeToLive,
 }
 
 impl LaserGunBulletBundle {
@@ -60,7 +59,6 @@ impl LaserGunBulletBundle {
                 ..Default::default()
             },
             tag: LaserGunBullet,
-            time_to_live: TimeToLive(100),
         }
     }
 }

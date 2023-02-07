@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::LaserGunBulletBundle, components::LaserGun, resources::Config};
+use crate::{bundles::LaserGunBulletBundle, components::{LaserGun, TimeToLive}, resources::Config};
 
 pub fn shoot_gun(
     mut commands: Commands,
@@ -17,11 +17,15 @@ pub fn shoot_gun(
 
         gun.cooldown = gun.cooldown_max;
         // TODO: replace magic numbers
-        commands.spawn(LaserGunBulletBundle::new(
+        let bullet = commands.spawn(LaserGunBulletBundle::new(
             &asset_server,
             &mut texture_atlases,
             &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
             config.scale,
-        ));
+        )).id();
+
+        let time_to_live = commands.spawn(TimeToLive(100)).id();
+        commands.entity(bullet).push_children(&[time_to_live]);
+
     })
 }
