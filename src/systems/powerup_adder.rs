@@ -15,7 +15,7 @@ pub fn powerup_adder<T: Component + AddAssign + Default + Clone>(
     });
     powerups.for_each(|(parent, powerup)| {
         if let Ok(mut target) = powerup_target.get_mut(parent.get()) {
-            target += powerup.0.clone();
+            *target += powerup.0.clone();
         }
     });
 }
