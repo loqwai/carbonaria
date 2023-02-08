@@ -35,6 +35,7 @@ mod time_to_live;
 mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
+mod powerup_adder;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use consume_despawn_entity_events::consume_despawn_entity_events;
