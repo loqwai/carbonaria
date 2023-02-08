@@ -9,7 +9,7 @@ use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
-use components::Tick;
+use components::{Tick, RateOfFire};
 use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
@@ -31,6 +31,10 @@ fn main() {
         .with_system(systems::on_click_and_no_player_reset)
         .with_system(systems::on_move_event_change_sprite_index);
 
+
+    let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
+        .with_system(systems::powerup_adder::<RateOfFire>)
+        .label("compute_powerups_system_set");
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         //https://bevy-cheatbook.github.io/programming/run-criteria.html
@@ -58,7 +62,6 @@ fn main() {
         .with_system(systems::spawn_powerups)
         .with_system(systems::on_damager_hit_subtract_health)
         .with_system(systems::time_to_live)
-        .with_system(systems::on_health_100_you_win)
         .label("game_loop_system_set")
         ;
 
@@ -103,7 +106,8 @@ fn main() {
         .add_startup_system(systems::resize_window)
         .add_system_set(startup_system_set)
         .add_system_set(ui_system_set)
-        .add_system_set(game_loop_system_set)
+        .add_system_set(compute_powerups_system_set)
+        .add_system_set(game_loop_system_set.after("compute_powerups_system_set"))
         .add_system_set(game_loop_cleanup_system_set.after("game_loop_system_set"))
         .add_system_set(cleanup_system_set)
         .add_stage_after(

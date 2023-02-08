@@ -5,7 +5,7 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Chases, Health, Mob, Pocket, Speed, Team};
+use crate::components::{Chases, Health, Mob, Pocket, Speed, Team, RateOfFire};
 
 const BASE_SPEED: f32 = 10.0;
 const RADIUS: f32 = 128.0;
@@ -22,13 +22,14 @@ pub struct MobBundle {
     pub chases: Chases,
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub axis_constraints: LockedAxes,
+    pub rate_of_fire: RateOfFire,
 }
 
 impl MobBundle {
     pub fn new(
-        asset_server: &Res<AssetServer>, 
+        asset_server: &Res<AssetServer>,
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
-        position: Vec3, 
+        position: Vec3,
         scale: f32,
     ) -> MobBundle {
         let texture = asset_server.load("mob-sprite-sheet.png");
@@ -55,6 +56,7 @@ impl MobBundle {
                 ..Default::default()
             },
             team: Team(1),
+            rate_of_fire: RateOfFire(1),
         }
     }
 }

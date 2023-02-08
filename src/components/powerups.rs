@@ -29,5 +29,10 @@ impl AddAssign for RateOfFire {
         self.0 += other.0;
     }
 }
+impl Default for RateOfFire {
+    fn default() -> Self {
+        RateOfFire(0)
+    }
+}
 #[derive(Component, Debug)]
-pub struct AddPowerup<T: Component + AddAssign>(pub T);
+pub struct AddPowerup<T: Component + AddAssign + Default>(pub T);

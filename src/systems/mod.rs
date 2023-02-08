@@ -73,6 +73,7 @@ pub use time_to_live::time_to_live;
 pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
+pub use powerup_adder::powerup_adder;
 
 use crate::components::{Health, Player};
 use bevy::prelude::*;

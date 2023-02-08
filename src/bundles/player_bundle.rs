@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Health, Player, Pocket, Points, Speed, Team};
+use crate::components::{Health, Player, Pocket, Points, Speed, Team, RateOfFire};
 
 const BASE_SPEED: f32 = 16.0;
 const RADIUS: f32 = 128.0;
@@ -21,6 +21,7 @@ pub struct PlayerBundle {
     pub active_events: ActiveEvents,
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub rigid_body: RigidBody,
+    pub rate_of_fire: RateOfFire,
 }
 
 impl PlayerBundle {
@@ -55,6 +56,7 @@ impl PlayerBundle {
             },
             sensor: Sensor,
             team: Team(0),
+            rate_of_fire: RateOfFire(1),
         }
     }
 }

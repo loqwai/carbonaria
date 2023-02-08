@@ -2,14 +2,17 @@ use std::ops::{AddAssign};
 
 use bevy::prelude::*;
 
-use crate::components::{RateOfFire, AddPowerup};
+use crate::components::AddPowerup;
 
 
 
-pub fn powerup_adder<T: Component + AddAssign + Copy>(
+pub fn powerup_adder<T: Component + AddAssign + Default + Copy>(
     powerups: Query<(&Parent, &mut AddPowerup<T>)>,
     mut guns: Query<&mut T>,
 ) {
+    guns.for_each_mut(|mut gun| {
+        *gun = T::default();
+    });
     powerups.for_each(|(parent, powerup)| {
         if let Ok(mut gun) = guns.get_mut(parent.get()) {
             *gun += powerup.0;
@@ -19,6 +22,7 @@ pub fn powerup_adder<T: Component + AddAssign + Copy>(
 
 #[test]
 fn did_add_rate_of_fire_to_gun_cooldown_rate() {
+    use crate::components::RateOfFire;
     let mut app = App::new();
 
     let pu1 = AddPowerup::<RateOfFire>(RateOfFire(1));
@@ -35,6 +39,9 @@ fn did_add_rate_of_fire_to_gun_cooldown_rate() {
     app.add_system(powerup_adder::<RateOfFire>);
     app.update();
 
+    let rate_of_fire = app.world.get::<RateOfFire>(laser_gun).unwrap();
+    assert_eq!(rate_of_fire.0, 3);
+    app.update();
     let rate_of_fire = app.world.get::<RateOfFire>(laser_gun).unwrap();
     assert_eq!(rate_of_fire.0, 3);
 }
