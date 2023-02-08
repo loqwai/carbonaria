@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
-use crate::{bundles::LaserGunBulletBundle, components::{LaserGun, TimeToLive}, resources::Config};
+use crate::{bundles::{RageQuitBulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire}, resources::Config};
 
-pub fn shoot_gun(
+pub fn shoot_rage_quit_gun(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut guns: Query<(&mut LaserGun, &GlobalTransform)>,
@@ -16,16 +16,20 @@ pub fn shoot_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
+        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(RateOfFire(2)).id();
         // TODO: replace magic numbers
-        let bullet = commands.spawn(LaserGunBulletBundle::new(
+        let bullet = commands.spawn(RageQuitBulletBundle::new(
             &asset_server,
             &mut texture_atlases,
             &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
             config.scale,
-        )).id();
+        ))
+        .insert(Chest {
+            contents: ttl_powerup,
+        })
+        .id();
 
-        let time_to_live = commands.spawn(TimeToLive(200)).id();
-        commands.entity(bullet).push_children(&[time_to_live]);
-
+        let bullet_time_to_live = commands.spawn(TimeToLive(200)).id();
+        commands.entity(bullet).push_children(&[bullet_time_to_live]);
     })
 }

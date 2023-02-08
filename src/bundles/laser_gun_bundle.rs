@@ -21,6 +21,7 @@ impl LaserGunBundle {
             gun: LaserGun {
                 cooldown: 0,
                 cooldown_max: cooldown,
+                cooldown_rate: 1,
             },
             name: "laser gun".into(),
             transform: Transform::default(),

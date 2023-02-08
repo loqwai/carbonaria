@@ -48,16 +48,11 @@ pub struct Chases;
 #[derive(Component, Default)]
 pub struct Pocket;
 
-#[derive(Component, Reflect)]
-#[reflect(Component)]
+#[derive(Component)]
 pub struct Chest {
-    pub contents: Option<Entity>,
+    pub contents: Entity,
 }
-impl Default for Chest {
-    fn default() -> Self {
-        Chest { contents: None }
-    }
-}
+
 #[derive(Component)]
 pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332
@@ -66,6 +61,7 @@ pub struct MousePos;
 pub struct LaserGun {
     pub cooldown: usize,
     pub cooldown_max: usize,
+    pub cooldown_rate: usize,
 }
 #[derive(Component, Reflect)]
 pub struct LaserGunBullet;

@@ -24,7 +24,7 @@ impl ChestBundle {
     ) -> ChestBundle {
         ChestBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
-            chest: Chest { contents: Some(contents), },
+            chest: Chest { contents },
             collider: Collider::ball(RADIUS * scale),
             sensor: Sensor,
             sprite_bundle: SpriteBundle {
