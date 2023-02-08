@@ -11,7 +11,7 @@ pub fn shoot_gun(
 ) {
     guns.for_each_mut(|(mut gun, transform)| {
         if gun.cooldown > 0 {
-            gun.cooldown -= 1;
+            gun.cooldown -= gun.cooldown_rate;
             return;
         }
 
