@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::{CompassBundle, HealthBundle, PlayerBundle, LaserGunBundle}, resources::Config};
+use crate::{bundles::{CompassBundle, HealthBundle, PlayerBundle, LaserGunBundle}, resources::Config, components::RateOfFire};
 
 pub fn spawn_player(
     mut commands: Commands,
@@ -12,8 +12,9 @@ pub fn spawn_player(
     let compass = commands.spawn(CompassBundle::new(&asset_server)).id();
     let health_ui = commands.spawn(HealthBundle::new(&asset_server)).id();
     let laser_gun = commands.spawn(LaserGunBundle::new(60)).id();
+    let rate_of_fire = commands.spawn(RateOfFire(1) ).id();
 
     commands
         .entity(player)
-        .push_children(&[health_ui, compass, laser_gun]);
+        .push_children(&[health_ui, compass, laser_gun, rate_of_fire]);
 }

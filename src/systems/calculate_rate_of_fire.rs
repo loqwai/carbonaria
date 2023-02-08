@@ -3,7 +3,7 @@ use crate::{
 };
 use bevy::prelude::*;
 
-pub fn move_rate_of_fire_powerup_to_gun(
+pub fn calculate_rate_of_fire(
     rate_of_fires: Query<&RateOfFire>,
     childrens: Query<&Children>,
     mut guns: Query<(&Parent, &mut LaserGun)>,
