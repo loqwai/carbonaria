@@ -10,10 +10,9 @@ pub fn powerup_adder<T: Component + AddAssign + Copy>(
     powerups: Query<(&Parent, &mut AddPowerup<T>)>,
     mut guns: Query<&mut T>,
 ) {
-    println!("powerup_adder");
     powerups.for_each(|(parent, powerup)| {
         if let Ok(mut gun) = guns.get_mut(parent.get()) {
-            *gun += powerup.value;
+            *gun += powerup.0;
         }
     });
 }
@@ -22,12 +21,8 @@ pub fn powerup_adder<T: Component + AddAssign + Copy>(
 fn did_add_rate_of_fire_to_gun_cooldown_rate() {
     let mut app = App::new();
 
-    let pu1 = AddPowerup::<RateOfFire> {
-        value: RateOfFire(1),
-    };
-    let pu2 = AddPowerup::<RateOfFire> {
-        value: RateOfFire(2),
-    };
+    let pu1 = AddPowerup::<RateOfFire>(RateOfFire(1));
+    let pu2 = AddPowerup::<RateOfFire>(RateOfFire(2));
     let laser_gun = app
         .world
         .spawn(RateOfFire(0))

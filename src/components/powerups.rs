@@ -30,6 +30,4 @@ impl AddAssign for RateOfFire {
     }
 }
 #[derive(Component, Debug)]
-pub struct AddPowerup<T: Component + AddAssign + Copy> {
-    pub value: T,
-}
+pub struct AddPowerup<T: Component + AddAssign>(pub T);
