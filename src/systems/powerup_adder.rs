@@ -10,8 +10,8 @@ pub fn powerup_adder<T: Component + AddAssign + Default + Copy>(
     powerups: Query<(&Parent, &mut AddPowerup<T>)>,
     mut powerup_target: Query<&mut T>,
 ) {
-    powerup_target.for_each_mut(|mut gun| {
-        *gun = T::default();
+    powerup_target.for_each_mut(|mut target| {
+        *target = T::default();
     });
     powerups.for_each(|(parent, powerup)| {
         if let Ok(mut gun) = powerup_target.get_mut(parent.get()) {
