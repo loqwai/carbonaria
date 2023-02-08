@@ -8,13 +8,13 @@ use crate::components::AddPowerup;
 
 pub fn powerup_adder<T: Component + AddAssign + Default + Copy>(
     powerups: Query<(&Parent, &mut AddPowerup<T>)>,
-    mut guns: Query<&mut T>,
+    mut powerup_target: Query<&mut T>,
 ) {
-    guns.for_each_mut(|mut gun| {
+    powerup_target.for_each_mut(|mut gun| {
         *gun = T::default();
     });
     powerups.for_each(|(parent, powerup)| {
-        if let Ok(mut gun) = guns.get_mut(parent.get()) {
+        if let Ok(mut gun) = powerup_target.get_mut(parent.get()) {
             *gun += powerup.0;
         }
     });

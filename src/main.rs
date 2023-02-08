@@ -59,7 +59,6 @@ fn main() {
         .with_system(systems::team_powerup_assigns_team)
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::spawn_powerups)
-        .with_system(systems::on_damager_hit_subtract_health)
         .with_system(systems::time_to_live)
         .label("game_loop_system_set")
         ;
