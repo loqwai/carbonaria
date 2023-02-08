@@ -2,33 +2,22 @@ use std::ops::{Add, AddAssign};
 
 use bevy::prelude::*;
 
-use crate::{
-    components::{RateOfFire, LaserGun},
-};
-
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct Powerup<T:Component> {
     pub value: T,
 }
-
+#[derive(Component,Debug)]
+pub struct RateOfFire(pub usize);
 
 pub fn powerup_adder(
-    rate_of_fires: Query<&RateOfFire>,
-    childrens: Query<&Children>,
-    mut guns: Query<(&Parent, &mut LaserGun)>,
+    powerups: Query<(&Parent,&Powerup<RateOfFire>)>,
+    mut guns: Query<&mut RateOfFire>,
 ) {
     println!("powerup_adder");
-    guns.for_each_mut(|(parent, mut gun)| {
-        println!("gun: {:?}", gun);
-        if let Some(children) = childrens.get(parent.get()).ok() {
-            let cooldown_rate = children
-                .iter()
-                .filter_map(|child| rate_of_fires.get(*child).ok())
-                .map(|rate_of_fire| rate_of_fire.0)
-                .sum();
-            gun.cooldown_rate = cooldown_rate;
+    powerups.for_each(|(parent, powerup)| {
+        if let Ok(mut gun) = guns.get_mut(parent.get()) {
+            gun.0 += powerup.value.0;
         }
-
     });
 }
 
@@ -37,22 +26,22 @@ fn did_add_rate_of_fire_to_gun_cooldown_rate() {
 
     let mut app = App::new();
 
-    let laser =  LaserGun {
-        cooldown: 0,
-        cooldown_max: 10,
-        cooldown_rate: 1,
+    let pu1 =  Powerup::<RateOfFire> {
+        value: RateOfFire(1),
     };
-    let laser_entity = app.world.spawn(laser).id();
-    app.world.spawn_empty().with_children(|parent| {
-        parent.spawn(RateOfFire(1));
-        parent.spawn(RateOfFire(2));
+    let pu2 =  Powerup::<RateOfFire> {
+        value: RateOfFire(2),
+    };
+    let laser_gun = app.world.spawn(RateOfFire(0)).with_children(|parent| {
+        parent.spawn(pu1);
+        parent.spawn(pu2);
 
-    }).push_children(&[laser_entity]);
+    }).id();
 
 
     app.add_system(powerup_adder);
     app.update();
 
-    let gun = app.world.get::<LaserGun>(laser_entity).unwrap();
-    assert_eq!(gun.cooldown_rate, 3);
+    let rate_of_fire = app.world.get::<RateOfFire>(laser_gun).unwrap();
+    assert_eq!(rate_of_fire.0, 3);
 }
