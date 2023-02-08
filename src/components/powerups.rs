@@ -1,3 +1,5 @@
+use std::ops::AddAssign;
+
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -20,5 +22,14 @@ impl Default for Health {
     }
 }
 
-#[derive(Clone, Component)]
+#[derive(Clone, Component,Copy)]
 pub struct RateOfFire(pub usize);
+impl AddAssign for RateOfFire {
+    fn add_assign(&mut self, other: Self) {
+        self.0 += other.0;
+    }
+}
+#[derive(Component, Debug)]
+pub struct AddPowerup<T: Component + AddAssign + Copy> {
+    pub value: T,
+}
