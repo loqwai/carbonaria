@@ -39,7 +39,7 @@ impl AddAssign for Health {
 }
 
 
-#[derive(Clone,Component, Copy)]
+#[derive(Clone, Component)]
 pub struct RateOfFire(pub usize);
 impl AddAssign for RateOfFire {
     fn add_assign(&mut self, other: Self) {

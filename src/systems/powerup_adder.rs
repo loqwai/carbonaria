@@ -6,7 +6,7 @@ use crate::components::AddPowerup;
 
 
 
-pub fn powerup_adder<T: Component + AddAssign + Default + Copy>(
+pub fn powerup_adder<T: Component + AddAssign + Default + Clone>(
     powerups: Query<(&Parent, &mut AddPowerup<T>)>,
     mut powerup_target: Query<&mut T>,
 ) {
@@ -15,7 +15,7 @@ pub fn powerup_adder<T: Component + AddAssign + Default + Copy>(
     });
     powerups.for_each(|(parent, powerup)| {
         if let Ok(mut target) = powerup_target.get_mut(parent.get()) {
-            *target += powerup.0;
+            target += powerup.0.clone();
         }
     });
 }
