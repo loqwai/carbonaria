@@ -16,7 +16,7 @@ pub fn shoot_rage_quit_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(RateOfFire(2)).id();
+        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(AddPowerup(RateOfFire(100))).id();
         // TODO: replace magic numbers
         let bullet = commands.spawn(RageQuitBulletBundle::new(
             &asset_server,
@@ -30,7 +30,7 @@ pub fn shoot_rage_quit_gun(
         .id();
 
         let bullet_time_to_live = commands.spawn(TimeToLive(200)).id();
-        let speed_powerup = commands.spawn(AddPowerup::<Speed>(Speed(10.0))).id();
-        commands.entity(bullet).push_children(&[bullet_time_to_live, speed_powerup]);
+        let bullet_speed = commands.spawn(AddPowerup(Speed(10.0))).id();
+        commands.entity(bullet).push_children(&[bullet_time_to_live, bullet_speed]);
     })
 }

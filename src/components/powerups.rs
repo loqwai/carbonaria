@@ -1,4 +1,4 @@
-use std::ops::AddAssign;
+use std::ops::{AddAssign, MulAssign};
 
 use bevy::prelude::*;
 
@@ -53,3 +53,7 @@ impl Default for RateOfFire {
 }
 #[derive(Component, Debug)]
 pub struct AddPowerup<T: Component + AddAssign + Default>(pub T);
+
+#[derive(Component, Debug)]
+pub struct MultiplierPowerup<T: Component + MulAssign + Default>(pub T);
+
