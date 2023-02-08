@@ -57,7 +57,7 @@ pub struct Chest {
 pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332
 
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Debug)]
 pub struct LaserGun {
     pub cooldown: usize,
     pub cooldown_max: usize,

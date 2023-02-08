@@ -17,8 +17,9 @@ pub fn powerup_adder(
     childrens: Query<&Children>,
     mut guns: Query<(&Parent, &mut LaserGun)>,
 ) {
+    println!("powerup_adder");
     guns.for_each_mut(|(parent, mut gun)| {
-
+        println!("gun: {:?}", gun);
         if let Some(children) = childrens.get(parent.get()).ok() {
             let cooldown_rate = children
                 .iter()
@@ -41,12 +42,17 @@ fn did_add_rate_of_fire_to_gun_cooldown_rate() {
         cooldown_max: 10,
         cooldown_rate: 1,
     };
-    let laser_powerup = app.world.spawn(RateOfFire(1)).id();
-    let gun_entity = app.world.spawn(laser).push_children(&[laser_powerup]).id();
+    let laser_entity = app.world.spawn(laser).id();
+    app.world.spawn_empty().with_children(|parent| {
+        parent.spawn(RateOfFire(1));
+        parent.spawn(RateOfFire(2));
+
+    }).push_children(&[laser_entity]);
 
 
+    app.add_system(powerup_adder);
     app.update();
 
-    let gun = app.world.get::<LaserGun>(gun_entity).unwrap();
-    assert_eq!(gun.cooldown_rate, 2);
+    let gun = app.world.get::<LaserGun>(laser_entity).unwrap();
+    assert_eq!(gun.cooldown_rate, 3);
 }
