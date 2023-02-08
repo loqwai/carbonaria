@@ -25,8 +25,8 @@ fn did_add_rate_of_fire_to_gun_cooldown_rate() {
     use crate::components::RateOfFire;
     let mut app = App::new();
 
-    let pu1 = AddPowerup::<RateOfFire>(RateOfFire(1));
-    let pu2 = AddPowerup::<RateOfFire>(RateOfFire(2));
+    let pu1 = AddPowerup(RateOfFire(1));
+    let pu2 = AddPowerup(RateOfFire(2));
     let laser_gun = app
         .world
         .spawn(RateOfFire(0))

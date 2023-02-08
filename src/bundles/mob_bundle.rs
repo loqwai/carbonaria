@@ -7,7 +7,6 @@ use bevy_rapier2d::prelude::*;
 
 use crate::components::{Chases, Health, Mob, Pocket, Speed, Team, RateOfFire};
 
-const BASE_SPEED: f32 = 10.0;
 const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
@@ -15,7 +14,7 @@ pub struct MobBundle {
     pub mob: Mob,
     pub rigid_body: RigidBody,
     pub collider: Collider,
-    pub base_speed: Speed,
+    pub speed: Speed,
     pub pockets: Pocket,
     pub team: Team,
     pub health: Health,
@@ -38,7 +37,7 @@ impl MobBundle {
 
         MobBundle {
             axis_constraints: LockedAxes::all(),
-            base_speed: Speed(BASE_SPEED * scale),
+            speed: Speed::default(),
             chases: Chases,
             collider: Collider::ball(RADIUS * scale),
             health: Health(2),

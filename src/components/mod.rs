@@ -67,7 +67,7 @@ pub struct LaserGun {
 pub struct LaserGunBullet;
 
 #[derive(Component, Reflect)]
-pub struct Damage(pub usize);
+pub struct Damage(pub isize);
 
 #[derive(Component)]
 pub struct Aimable;

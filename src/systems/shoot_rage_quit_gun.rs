@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::{RageQuitBulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire}, resources::Config};
+use crate::{bundles::{RageQuitBulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire, AddPowerup, Speed}, resources::Config};
 
 pub fn shoot_rage_quit_gun(
     mut commands: Commands,
@@ -30,6 +30,7 @@ pub fn shoot_rage_quit_gun(
         .id();
 
         let bullet_time_to_live = commands.spawn(TimeToLive(200)).id();
-        commands.entity(bullet).push_children(&[bullet_time_to_live]);
+        let speed_powerup = commands.spawn(AddPowerup::<Speed>(Speed(10.0))).id();
+        commands.entity(bullet).push_children(&[bullet_time_to_live, speed_powerup]);
     })
 }

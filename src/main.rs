@@ -9,7 +9,7 @@ use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
-use components::{Tick, RateOfFire};
+use components::{Tick, RateOfFire, Speed, Health};
 use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
@@ -34,10 +34,11 @@ fn main() {
 
     let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
         .with_system(systems::powerup_adder::<RateOfFire>)
+        .with_system(systems::powerup_adder::<Speed>)
+        .with_system(systems::powerup_adder::<Health>)
         .label("compute_powerups_system_set");
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
-        //https://bevy-cheatbook.github.io/programming/run-criteria.html
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64).with_label("foo"))
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
@@ -52,11 +53,9 @@ fn main() {
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_change_sprite_index)
-        .with_system(systems::health_powerup_add_health)
         .with_system(systems::calculate_rate_of_fire)
         .with_system(systems::rotate_thing)
         // .with_system(systems::detect_exit)
-        .with_system(systems::detect_damager_hits)
         .with_system(systems::team_powerup_assigns_team)
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::spawn_powerups)

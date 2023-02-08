@@ -9,20 +9,37 @@ pub struct Speedup;
 #[reflect(Component)]
 pub struct Team(pub usize);
 
-#[derive(Clone, Component, Reflect)]
+#[derive(Clone, Component, Reflect,Copy)]
 pub struct Speed(pub f32);
-
-
-#[derive(Clone, Component, Reflect)]
-#[reflect(Component)]
-pub struct Health(pub usize);
-impl Default for Health {
+impl Default for Speed {
     fn default() -> Self {
-        Health(10)
+        Speed(0.0)
+    }
+}
+impl AddAssign for Speed {
+    fn add_assign(&mut self, other: Self) {
+        self.0 += other.0;
     }
 }
 
-#[derive(Clone, Component,Copy)]
+
+
+#[derive(Clone, Component, Reflect,Copy)]
+#[reflect(Component)]
+pub struct Health(pub isize);
+impl Default for Health {
+    fn default() -> Self {
+        Health(0)
+    }
+}
+impl AddAssign for Health {
+    fn add_assign(&mut self, other: Self) {
+        self.0 += other.0;
+    }
+}
+
+
+#[derive(Clone,Component, Copy)]
 pub struct RateOfFire(pub usize);
 impl AddAssign for RateOfFire {
     fn add_assign(&mut self, other: Self) {
