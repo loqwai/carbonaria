@@ -14,8 +14,8 @@ pub fn powerup_adder<T: Component + AddAssign + Default + Copy>(
         *target = T::default();
     });
     powerups.for_each(|(parent, powerup)| {
-        if let Ok(mut gun) = powerup_target.get_mut(parent.get()) {
-            *gun += powerup.0;
+        if let Ok(mut target) = powerup_target.get_mut(parent.get()) {
+            *target += powerup.0;
         }
     });
 }
