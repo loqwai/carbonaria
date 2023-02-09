@@ -4,7 +4,6 @@ mod events;
 mod resources;
 mod systems;
 mod util;
-
 use std::ops::{AddAssign, MulAssign};
 
 use bevy::{prelude::*, time::FixedTimestep};
@@ -42,8 +41,7 @@ fn main() {
         .with_system(systems::on_click_and_no_player_reset)
         .with_system(systems::on_move_event_change_sprite_index);
 
-    let compute_powerups_system_set =
-        SystemSet::on_update(AppState::InGame).label("compute_powerups_system_set")
+    let compute_powerups_system_set = SystemSet::on_update(AppState::InGame).label("compute_powerups_system_set")
             .with_powerup_chain::<RateOfFire>()
             .with_powerup_chain::<Health>()
             .with_powerup_chain::<Speed>();
