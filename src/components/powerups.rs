@@ -41,6 +41,11 @@ impl AddAssign for Health {
         self.0 += other.0;
     }
 }
+impl MulAssign for Health {
+    fn mul_assign(&mut self, other: Self) {
+        self.0 *= other.0;
+    }
+}
 
 
 #[derive(Clone, Component)]
@@ -53,6 +58,11 @@ impl AddAssign for RateOfFire {
 impl Default for RateOfFire {
     fn default() -> Self {
         RateOfFire(0)
+    }
+}
+impl MulAssign for RateOfFire {
+    fn mul_assign(&mut self, other: Self) {
+        self.0 *= other.0;
     }
 }
 #[derive(Component, Debug)]

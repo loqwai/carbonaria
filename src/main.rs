@@ -5,11 +5,13 @@ mod resources;
 mod systems;
 mod util;
 
+use std::ops::{AddAssign, MulAssign};
+
 use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
-use components::{Tick, RateOfFire, Speed, Health};
+use components::{Health, RateOfFire, Speed, Tick};
 use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
@@ -18,7 +20,16 @@ const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
 pub enum AppState {
     InGame,
 }
-
+trait PowerUpChain {
+    fn with_powerup_chain<T: Component + AddAssign + MulAssign + Default + Clone>(self) -> Self;
+}
+impl PowerUpChain for SystemSet {
+    fn with_powerup_chain<T: Component + AddAssign + MulAssign + Default + Clone>(self) -> Self {
+        self.with_system(systems::powerup_defaulter::<T>)
+            .with_system(systems::powerup_adder::<T>.after(systems::powerup_defaulter::<T>))
+            .with_system(systems::powerup_multiplier::<T>.after(systems::powerup_adder::<T>))
+    }
+}
 fn main() {
     // group ui systems together bc we want to run them as fast as possible
     let ui_system_set = SystemSet::on_update(AppState::InGame)
@@ -31,15 +42,11 @@ fn main() {
         .with_system(systems::on_click_and_no_player_reset)
         .with_system(systems::on_move_event_change_sprite_index);
 
-
-    let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
-        .with_system(systems::powerup_defaulter::<RateOfFire>)
-        .with_system(systems::powerup_defaulter::<Health>)
-        .with_system(systems::powerup_defaulter::<Speed>)
-        .with_system(systems::powerup_adder::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>))
-        .with_system(systems::powerup_adder::<Health>.after(systems::powerup_defaulter::<Health>))
-        .with_system(systems::powerup_adder::<Speed>.after(systems::powerup_defaulter::<Speed>))
-        .label("compute_powerups_system_set");
+    let compute_powerups_system_set =
+        SystemSet::on_update(AppState::InGame).label("compute_powerups_system_set")
+            .with_powerup_chain::<RateOfFire>()
+            .with_powerup_chain::<Health>()
+            .with_powerup_chain::<Speed>();
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
@@ -63,8 +70,7 @@ fn main() {
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::spawn_powerups)
         .with_system(systems::time_to_live)
-        .label("game_loop_system_set")
-        ;
+        .label("game_loop_system_set");
 
     let game_loop_cleanup_system_set = SystemSet::on_update(AppState::InGame)
         //https://bevy-cheatbook.github.io/programming/run-criteria.html
