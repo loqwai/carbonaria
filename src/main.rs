@@ -51,7 +51,8 @@ fn main() {
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
-        .with_system(systems::shoot_rage_quit_gun)
+        // .with_system(systems::shoot_rage_quit_gun)
+        // .with_system(systems::shoot_reverser_gun)
         .with_system(systems::move_bullet)
         // .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mobs)

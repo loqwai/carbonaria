@@ -55,7 +55,6 @@ pub use player_aimables_aim_at_cursor::player_aimables_aim_at_cursor;
 pub use remove_all_entities::remove_all_entities;
 pub use resize_window::resize_window;
 pub use rotate_thing::rotate_thing;
-pub use shoot_gun::shoot_gun;
 pub use spawn_camera::spawn_camera;
 pub use spawn_crosshairs::spawn_crosshairs;
 // pub use spawn_exit::spawn_exit;
@@ -65,7 +64,11 @@ pub use spawn_powerups::spawn_powerups;
 pub use spawn_ui::spawn_ui;
 pub use sync_mouse_position::sync_mouse_position;
 pub use team_powerup_assigns_team::team_powerup_assigns_team;
+
+pub use shoot_gun::shoot_gun;
 pub use shoot_rage_quit_gun::shoot_rage_quit_gun;
+pub use shoot_reverser_gun::shoot_reverser_gun;
+
 pub use time_to_live::time_to_live;
 pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;

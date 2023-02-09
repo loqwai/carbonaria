@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    bundles::RageQuitBulletBundle,
-    components::{AddPowerup, Chest, LaserGun, MultiplyPowerup, RateOfFire, Speed, TimeToLive},
+    bundles::ReverserBulletBundle,
+    components::{AddPowerup, Chest, LaserGun, MultiplyPowerup, Speed, TimeToLive},
     resources::Config,
 };
 
@@ -20,17 +20,15 @@ pub fn shoot_reverser_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let payload = commands
-            .spawn_empty()
+        let payload = commands.spawn_empty()
             .insert(MultiplyPowerup(Speed(-1.0)))
             .with_children(|parent| {
-                parent.spawn(TimeToLive(100));
-            })
-            .id();
+                parent.spawn(TimeToLive(300));
+            }).id();
 
         // TODO: replace magic numbers
         let bullet = commands
-            .spawn(RageQuitBulletBundle::new(
+            .spawn(ReverserBulletBundle::new(
                 &asset_server,
                 &mut texture_atlases,
                 &transform.mul_transform(Transform::from_translation(Vec3::new(
