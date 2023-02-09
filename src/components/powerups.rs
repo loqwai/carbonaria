@@ -22,7 +22,11 @@ impl AddAssign for Speed {
     }
 }
 
-
+impl MulAssign for Speed {
+    fn mul_assign(&mut self, other: Self) {
+        self.0 *= other.0;
+    }
+}
 
 #[derive(Clone, Component, Reflect,Copy)]
 #[reflect(Component)]
@@ -52,8 +56,7 @@ impl Default for RateOfFire {
     }
 }
 #[derive(Component, Debug)]
-pub struct AddPowerup<T: Component + AddAssign + Default>(pub T);
+pub struct AddPowerup<T: Component + AddAssign>(pub T);
 
 #[derive(Component, Debug)]
-pub struct MultiplierPowerup<T: Component + MulAssign + Default>(pub T);
-
+pub struct MultiplyPowerup<T: Component + MulAssign>(pub T);

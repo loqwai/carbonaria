@@ -16,7 +16,7 @@ pub fn shoot_rage_quit_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(AddPowerup(RateOfFire(100))).id();
+        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(AddPowerup(RateOfFire(1))).id();
         // TODO: replace magic numbers
         let bullet = commands.spawn(RageQuitBulletBundle::new(
             &asset_server,

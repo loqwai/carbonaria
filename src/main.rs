@@ -33,23 +33,26 @@ fn main() {
 
 
     let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
-        .with_system(systems::powerup_adder::<RateOfFire>)
-        .with_system(systems::powerup_adder::<Speed>)
-        .with_system(systems::powerup_adder::<Health>)
+        .with_system(systems::powerup_defaulter::<RateOfFire>)
+        .with_system(systems::powerup_defaulter::<Health>)
+        .with_system(systems::powerup_defaulter::<Speed>)
+        .with_system(systems::powerup_adder::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>))
+        .with_system(systems::powerup_adder::<Health>.after(systems::powerup_defaulter::<Health>))
+        .with_system(systems::powerup_adder::<Speed>.after(systems::powerup_defaulter::<Speed>))
         .label("compute_powerups_system_set");
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
-        .with_run_criteria(FixedTimestep::step(TIME_STEP as f64).with_label("foo"))
+        .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
-        // .with_system(systems::shoot_gun)
+        .with_system(systems::shoot_gun)
         .with_system(systems::shoot_rage_quit_gun)
         .with_system(systems::move_bullet)
         // .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mobs)
-        // .with_system(systems::chasers_follow_other_teams)
+        .with_system(systems::chasers_follow_other_teams)
         .with_system(systems::player_aimables_aim_at_cursor)
-        // .with_system(systems::chaser_aimables_aim_at_other_teams)
+        .with_system(systems::chaser_aimables_aim_at_other_teams)
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_change_sprite_index)

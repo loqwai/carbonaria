@@ -33,6 +33,8 @@ mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
 mod powerup_adder;
+mod powerup_multiplier;
+mod powerup_defaulter;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use consume_despawn_entity_events::consume_despawn_entity_events;
@@ -68,6 +70,8 @@ pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
 pub use powerup_adder::powerup_adder;
+pub use powerup_multiplier::powerup_multiplier;
+pub use powerup_defaulter::powerup_defaulter;
 
 use crate::components::{Health, Player};
 use bevy::prelude::*;
