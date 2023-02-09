@@ -21,6 +21,7 @@ mod shoot_gun;
 mod spawn_camera;
 mod spawn_crosshairs;
 mod shoot_rage_quit_gun;
+mod shoot_reverser_gun;
 // mod spawn_exit;
 mod spawn_mobs;
 mod spawn_player;

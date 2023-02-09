@@ -24,9 +24,10 @@ pub fn shoot_reverser_gun(
             .spawn_empty()
             .insert(MultiplyPowerup(Speed(-1.0)))
             .with_children(|parent| {
-                parent.spawn().insert(TimeToLive(100));
+                parent.spawn(TimeToLive(100));
             })
             .id();
+
         // TODO: replace magic numbers
         let bullet = commands
             .spawn(RageQuitBulletBundle::new(
@@ -43,8 +44,8 @@ pub fn shoot_reverser_gun(
             .id();
 
         commands.entity(bullet).with_children(|parent| {
-            parent.spawn().insert(TimeToLive(200));
-            parent.spawn().insert(AddPowerup(Speed(10.0)));
+            parent.spawn(TimeToLive(200));
+            parent.spawn(AddPowerup(Speed(10.0)));
         });
     })
 }

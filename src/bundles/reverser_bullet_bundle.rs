@@ -10,7 +10,7 @@ const BASE_SPEED: f32 = 20.0;
 const RADIUS: f32 = 64.0;
 
 #[derive(Bundle)]
-pub struct InverterBulletBundle {
+pub struct ReverserBulletBundle {
     pub name: Name,
     pub tag: LaserGunBullet,
     pub sprite_sheet_bundle: SpriteSheetBundle,
@@ -23,20 +23,20 @@ pub struct InverterBulletBundle {
     pub health: Health, // !important
 }
 
-impl InverterBulletBundle {
+impl ReverserBulletBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
         transform: &GlobalTransform,
         scale: f32,
-    ) -> InverterBulletBundle {
+    ) -> ReverserBulletBundle {
         let transform = transform.compute_transform();
         let texture = asset_server.load("bullet-sprite-sheet.png");
         let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_len = texture_atlas.len();
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-        InverterBulletBundle {
+        ReverserBulletBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
             collider: Collider::ball(RADIUS * scale),
             damage: Damage(1),
