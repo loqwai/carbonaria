@@ -44,7 +44,6 @@ pub fn shoot_reverser_gun(
         commands.entity(bullet).with_children(|parent| {
             parent.spawn(TimeToLive(200));
             parent.spawn(Math::add(Speed(10.0)));
-            parent.spawn(Math::add(Health(1)));
         });
     })
 }

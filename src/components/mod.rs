@@ -67,10 +67,6 @@ pub struct LaserGun {
 pub struct LaserGunBullet;
 #[derive(Component)]
 pub struct Aimable;
-
-#[derive(Component, Reflect)]
-pub struct TimeToLive(pub usize);
-
 #[derive(Component, Deref)]
 pub struct Direction(pub Quat);
 
