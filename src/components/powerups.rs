@@ -49,7 +49,7 @@ impl MulAssign for Health {
 
 
 #[derive(Clone, Component)]
-pub struct RateOfFire(pub usize);
+pub struct RateOfFire(pub f32);
 impl AddAssign for RateOfFire {
     fn add_assign(&mut self, other: Self) {
         self.0 += other.0;
@@ -57,7 +57,7 @@ impl AddAssign for RateOfFire {
 }
 impl Default for RateOfFire {
     fn default() -> Self {
-        RateOfFire(0)
+        RateOfFire(0.0)
     }
 }
 impl MulAssign for RateOfFire {
@@ -67,7 +67,7 @@ impl MulAssign for RateOfFire {
 }
 
 #[derive(Clone, Component)]
-pub struct TimeToLive(pub usize);
+pub struct TimeToLive(pub isize);
 impl AddAssign for TimeToLive {
     fn add_assign(&mut self, other: Self) {
         self.0 += other.0;

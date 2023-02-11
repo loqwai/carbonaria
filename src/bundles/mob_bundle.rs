@@ -55,7 +55,7 @@ impl MobBundle {
                 ..Default::default()
             },
             team: Team(1),
-            rate_of_fire: RateOfFire(1),
+            rate_of_fire: RateOfFire(1.0),
         }
     }
 }

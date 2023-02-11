@@ -56,7 +56,7 @@ impl PlayerBundle {
             },
             sensor: Sensor,
             team: Team(0),
-            rate_of_fire: RateOfFire(1),
+            rate_of_fire: RateOfFire(1.0),
         }
     }
 }

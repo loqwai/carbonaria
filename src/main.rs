@@ -35,6 +35,7 @@ fn main() {
             .with_system(systems::powerup_defaulter::<Speed>)
             .with_system(systems::powerup_defaulter::<Health>)
             .with_system(systems::powerup_defaulter::<RateOfFire>)
+            .with_system(systems::powerup_defaulter::<TimeToLive>)
             .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
             .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
             .with_system(systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>))
@@ -46,9 +47,9 @@ fn main() {
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
-        // .with_system(systems::shoot_rage_quit_gun)
+        .with_system(systems::shoot_rage_quit_gun)
         .with_system(systems::shoot_reverser_gun)
-        .with_system(systems::shoot_poison_gun)
+        // .with_system(systems::shoot_poison_gun)
         .with_system(systems::move_bullet)
         // .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mobs)
@@ -64,6 +65,7 @@ fn main() {
         .with_system(systems::team_powerup_assigns_team)
         .with_system(systems::on_chest_hit_pickup)
         .with_system(systems::spawn_powerups)
+        .with_system(systems::attach_time_to_live)
         .with_system(systems::time_to_live)
         .label("game_loop_system_set");
 

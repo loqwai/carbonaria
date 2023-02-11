@@ -36,6 +36,7 @@ mod update_health_ui;
 mod update_score_ui;
 mod powerup_mather;
 mod powerup_defaulter;
+mod attach_time_to_live;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use consume_despawn_entity_events::consume_despawn_entity_events;
@@ -76,15 +77,4 @@ pub use update_score_ui::update_score_ui;
 pub use powerup_mather::powerup_mather;
 pub use powerup_defaulter::powerup_defaulter;
 pub use shoot_poison_gun::shoot_poison_gun;
-
-use crate::components::{Health, Player};
-use bevy::prelude::*;
-
-pub fn on_health_100_you_win(players: Query<&Health, With<Player>>) {
-    for player in players.iter() {
-        if player.0 == 100 {
-            println!("You win!");
-            std::process::exit(1);
-        }
-    }
-}
+pub use attach_time_to_live::attach_time_to_live;

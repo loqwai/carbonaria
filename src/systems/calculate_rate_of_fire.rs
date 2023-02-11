@@ -7,7 +7,7 @@ pub fn calculate_rate_of_fire(
 ) {
     guns.for_each_mut(|(mut gun, parent)| {
         if let Ok(rate_of_fire) = rate_of_fires.get_mut(parent.get()) {
-            gun.cooldown_rate = rate_of_fire.0;
+            gun.cooldown_rate = rate_of_fire.0 as usize;
         }
     });
 }

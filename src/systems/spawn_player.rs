@@ -22,7 +22,7 @@ pub fn spawn_player(
     let compass = commands.spawn(CompassBundle::new(&asset_server)).id();
     let health_ui = commands.spawn(HealthBundle::new(&asset_server)).id();
     let laser_gun = commands.spawn(LaserGunBundle::new(60)).id();
-    let rate_of_fire_powerup = commands.spawn(Math::add(RateOfFire(1))).id();
+    let rate_of_fire_powerup = commands.spawn(Math::add(RateOfFire(1.0))).id();
     let speed_powerup = commands.spawn(Math::add(Speed(5.0))).id();
     let health_powerup = commands
         .spawn(Math::add(Health(75)))
