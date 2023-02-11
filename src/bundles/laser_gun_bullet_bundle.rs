@@ -4,7 +4,7 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::{components::{Direction, LaserGunBullet, Speed,Damage, Health}, util::index_for_direction};
+use crate::{components::{Direction, LaserGunBullet, Speed,}, util::index_for_direction};
 
 const BASE_SPEED: f32 = 20.0;
 const RADIUS: f32 = 64.0;
@@ -19,8 +19,6 @@ pub struct LaserGunBulletBundle {
     pub sensor: Sensor,
     pub active_events: ActiveEvents,
     pub speed: Speed,
-    pub damage: Damage,
-    pub health: Health, // !important
 }
 
 impl LaserGunBulletBundle {
@@ -39,7 +37,6 @@ impl LaserGunBulletBundle {
         LaserGunBulletBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
             collider: Collider::ball(RADIUS * scale),
-            damage: Damage(1),
             direction: Direction(transform.rotation),
             name: "laser gun bullet".into(),
             sensor: Sensor,
@@ -58,7 +55,6 @@ impl LaserGunBulletBundle {
                 ..Default::default()
             },
             tag: LaserGunBullet,
-            health: Health(1),
         }
     }
 }
