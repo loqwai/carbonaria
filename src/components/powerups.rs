@@ -73,13 +73,17 @@ pub struct Math<T: Component + AddAssign + MulAssign> {
 }
 
 impl<T: Component + AddAssign + MulAssign> Math<T> {
-    pub fn add(&mut self, add: T) {
-        self.add = Some(add);
-        self.multiply = None;
+    pub fn add(add: T) -> Math<T> {
+        Math {
+            add: Some(add),
+            multiply: None,
+        }
     }
 
-    pub fn multiply(&mut self, multiply: T) {
-        self.add = None;
-        self.multiply = Some(multiply);
+    pub fn multiply(multiply: T) -> Math<T> {
+        Math {
+            add: None,
+            multiply: Some(multiply),
+        }
     }
 }

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     bundles::ReverserBulletBundle,
-    components::{AddPowerup, Chest, LaserGun, MultiplyPowerup, Speed, TimeToLive},
+    components::{Chest, LaserGun, Math, Speed, TimeToLive},
     resources::Config,
 };
 
@@ -21,7 +21,7 @@ pub fn shoot_reverser_gun(
 
         gun.cooldown = gun.cooldown_max;
         let payload = commands.spawn_empty()
-            .insert(MultiplyPowerup(Speed(-1.0)))
+            .insert(Math::multiply(Speed(-1.0)))
             .with_children(|parent| {
                 parent.spawn(TimeToLive(300));
             }).id();
@@ -43,7 +43,7 @@ pub fn shoot_reverser_gun(
 
         commands.entity(bullet).with_children(|parent| {
             parent.spawn(TimeToLive(200));
-            parent.spawn(AddPowerup(Speed(10.0)));
+            parent.spawn(Math::add(Speed(10.0)));
         });
     })
 }

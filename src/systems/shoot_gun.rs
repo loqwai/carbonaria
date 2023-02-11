@@ -18,10 +18,7 @@ pub fn shoot_gun(
         gun.cooldown = gun.cooldown_max;
 
         //TODO: This will not work well when we start having multipliers
-        let health_powerdown = commands.spawn(Math{
-            add: Some(Health(-10)),
-            multiply: None,
-        }).id();
+        let health_powerdown = commands.spawn(Math::add(Health(-10))).id();
         // TODO: replace magic numbers
         let bullet = commands.spawn(LaserGunBulletBundle::new(
             &asset_server,
@@ -35,8 +32,8 @@ pub fn shoot_gun(
         .id();
 
         let time_to_live = commands.spawn(TimeToLive(200)).id();
-        let speed_powerup = commands.spawn(Math{ add: Some(Speed(10.0)), multiply: None }).id();
-        let health_powerup = commands.spawn(AddPowerup(Health(1))).id();
+        let speed_powerup = commands.spawn(Math::add(Speed(10.0))).id();
+        let health_powerup = commands.spawn(Math::add(Health(1))).id();
         commands.entity(bullet).push_children(&[time_to_live, speed_powerup, health_powerup]);
 
     })

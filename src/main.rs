@@ -32,9 +32,12 @@ fn main() {
         .with_system(systems::on_move_event_change_sprite_index);
 
     let compute_powerups_system_set = SystemSet::on_update(AppState::InGame).label("compute_powerups_system_set")
-            .with_system(systems::powerup_defaulter::<Speed>.before(systems::powerup_mather::<Speed>))
-            .with_system(systems::powerup_defaulter::<Health>.before(systems::powerup_mather::<Health>))
-            .with_system(systems::powerup_defaulter::<RateOfFire>.before(systems::powerup_mather::<RateOfFire>));
+            .with_system(systems::powerup_defaulter::<Speed>)
+            .with_system(systems::powerup_defaulter::<Health>)
+            .with_system(systems::powerup_defaulter::<RateOfFire>)
+            .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
+            .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
+            .with_system(systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>));
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::{RageQuitBulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire, AddPowerup, Speed}, resources::Config};
+use crate::{bundles::{RageQuitBulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire, Math, Speed}, resources::Config};
 
 pub fn shoot_rage_quit_gun(
     mut commands: Commands,
@@ -16,7 +16,7 @@ pub fn shoot_rage_quit_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(AddPowerup(RateOfFire(1))).id();
+        let ttl_powerup = commands.spawn(TimeToLive(100)).insert(Math::add(RateOfFire(1))).id();
         // TODO: replace magic numbers
         let bullet = commands.spawn(RageQuitBulletBundle::new(
             &asset_server,
@@ -30,7 +30,7 @@ pub fn shoot_rage_quit_gun(
         .id();
 
         let bullet_time_to_live = commands.spawn(TimeToLive(200)).id();
-        let bullet_speed = commands.spawn(AddPowerup(Speed(10.0))).id();
+        let bullet_speed = commands.spawn(Math::add(Speed(10.0))).id();
         commands.entity(bullet).push_children(&[bullet_time_to_live, bullet_speed]);
     })
 }
