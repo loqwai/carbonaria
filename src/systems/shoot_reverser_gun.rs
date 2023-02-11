@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     bundles::ReverserBulletBundle,
-    components::{Chest, LaserGun, Math, Speed, TimeToLive},
+    components::{Chest, Health, LaserGun, Math, Speed, TimeToLive},
     resources::Config,
 };
 
@@ -44,6 +44,7 @@ pub fn shoot_reverser_gun(
         commands.entity(bullet).with_children(|parent| {
             parent.spawn(TimeToLive(200));
             parent.spawn(Math::add(Speed(10.0)));
+            parent.spawn(Math::add(Health(1)));
         });
     })
 }
