@@ -70,9 +70,16 @@ impl MulAssign for RateOfFire {
 pub struct TimeToLive(pub usize);
 impl AddAssign for TimeToLive {
     fn add_assign(&mut self, other: Self) {
-        self.0 += other.0;
+        self.0 = 1;
     }
 }
+
+impl AddAssign<usize> for TimeToLive {
+    fn add_assign(&mut self, other: usize) {
+        self.0  = self.0.saturating_add(other);
+    }
+}
+
 impl Default for TimeToLive {
     fn default() -> Self {
         TimeToLive(0)
