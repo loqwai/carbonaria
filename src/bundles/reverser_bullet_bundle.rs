@@ -20,7 +20,6 @@ pub struct ReverserBulletBundle {
     pub active_events: ActiveEvents,
     pub speed: Speed,
     pub damage: Damage,
-    pub health: Health, // !important
 }
 
 impl ReverserBulletBundle {
@@ -58,7 +57,6 @@ impl ReverserBulletBundle {
                 ..Default::default()
             },
             tag: LaserGunBullet,
-            health: Health(1),
         }
     }
 }

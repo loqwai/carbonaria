@@ -67,6 +67,26 @@ impl MulAssign for RateOfFire {
 }
 
 #[derive(Clone, Component)]
+pub struct TimeToLive(pub usize);
+impl AddAssign for TimeToLive {
+    fn add_assign(&mut self, other: Self) {
+        self.0 += other.0;
+    }
+}
+impl Default for TimeToLive {
+    fn default() -> Self {
+        TimeToLive(0)
+    }
+}
+
+impl MulAssign for TimeToLive {
+    fn mul_assign(&mut self, other: Self) {
+        self.0 *= other.0;
+    }
+}
+
+
+#[derive(Clone, Component)]
 pub struct Math<T: Component + AddAssign + MulAssign> {
     pub add: Option<T>,
     pub multiply: Option<T>,
