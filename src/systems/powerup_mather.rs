@@ -2,11 +2,11 @@ use std::ops::{MulAssign, AddAssign};
 
 use bevy::prelude::*;
 
-use crate::components::MathComponent;
+use crate::components::MathPowerup;
 
-pub fn powerup_multiplier<T: Component + MulAssign + AddAssign + Clone>(
-    powerups: Query<(&Parent, &MathComponent<T>)>,
-    entities: Query<Entity, (With<Parent>, With<MathComponent<T>>)>,
+pub fn powerup_mather<T: Component + MulAssign + AddAssign + Clone>(
+    powerups: Query<(&Parent, &MathPowerup<T>)>,
+    entities: Query<Entity, (With<Parent>, With<MathPowerup<T>>)>,
     mut powerup_target: Query<&mut T>,
 ) {
     let mut entities: Vec<Entity> = entities.iter().collect();

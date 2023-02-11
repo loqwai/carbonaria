@@ -67,7 +67,7 @@ impl MulAssign for RateOfFire {
 }
 
 #[derive(Clone, Component)]
-pub struct MathComponent<T: Component + AddAssign + MulAssign> {
+pub struct MathPowerup<T: Component + AddAssign + MulAssign> {
     pub add: Option<T>,
     pub multiply: Option<T>,
 }

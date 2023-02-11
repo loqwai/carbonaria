@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::LaserGunBulletBundle, components::{LaserGun, TimeToLive, AddPowerup, Speed, Health, Chest}, resources::Config};
+use crate::{bundles::LaserGunBulletBundle, components::{LaserGun, TimeToLive, Math, Speed, Health, Chest}, resources::Config};
 
 pub fn shoot_gun(
     mut commands: Commands,
@@ -18,7 +18,10 @@ pub fn shoot_gun(
         gun.cooldown = gun.cooldown_max;
 
         //TODO: This will not work well when we start having multipliers
-        let health_powerdown = commands.spawn(AddPowerup(Health(-10))).id();
+        let health_powerdown = commands.spawn(Math{
+            add: Some(Health(-10)),
+            multiply: None,
+        }).id();
         // TODO: replace magic numbers
         let bullet = commands.spawn(LaserGunBulletBundle::new(
             &asset_server,
@@ -32,7 +35,7 @@ pub fn shoot_gun(
         .id();
 
         let time_to_live = commands.spawn(TimeToLive(200)).id();
-        let speed_powerup = commands.spawn(AddPowerup(Speed(10.0))).id();
+        let speed_powerup = commands.spawn(Math{ add: Some(Speed(10.0)), multiply: None }).id();
         let health_powerup = commands.spawn(AddPowerup(Health(1))).id();
         commands.entity(bullet).push_children(&[time_to_live, speed_powerup, health_powerup]);
 
