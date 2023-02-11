@@ -25,7 +25,7 @@ pub fn shoot_rage_quit_gun(
             config.scale,
         ))
         .insert(Chest {
-            contents: ttl_powerup,
+            contents: vec![ttl_powerup],
         })
         .id();
 

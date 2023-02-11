@@ -38,7 +38,7 @@ pub fn shoot_reverser_gun(
                 ))),
                 config.scale,
             ))
-            .insert(Chest { contents: payload })
+            .insert(Chest { contents: vec![payload] })
             .id();
 
         commands.entity(bullet).with_children(|parent| {

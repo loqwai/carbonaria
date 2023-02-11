@@ -23,8 +23,6 @@ bevy_rapier2d = "0.20.0"
 rand = { version = "0.8.5",  features = ["small_rng"] }
 bevy-inspector-egui = "0.17.0"
 
-[[bin]]
-name = "game"
 
 [[bin]]
 name = "main"

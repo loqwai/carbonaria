@@ -50,7 +50,7 @@ pub struct Pocket;
 
 #[derive(Component)]
 pub struct Chest {
-    pub contents: Entity,
+    pub contents: Vec<Entity>,
 }
 
 #[derive(Component)]

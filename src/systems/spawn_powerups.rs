@@ -31,7 +31,7 @@ pub fn spawn_powerups(
         position,
         config.scale,
         sprite,
-        powerup,
+        vec![powerup],
     ));
 }
 

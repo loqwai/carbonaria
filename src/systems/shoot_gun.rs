@@ -27,7 +27,7 @@ pub fn shoot_gun(
             config.scale,
         ))
         .insert(Chest {
-            contents: health_powerdown,
+            contents: vec![health_powerdown],
         })
         .id();
 

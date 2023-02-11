@@ -30,7 +30,7 @@ pub fn on_chest_hit_pickup(
         })
         .for_each(|(&pocket_entity, &chest_entity)| {
             let chest = q_chests.get(chest_entity).unwrap();
-            commands.entity(pocket_entity).push_children(&[chest.contents]);
+            commands.entity(pocket_entity).push_children(&chest.contents);
             despawn_events.send(DespawnEvent { entity: chest_entity });
         });
 }

@@ -20,7 +20,7 @@ impl ChestBundle {
         position: Vec3,
         scale: f32,
         texture: &str,
-        contents: Entity,
+        contents: Vec<Entity>,
     ) -> ChestBundle {
         ChestBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
