@@ -22,8 +22,8 @@ pub fn spawn_mobs(
     let position = random_position(&config, &mut rng);
     let mob = commands.spawn(MobBundle::new(&asset_server, &mut texture_atlases, position, config.scale)).id();
     let laser_gun = commands.spawn(LaserGunBundle::new(60)).id();
-    let rate_of_fire_powerup = commands.spawn(Math::add(RateOfFire(1))).id();
-    let speed_powerup = commands.spawn(Math::add(Speed(5.0))).id();
+    let rate_of_fire_powerup = commands.spawn(Math::add(RateOfFire(0.1))).id();
+    let speed_powerup = commands.spawn(Math::add(Speed(1.0))).id();
     let health_powerup = commands.spawn(Math::add(crate::components::Health(10))).id();
 
     commands.entity(mob).push_children(&[laser_gun, speed_powerup, health_powerup, rate_of_fire_powerup]);

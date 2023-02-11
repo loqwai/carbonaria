@@ -33,7 +33,7 @@ pub fn shoot_rage_quit_gun(
         .id();
 
         let bullet_time_to_live = commands.spawn(TimeToLive(200)).id();
-        let bullet_speed = commands.spawn(Math::add(Speed(10.0))).id();
+        let bullet_speed = commands.spawn(Math::add(Speed(5.0))).id();
         commands.entity(bullet).push_children(&[bullet_time_to_live, bullet_speed]);
     })
 }
