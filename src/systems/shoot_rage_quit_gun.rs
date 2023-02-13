@@ -21,7 +21,7 @@ pub fn shoot_rage_quit_gun(
             .insert(Math::multiply(RateOfFire(0.1))).id();
 
         // TODO: replace magic numbers
-        let bullet = commands.spawn(BulletBundle::new(
+        commands.spawn(BulletBundle::new(
             &asset_server,
             &mut texture_atlases,
             &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
@@ -30,11 +30,10 @@ pub fn shoot_rage_quit_gun(
         ))
         .insert(Chest {
             contents: vec![ttl_powerup],
-        })
-        .id();
+        }).with_children(|parent| {
+            parent.spawn(TimeToLive(200));
+            parent.spawn(Math::add(Speed(10.0)));
+        });
 
-        let bullet_time_to_live = commands.spawn(TimeToLive(200)).id();
-        let bullet_speed = commands.spawn(Math::add(Speed(5.0))).id();
-        commands.entity(bullet).push_children(&[bullet_time_to_live, bullet_speed]);
     })
 }
