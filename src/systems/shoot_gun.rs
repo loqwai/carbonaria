@@ -20,7 +20,7 @@ pub fn shoot_gun(
         //TODO: This will not work well when we start having multipliers
         let health_powerdown = commands.spawn(Math::add(Health(-10))).id();
         // TODO: replace magic numbers
-        let bullet = commands.spawn(BulletBundle::new(
+        commands.spawn(BulletBundle::new(
             &asset_server,
             &mut texture_atlases,
             &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
@@ -29,13 +29,9 @@ pub fn shoot_gun(
         ))
         .insert(Chest {
             contents: vec![health_powerdown],
-        })
-        .id();
-
-        let time_to_live = commands.spawn(TimeToLive(200)).id();
-        let speed_powerup = commands.spawn(Math::add(Speed(10.0))).id();
-        let health_powerup = commands.spawn(Math::add(Health(1))).id();
-        commands.entity(bullet).push_children(&[time_to_live, speed_powerup, health_powerup]);
-
+        }).with_children(|parent| {
+            parent.spawn(TimeToLive(200));
+            parent.spawn(Math::add(Speed(10.0)));
+        });
     })
 }
