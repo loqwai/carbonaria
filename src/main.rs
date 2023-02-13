@@ -77,6 +77,7 @@ fn main() {
         .with_system(systems::spawn_powerups)
         .with_system(systems::attach_time_to_live)
         .with_system(systems::time_to_live)
+        .with_system(systems::on_0_health_kill)
         .label("game_loop_system_set");
 
     let game_loop_cleanup_system_set = SystemSet::on_update(AppState::InGame)
@@ -125,10 +126,5 @@ fn main() {
         .add_system_set(game_loop_system_set.after("compute_powerups_system_set"))
         .add_system_set(game_loop_cleanup_system_set.after("game_loop_system_set"))
         .add_system_set(cleanup_system_set)
-        .add_stage_after(
-            CoreStage::Update,
-            "cleanup",
-            SystemStage::single_threaded().with_system(systems::on_0_health_kill),
-        )
         .run();
 }
