@@ -18,7 +18,7 @@ pub fn shoot_gun(
         gun.cooldown = gun.cooldown_max;
 
         //TODO: This will not work well when we start having multipliers
-        let health_powerdown = commands.spawn(Math::add(Health(-10))).id();
+        let payload = commands.spawn(Math::add(Health(-10))).id();
         // TODO: replace magic numbers
         commands.spawn(BulletBundle::new(
             &asset_server,
@@ -28,9 +28,9 @@ pub fn shoot_gun(
             config.scale,
         ))
         .insert(Chest {
-            contents: vec![health_powerdown],
+            contents: vec![payload],
         }).with_children(|parent| {
-            parent.spawn(TimeToLive(200));
+            parent.spawn(Math::add(TimeToLive(200)));
             parent.spawn(Math::add(Speed(10.0)));
         });
     })

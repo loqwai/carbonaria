@@ -31,7 +31,7 @@ pub fn shoot_rage_quit_gun(
         .insert(Chest {
             contents: vec![ttl_powerup],
         }).with_children(|parent| {
-            parent.spawn(TimeToLive(200));
+            parent.spawn(Math::add(TimeToLive(200)));
             parent.spawn(Math::add(Speed(10.0)));
         });
 

@@ -57,8 +57,8 @@ fn main() {
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
-        .with_system(systems::shoot_rage_quit_gun)
-        .with_system(systems::shoot_reverser_gun)
+        // .with_system(systems::shoot_rage_quit_gun)
+        // .with_system(systems::shoot_reverser_gun)
         // .with_system(systems::shoot_poison_gun)
         .with_system(systems::move_bullet)
         // .with_system(systems::spawn_exit)
@@ -80,9 +80,8 @@ fn main() {
         .label("game_loop_system_set");
 
     let game_loop_cleanup_system_set = SystemSet::on_update(AppState::InGame)
-        //https://bevy-cheatbook.github.io/programming/run-criteria.html
-        .with_run_criteria(FixedTimestep::step(TIME_STEP as f64).with_label("foo"))
-        .with_system(systems::consume_despawn_entity_events);
+        .with_system(systems::consume_despawn_entity_events)
+        ;
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
         .with_system(load_sprites)
@@ -108,8 +107,8 @@ fn main() {
             tile_size: 64,
             scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
-            mob_spawn_interval: 1,
-            powerup_spawn_interval: 1,
+            mob_spawn_interval: 100,
+            powerup_spawn_interval: 100,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())

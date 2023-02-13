@@ -23,7 +23,7 @@ pub fn shoot_reverser_gun(
         let payload = commands.spawn_empty()
             .insert(Math::multiply(Speed(-1.0)))
             .with_children(|parent| {
-                parent.spawn(TimeToLive(300));
+                parent.spawn(Math::add(TimeToLive(300)));
             }).id();
 
         // TODO: replace magic numbers
@@ -43,7 +43,7 @@ pub fn shoot_reverser_gun(
             .id();
 
         commands.entity(bullet).with_children(|parent| {
-            parent.spawn(TimeToLive(200));
+            parent.spawn(Math::add(TimeToLive(200)));
             parent.spawn(Math::add(Speed(10.0)));
         });
     })
