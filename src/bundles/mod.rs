@@ -1,18 +1,18 @@
-mod chest_bundle;
-mod compass_bundle;
+mod chest;
+mod compass;
 // mod exit_bundle;
-mod health_bundle;
-mod bullet_bundle;
-mod laser_gun_bundle;
-mod mob_bundle;
-mod player_bundle;
+mod health;
+mod bullet;
+mod laser_gun;
+mod mob;
+mod player;
 
-pub use chest_bundle::ChestBundle;
-pub use compass_bundle::CompassBundle;
-pub use health_bundle::HealthBundle;
+pub use chest::ChestBundle;
+pub use compass::CompassBundle;
+pub use health::HealthBundle;
 
-pub use laser_gun_bundle::LaserGunBundle;
-pub use mob_bundle::MobBundle;
-pub use player_bundle::PlayerBundle;
+pub use laser_gun::LaserGunBundle;
+pub use mob::MobBundle;
+pub use player::PlayerBundle;
 
-pub use bullet_bundle::BulletBundle;
+pub use bullet::BulletBundle;
