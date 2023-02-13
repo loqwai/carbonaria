@@ -10,6 +10,7 @@ use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
+use carbonaria::components::Poison;
 use components::{Health, RateOfFire, Speed, Tick, TimeToLive};
 use resources::{Config, SmallRng};
 
@@ -46,20 +47,22 @@ fn main() {
             .with_system(systems::powerup_defaulter::<Health>)
             .with_system(systems::powerup_defaulter::<RateOfFire>)
             .with_system(systems::powerup_defaulter::<TimeToLive>)
+            .with_system(systems::powerup_defaulter::<Poison>)
             .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
             .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
             .with_system(systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>))
             .with_system(systems::powerup_mather::<TimeToLive>.after(systems::powerup_defaulter::<TimeToLive>))
+            .with_system(systems::powerup_mather::<Poison>.after(systems::powerup_defaulter::<Poison>))
             ;
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
-        .with_system(systems::shoot_gun)
+        // .with_system(systems::shoot_gun)
         // .with_system(systems::shoot_rage_quit_gun)
         // .with_system(systems::shoot_reverser_gun)
-        // .with_system(systems::shoot_poison_gun)
+        .with_system(systems::shoot_poison_gun)
         .with_system(systems::move_bullet)
         // .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mobs)
@@ -78,6 +81,8 @@ fn main() {
         .with_system(systems::attach_time_to_live)
         .with_system(systems::time_to_live)
         .with_system(systems::on_0_health_kill)
+        .with_system(systems::poison)
+        .with_system(systems::attach_poison)
         .label("game_loop_system_set");
 
     let game_loop_cleanup_system_set = SystemSet::on_update(AppState::InGame)

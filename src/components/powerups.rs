@@ -85,6 +85,24 @@ impl MulAssign for TimeToLive {
     }
 }
 
+#[derive(Clone, Component)]
+pub struct Poison(pub isize);
+impl AddAssign for Poison {
+    fn add_assign(&mut self, other: Self) {
+        self.0 += other.0;
+    }
+}
+impl MulAssign for Poison {
+    fn mul_assign(&mut self, other: Self) {
+        self.0 *= other.0;
+    }
+}
+impl Default for Poison {
+    fn default() -> Self {
+        Poison(0)
+    }
+}
+
 
 #[derive(Clone, Component)]
 pub struct Math<T: Component + AddAssign + MulAssign> {
