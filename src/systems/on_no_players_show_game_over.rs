@@ -46,7 +46,7 @@ pub fn on_no_players_show_game_over(
                             TextSection {
                                 value: "Game Over\n".to_string(),
                                 style: TextStyle {
-                                    font: asset_server.get_handle("fonts/10100.otf"),
+                                    font: asset_server.load("fonts/10100.otf"),
                                     font_size: 100.0,
                                     color: Color::WHITE,
                                 },
@@ -54,7 +54,7 @@ pub fn on_no_players_show_game_over(
                             TextSection {
                                 value: "Click to reset".to_string(),
                                 style: TextStyle {
-                                    font: asset_server.get_handle("fonts/10100.otf"),
+                                    font: asset_server.load("fonts/10100.otf"),
                                     font_size: 50.0,
                                     color: Color::WHITE,
                                 },

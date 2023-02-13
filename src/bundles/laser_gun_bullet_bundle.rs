@@ -29,7 +29,7 @@ impl LaserGunBulletBundle {
         scale: f32,
     ) -> LaserGunBulletBundle {
         let transform = transform.compute_transform();
-        let texture = asset_server.get_handle("bullet-sprite-sheet.png");
+        let texture = asset_server.get_handle("sprites/bullet/laser.png");
         let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_len = texture_atlas.len();
         let texture_atlas_handle = texture_atlases.add(texture_atlas);

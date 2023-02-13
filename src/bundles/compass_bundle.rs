@@ -24,7 +24,7 @@ impl CompassBundle {
             name: name.clone(),
             compass: Compass{},
             sprite_bundle: SpriteBundle {
-                texture: asset_server.get_handle("compass.png"),
+                texture: asset_server.load("compass.png"),
                 sprite: Sprite {
                     anchor: Anchor::Custom(Vec2::new(0.0, -5.0 / 32.0)),
                     ..Default::default()

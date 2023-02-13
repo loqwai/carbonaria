@@ -16,7 +16,7 @@ impl ExitBundle {
     pub fn new(asset_server: &Res<AssetServer>, position: Vec3) -> ExitBundle {
         ExitBundle {
             sprite_bundle: SpriteBundle {
-                texture: asset_server.get_handle("exit.png"),
+                texture: asset_server.load("exit.png"),
                 transform: Transform {
                     translation: position,
                     ..Default::default()

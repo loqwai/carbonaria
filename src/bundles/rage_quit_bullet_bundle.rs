@@ -29,7 +29,7 @@ impl RageQuitBulletBundle {
         scale: f32,
     ) -> RageQuitBulletBundle {
         let transform = transform.compute_transform();
-        let texture = asset_server.get_handle("bullet-ragequit-sprite-sheet.png");
+        let texture = asset_server.get_handle("sprites/bullets/ragequit.png");
         let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_len = texture_atlas.len();
         let texture_atlas_handle = texture_atlases.add(texture_atlas);

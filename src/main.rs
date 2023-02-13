@@ -26,7 +26,7 @@ struct Sprites {
 }
 
 fn load_sprites(mut sprite_handles: ResMut<Sprites>, asset_server: Res<AssetServer>) {
-    sprite_handles.handles = asset_server.load_folder(".").unwrap();
+    sprite_handles.handles = asset_server.load_folder("sprites").unwrap();
 }
 
 fn main() {
