@@ -19,6 +19,16 @@ const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
 pub enum AppState {
     InGame,
 }
+
+#[derive(Resource, Default)]
+struct Sprites {
+    handles: Vec<HandleUntyped>,
+}
+
+fn load_sprites(mut sprite_handles: ResMut<Sprites>, asset_server: Res<AssetServer>) {
+    sprite_handles.handles = asset_server.load_folder(".").unwrap();
+}
+
 fn main() {
     // group ui systems together bc we want to run them as fast as possible
     let ui_system_set = SystemSet::on_update(AppState::InGame)
@@ -75,6 +85,7 @@ fn main() {
         .with_system(systems::consume_despawn_entity_events);
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
+        .with_system(load_sprites)
         .with_system(systems::spawn_camera)
         .with_system(systems::spawn_player)
         .with_system(systems::spawn_ui)
@@ -97,11 +108,12 @@ fn main() {
             tile_size: 64,
             scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
-            mob_spawn_interval: 100,
-            powerup_spawn_interval: 100,
+            mob_spawn_interval: 1,
+            powerup_spawn_interval: 1,
         })
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
+        .init_resource::<Sprites>()
         .add_event::<events::MoveEvent>()
         .add_event::<events::RotateEvent>()
         .add_event::<events::DamagerHitEvent>()

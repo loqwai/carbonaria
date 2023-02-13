@@ -17,7 +17,7 @@ impl HealthBundle {
                     sections: vec![TextSection {
                         value: "asdsad".to_string(),
                         style: TextStyle {
-                            font: asset_server.load("fonts/10100.otf"),
+                            font: asset_server.get_handle("fonts/10100.otf"),
                             font_size: 72.0,
                             color: Color::WHITE,
                         },

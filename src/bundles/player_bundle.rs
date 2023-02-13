@@ -30,7 +30,7 @@ impl PlayerBundle {
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
         scale: f32,
     ) -> PlayerBundle {
-        let texture = asset_server.load("player-sprite-sheet.png");
+        let texture = asset_server.get_handle("player-sprite-sheet.png");
         let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 

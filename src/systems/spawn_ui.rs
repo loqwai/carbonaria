@@ -21,7 +21,7 @@ pub fn spawn_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
                         sections: vec![TextSection {
                             value: "dsadasd".to_string(),
                             style: TextStyle {
-                                font: asset_server.load("fonts/10100.otf"),
+                                font: asset_server.get_handle("fonts/10100.otf"),
                                 font_size: 30.0,
                                 color: Color::WHITE,
                             },

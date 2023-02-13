@@ -32,7 +32,7 @@ impl ChestBundle {
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
                     ..Default::default()
                 },
-                texture: asset_server.load( format!("chests/{}.png", texture)),
+                texture: asset_server.get_handle( format!("chests/{}.png", texture)),
                 transform: Transform {
                     translation: position,
                     ..Default::default()
