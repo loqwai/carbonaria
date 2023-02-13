@@ -9,7 +9,7 @@ pub fn attach_time_to_live(
 
     q_time_to_live_powerups.for_each_mut(|parent| {
         if let Ok(_) = q_time_to_live.get(parent.get()) {
-            commands.entity(parent.get()).insert(TimeToLive(1));
+            commands.entity(parent.get()).insert(TimeToLive(isize::MAX / 2));
         }
     });
 }
