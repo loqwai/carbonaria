@@ -16,7 +16,7 @@ pub fn shoot_rage_quit_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let ttl_powerup = commands.spawn_empty()
+        let payload = commands.spawn_empty()
             .insert(Math::add(TimeToLive(100)))
             .insert(Math::multiply(RateOfFire(0.1))).id();
 
@@ -29,7 +29,7 @@ pub fn shoot_rage_quit_gun(
             config.scale,
         ))
         .insert(Chest {
-            contents: vec![ttl_powerup],
+            contents: vec![payload],
         }).with_children(|parent| {
             parent.spawn(Math::add(TimeToLive(200)));
             parent.spawn(Math::add(Speed(10.0)));

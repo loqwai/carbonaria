@@ -16,8 +16,6 @@ pub fn shoot_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-
-        //TODO: This will not work well when we start having multipliers
         let payload = commands.spawn(Math::add(Health(-10))).id();
         // TODO: replace magic numbers
         commands.spawn(BulletBundle::new(
