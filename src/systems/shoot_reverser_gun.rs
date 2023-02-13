@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    bundles::ReverserBulletBundle,
-    components::{Chest, Health, LaserGun, Math, Speed, TimeToLive},
+    bundles::BulletBundle,
+    components::{Chest, LaserGun, Math, Speed, TimeToLive},
     resources::Config,
 };
 
@@ -28,7 +28,7 @@ pub fn shoot_reverser_gun(
 
         // TODO: replace magic numbers
         let bullet = commands
-            .spawn(ReverserBulletBundle::new(
+            .spawn(BulletBundle::new(
                 &asset_server,
                 &mut texture_atlases,
                 &transform.mul_transform(Transform::from_translation(Vec3::new(
@@ -36,6 +36,7 @@ pub fn shoot_reverser_gun(
                     1.0,
                     1.0,
                 ))),
+                "reverser",
                 config.scale,
             ))
             .insert(Chest { contents: vec![payload] })

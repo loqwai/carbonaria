@@ -64,7 +64,7 @@ pub struct LaserGun {
     pub cooldown_rate: usize,
 }
 #[derive(Component, Reflect)]
-pub struct LaserGunBullet;
+pub struct Bullet;
 #[derive(Component)]
 pub struct Aimable;
 #[derive(Component, Deref)]

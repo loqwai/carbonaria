@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::{RageQuitBulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire, Math, Speed}, resources::Config};
+use crate::{bundles::{BulletBundle}, components::{LaserGun, TimeToLive, Chest, RateOfFire, Math, Speed}, resources::Config};
 
 pub fn shoot_rage_quit_gun(
     mut commands: Commands,
@@ -21,10 +21,11 @@ pub fn shoot_rage_quit_gun(
             .insert(Math::multiply(RateOfFire(0.1))).id();
 
         // TODO: replace magic numbers
-        let bullet = commands.spawn(RageQuitBulletBundle::new(
+        let bullet = commands.spawn(BulletBundle::new(
             &asset_server,
             &mut texture_atlases,
             &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
+            "ragequit",
             config.scale,
         ))
         .insert(Chest {

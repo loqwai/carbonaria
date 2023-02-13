@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{bundles::LaserGunBulletBundle, components::{LaserGun, TimeToLive, Math, Speed, Health, Chest}, resources::Config};
+use crate::{bundles::BulletBundle, components::{LaserGun, TimeToLive, Math, Speed, Health, Chest}, resources::Config};
 
 pub fn shoot_gun(
     mut commands: Commands,
@@ -20,10 +20,11 @@ pub fn shoot_gun(
         //TODO: This will not work well when we start having multipliers
         let health_powerdown = commands.spawn(Math::add(Health(-10))).id();
         // TODO: replace magic numbers
-        let bullet = commands.spawn(LaserGunBulletBundle::new(
+        let bullet = commands.spawn(BulletBundle::new(
             &asset_server,
             &mut texture_atlases,
             &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
+            "laser",
             config.scale,
         ))
         .insert(Chest {

@@ -4,15 +4,14 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::{components::{Direction, LaserGunBullet, Speed}, util::index_for_direction};
+use crate::{components::{Direction, Bullet, Speed,}, util::index_for_direction};
 
 const BASE_SPEED: f32 = 20.0;
 const RADIUS: f32 = 64.0;
 
 #[derive(Bundle)]
-pub struct RageQuitBulletBundle {
-    pub name: Name,
-    pub tag: LaserGunBullet,
+pub struct BulletBundle {
+    pub tag: Bullet,
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub collider: Collider,
     pub direction: Direction,
@@ -21,24 +20,24 @@ pub struct RageQuitBulletBundle {
     pub speed: Speed,
 }
 
-impl RageQuitBulletBundle {
+impl BulletBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
         transform: &GlobalTransform,
+        texture_name: &str,
         scale: f32,
-    ) -> RageQuitBulletBundle {
+    ) -> BulletBundle {
         let transform = transform.compute_transform();
-        let texture = asset_server.get_handle("sprites/bullets/ragequit.png");
+        let texture = asset_server.get_handle(format!("sprites/bullets/{}.png", texture_name));
         let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_len = texture_atlas.len();
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-        RageQuitBulletBundle {
+        BulletBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
             collider: Collider::ball(RADIUS * scale),
             direction: Direction(transform.rotation),
-            name: "ragequit gun bullet".into(),
             sensor: Sensor,
             speed: Speed(BASE_SPEED * scale),
             sprite_sheet_bundle: SpriteSheetBundle {
@@ -54,7 +53,7 @@ impl RageQuitBulletBundle {
                 },
                 ..Default::default()
             },
-            tag: LaserGunBullet,
+            tag: Bullet,
         }
     }
 }
