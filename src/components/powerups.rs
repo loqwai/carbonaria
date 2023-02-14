@@ -28,7 +28,7 @@ impl MulAssign for Speed {
     }
 }
 
-#[derive(Clone, Component, Reflect,Copy)]
+#[derive(Clone, Component, Reflect,Copy,Debug)]
 #[reflect(Component)]
 pub struct Health(pub isize);
 impl Default for Health {
@@ -44,6 +44,11 @@ impl AddAssign for Health {
 impl MulAssign for Health {
     fn mul_assign(&mut self, other: Self) {
         self.0 *= other.0;
+    }
+}
+impl PartialEq for Health {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
     }
 }
 
