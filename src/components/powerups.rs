@@ -9,7 +9,7 @@ pub struct Speedup;
 #[reflect(Component)]
 pub struct Team(pub usize);
 
-#[derive(Clone, Component, Reflect,Copy)]
+#[derive(Clone, Component, Debug, Reflect, Copy)]
 pub struct Speed(pub f32);
 impl Default for Speed {
     fn default() -> Self {
@@ -28,7 +28,7 @@ impl MulAssign for Speed {
     }
 }
 
-#[derive(Clone, Component, Reflect,Copy,Debug)]
+#[derive(Clone, Component, Reflect, Copy, Debug)]
 #[reflect(Component)]
 pub struct Health(pub isize);
 impl Default for Health {
@@ -52,8 +52,7 @@ impl PartialEq for Health {
     }
 }
 
-
-#[derive(Clone, Component)]
+#[derive(Clone, Component, Debug)]
 pub struct RateOfFire(pub f32);
 impl AddAssign for RateOfFire {
     fn add_assign(&mut self, other: Self) {
@@ -71,7 +70,7 @@ impl MulAssign for RateOfFire {
     }
 }
 
-#[derive(Clone, Component)]
+#[derive(Clone, Component, Debug)]
 pub struct TimeToLive(pub isize);
 impl AddAssign for TimeToLive {
     fn add_assign(&mut self, other: Self) {
@@ -90,7 +89,7 @@ impl MulAssign for TimeToLive {
     }
 }
 
-#[derive(Clone, Component)]
+#[derive(Clone, Component, Debug)]
 pub struct Poison(pub isize);
 impl AddAssign for Poison {
     fn add_assign(&mut self, other: Self) {
@@ -108,14 +107,13 @@ impl Default for Poison {
     }
 }
 
-
-#[derive(Clone, Component)]
-pub struct Math<T: Component + AddAssign + MulAssign> {
+#[derive(Clone, Component, Debug)]
+pub struct Math<T: Component + AddAssign + MulAssign + core::fmt::Debug> {
     pub add: Option<T>,
     pub multiply: Option<T>,
 }
 
-impl<T: Component + AddAssign + MulAssign> Math<T> {
+impl<T: Component + AddAssign + MulAssign + core::fmt::Debug> Math<T> {
     pub fn add(add: T) -> Math<T> {
         Math {
             add: Some(add),

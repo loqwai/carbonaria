@@ -1,7 +1,10 @@
 use bevy::prelude::Entity;
 use bevy_rapier2d::prelude::CollisionEvent;
 
-use crate::{components::{Chest, Pocket}, events::DespawnEvent};
+use crate::{
+    components::{Chest, Math, Pocket, Poison},
+    events::DespawnEvent,
+};
 
 use bevy::prelude::*;
 
@@ -11,6 +14,7 @@ pub fn on_chest_hit_pickup(
     mut despawn_events: EventWriter<DespawnEvent>,
     q_pockets: Query<Entity, With<Pocket>>,
     q_chests: Query<&Chest>,
+    poisons: Query<&Math<Poison>>,
 ) {
     collision_events
         .iter()
@@ -30,7 +34,18 @@ pub fn on_chest_hit_pickup(
         })
         .for_each(|(&pocket_entity, &chest_entity)| {
             let chest = q_chests.get(chest_entity).unwrap();
-            commands.entity(pocket_entity).push_children(&chest.contents);
-            despawn_events.send(DespawnEvent { entity: chest_entity });
+
+            chest.contents.iter().for_each(|&entity| {
+                if let Ok(poison) = poisons.get(entity) {
+                    println!("{:?} just picked up Poison({:?})!", pocket_entity, poison);
+                }
+            });
+
+            commands
+                .entity(pocket_entity)
+                .push_children(&chest.contents);
+            despawn_events.send(DespawnEvent {
+                entity: chest_entity,
+            });
         });
 }

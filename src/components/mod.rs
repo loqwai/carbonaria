@@ -31,7 +31,6 @@ pub struct ScoreUI;
 #[derive(Component)]
 pub struct GameOverUI;
 
-
 #[derive(Component)]
 pub struct HealthTarget;
 
@@ -69,7 +68,6 @@ pub struct Bullet;
 pub struct Aimable;
 #[derive(Component, Deref)]
 pub struct Direction(pub Quat);
-
 
 #[derive(Reflect, Resource)]
 pub struct Tick(pub usize);

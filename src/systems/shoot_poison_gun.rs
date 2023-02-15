@@ -1,6 +1,10 @@
 use bevy::prelude::*;
 
-use crate::{bundles::BulletBundle, components::{LaserGun, TimeToLive, Math, Speed, Chest, Poison}, resources::Config};
+use crate::{
+    bundles::BulletBundle,
+    components::{Chest, LaserGun, Math, Poison, Speed, TimeToLive},
+    resources::Config,
+};
 
 pub fn shoot_poison_gun(
     mut commands: Commands,
@@ -18,18 +22,24 @@ pub fn shoot_poison_gun(
         gun.cooldown = gun.cooldown_max;
         let payload = commands.spawn(Math::add(Poison(1))).id();
         // TODO: replace magic numbers
-        commands.spawn(BulletBundle::new(
-            &asset_server,
-            &mut texture_atlases,
-            &transform.mul_transform(Transform::from_translation(Vec3::new(250.0 * config.scale, 1.0, 1.0))),
-            "laser",
-            config.scale,
-        ))
-        .insert(Chest {
-            contents: vec![payload],
-        }).with_children(|parent| {
-            parent.spawn(Math::add(TimeToLive(200)));
-            parent.spawn(Math::add(Speed(10.0)));
-        });
+        commands
+            .spawn(BulletBundle::new(
+                &asset_server,
+                &mut texture_atlases,
+                &transform.mul_transform(Transform::from_translation(Vec3::new(
+                    250.0 * config.scale,
+                    1.0,
+                    1.0,
+                ))),
+                "laser",
+                config.scale,
+            ))
+            .insert(Chest {
+                contents: vec![payload],
+            })
+            .with_children(|parent| {
+                parent.spawn(Math::add(TimeToLive(200)));
+                parent.spawn(Math::add(Speed(10.0)));
+            });
     })
 }

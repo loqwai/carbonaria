@@ -5,7 +5,6 @@ mod resources;
 mod systems;
 mod util;
 
-
 use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
@@ -42,18 +41,22 @@ fn main() {
         .with_system(systems::on_click_and_no_player_reset)
         .with_system(systems::on_move_event_change_sprite_index);
 
-    let compute_powerups_system_set = SystemSet::on_update(AppState::InGame).label("compute_powerups_system_set")
-            .with_system(systems::powerup_defaulter::<Speed>)
-            .with_system(systems::powerup_defaulter::<Health>)
-            .with_system(systems::powerup_defaulter::<RateOfFire>)
-            .with_system(systems::powerup_defaulter::<TimeToLive>)
-            .with_system(systems::powerup_defaulter::<Poison>)
-            .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
-            .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
-            .with_system(systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>))
-            .with_system(systems::powerup_mather::<TimeToLive>.after(systems::powerup_defaulter::<TimeToLive>))
-            .with_system(systems::powerup_mather::<Poison>.after(systems::powerup_defaulter::<Poison>))
-            ;
+    let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
+        .label("compute_powerups_system_set")
+        .with_system(systems::powerup_defaulter::<Speed>)
+        .with_system(systems::powerup_defaulter::<Health>)
+        .with_system(systems::powerup_defaulter::<RateOfFire>)
+        .with_system(systems::powerup_defaulter::<TimeToLive>)
+        .with_system(systems::powerup_defaulter::<Poison>)
+        .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
+        .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
+        .with_system(
+            systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>),
+        )
+        .with_system(
+            systems::powerup_mather::<TimeToLive>.after(systems::powerup_defaulter::<TimeToLive>),
+        )
+        .with_system(systems::powerup_mather::<Poison>.after(systems::powerup_defaulter::<Poison>));
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
@@ -85,9 +88,8 @@ fn main() {
         .with_system(systems::attach_poison)
         .label("game_loop_system_set");
 
-    let game_loop_cleanup_system_set = SystemSet::on_update(AppState::InGame)
-        .with_system(systems::consume_despawn_entity_events)
-        ;
+    let game_loop_cleanup_system_set =
+        SystemSet::on_update(AppState::InGame).with_system(systems::consume_despawn_entity_events);
 
     let startup_system_set = SystemSet::on_enter(AppState::InGame)
         .with_system(load_sprites)
