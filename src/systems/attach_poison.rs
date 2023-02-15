@@ -8,7 +8,6 @@ pub fn attach_poison(
 ) {
     q_poison_powerup.for_each_mut(|parent| {
         if let Ok(_) = q_no_poison.get(parent.get()) {
-            println!("attaching poison");
             commands.entity(parent.get()).insert(Poison::default());
         }
     });
