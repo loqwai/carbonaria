@@ -30,10 +30,10 @@ impl MulAssign for Speed {
 
 #[derive(Clone, Component, Reflect, Copy, Debug)]
 #[reflect(Component)]
-pub struct Health(pub isize);
+pub struct Health(pub f32);
 impl Default for Health {
     fn default() -> Self {
-        Health(0)
+        Health(Default::default())
     }
 }
 impl AddAssign for Health {
@@ -90,7 +90,7 @@ impl MulAssign for TimeToLive {
 }
 
 #[derive(Clone, Component, Debug)]
-pub struct Poison(pub isize);
+pub struct Poison(pub f32);
 impl AddAssign for Poison {
     fn add_assign(&mut self, other: Self) {
         self.0 += other.0;
@@ -103,7 +103,7 @@ impl MulAssign for Poison {
 }
 impl Default for Poison {
     fn default() -> Self {
-        Poison(0)
+        Poison(Default::default())
     }
 }
 

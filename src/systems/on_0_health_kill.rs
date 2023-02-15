@@ -7,7 +7,7 @@ pub fn on_0_health_kill(
     things: Query<(Entity, &Health)>,
 ) {
     for (entity, health) in things.iter() {
-        if health.0 > 0 {
+        if health.0 > 0.0 {
             continue;
         }
 

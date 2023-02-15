@@ -37,7 +37,7 @@ impl MobBundle {
             speed: Speed::default(),
             chases: Chases,
             collider: Collider::ball(RADIUS * scale),
-            health: Health(2),
+            health: Health(2.0),
             mob: Mob,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,

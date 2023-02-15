@@ -20,7 +20,7 @@ pub fn shoot_poison_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let payload = commands.spawn(Math::add(Poison(1))).id();
+        let payload = commands.spawn(Math::add(Poison(1.0))).id();
         // TODO: replace magic numbers
         commands
             .spawn(BulletBundle::new(

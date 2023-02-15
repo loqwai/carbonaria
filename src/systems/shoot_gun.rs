@@ -20,7 +20,7 @@ pub fn shoot_gun(
         }
 
         gun.cooldown = gun.cooldown_max;
-        let payload = commands.spawn(Math::add(Health(-10))).id();
+        let payload = commands.spawn(Math::add(Health(-10.0))).id();
         // TODO: replace magic numbers
         commands
             .spawn(BulletBundle::new(

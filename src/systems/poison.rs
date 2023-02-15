@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::components::{Health, Math, Poison};
 pub fn poison(mut commands: Commands, poisons: Query<(Entity, &Poison)>) {
     poisons.for_each(|(entity, poison)| {
-        if poison.0 <= 0 {
+        if poison.0 <= 0.0 {
             return;
         }
 
@@ -31,8 +31,8 @@ mod tests {
             .world
             .spawn((Health::default(), Poison::default()))
             .with_children(|entity| {
-                entity.spawn(Math::add(Health(10)));
-                entity.spawn(Math::add(Poison(1)));
+                entity.spawn(Math::add(Health(10.0)));
+                entity.spawn(Math::add(Poison(1.0)));
             })
             .id();
 
@@ -45,6 +45,6 @@ mod tests {
             .get(&app.world, entity)
             .unwrap();
 
-        assert_eq!(&Health(9), remaining_health);
+        assert_eq!(&Health(9.0), remaining_health);
     }
 }

@@ -24,6 +24,6 @@ pub fn spawn_player(
             parent.spawn(LaserGunBundle::new(60));
             parent.spawn(Math::add(RateOfFire(1.0)));
             parent.spawn(Math::add(Speed(5.0)));
-            parent.spawn(Math::add(Health(75)));
+            parent.spawn(Math::add(Health(75.0)));
         });
 }

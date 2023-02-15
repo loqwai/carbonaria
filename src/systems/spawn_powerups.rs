@@ -20,7 +20,7 @@ pub fn spawn_powerups(
         0 => (commands.spawn(Math::add(Speed(1.0))).id(), "fast"),
         1 => (commands.spawn(Math::add(Speed(-1.0))).id(), "slow"),
         2 => (commands.spawn(Team(0)).id(), "team"),
-        3 => (commands.spawn(Math::add(Health(1))).id(), "health"),
+        3 => (commands.spawn(Math::add(Health(1.0))).id(), "health"),
         4 => (
             commands.spawn(Math::add(RateOfFire(2.0))).id(),
             "rate-of-fire",
