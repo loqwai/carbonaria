@@ -9,8 +9,7 @@ use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 
-use carbonaria::components::Poison;
-use components::{Health, RateOfFire, Speed, Tick, TimeToLive};
+use components::{Health, Poison, RateOfFire, Speed, Tick, TimeToLive};
 use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
