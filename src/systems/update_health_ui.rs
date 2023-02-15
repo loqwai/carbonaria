@@ -8,6 +8,6 @@ pub fn update_health_ui(
     for (mut health_text, parent) in q_health_ui.iter_mut() {
         let target_health = q_healths.get(parent.get()).unwrap(); // Maybe Bevy 0.8+ only?
 
-        health_text.sections[0].value = format!("{}", target_health.0);
+        health_text.sections[0].value = format!("{}", target_health.0.round() as i32);
     }
 }
