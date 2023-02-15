@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::components::{Health, Math, Poison};
 pub fn poison(mut commands: Commands, poisons: Query<(Entity, &Poison)>) {
     poisons.for_each(|(entity, poison)| {
-        if poison.0 == 0 {
+        if poison.0 <= 0 {
             return;
         }
 

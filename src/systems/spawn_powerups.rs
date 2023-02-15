@@ -1,7 +1,7 @@
-use crate::components::{Tick, Speed, Team, Health, RateOfFire, Math};
+use crate::bundles::ChestBundle;
+use crate::components::{Health, Math, RateOfFire, Speed, Team, Tick};
 use crate::resources::{Config, SmallRng};
 use crate::util::random_position;
-use crate::{bundles::ChestBundle};
 use bevy::prelude::*;
 use rand::Rng;
 
@@ -21,8 +21,11 @@ pub fn spawn_powerups(
         1 => (commands.spawn(Math::add(Speed(-1.0))).id(), "slow"),
         2 => (commands.spawn(Team(0)).id(), "team"),
         3 => (commands.spawn(Math::add(Health(1))).id(), "health"),
-        4 => (commands.spawn(Math::add(RateOfFire(2.0))).id(), "rate-of-fire"),
-        n => panic!("Generated a number not between 0 & 4: {}", n)
+        4 => (
+            commands.spawn(Math::add(RateOfFire(2.0))).id(),
+            "rate-of-fire",
+        ),
+        n => panic!("Generated a number not between 0 & 4: {}", n),
     };
 
     let position = random_position(&config, &mut rng);
@@ -34,4 +37,3 @@ pub fn spawn_powerups(
         vec![powerup],
     ));
 }
-

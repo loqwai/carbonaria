@@ -1,11 +1,7 @@
-use bevy::{
-    math::Vec3,
-    prelude::*,
-    sprite::SpriteSheetBundle,
-};
+use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Chases, Health, Mob, Pocket, Speed, Team, RateOfFire};
+use crate::components::{Chases, Health, Mob, Pocket, RateOfFire, Speed, Team};
 
 const RADIUS: f32 = 128.0;
 
@@ -32,7 +28,8 @@ impl MobBundle {
         scale: f32,
     ) -> MobBundle {
         let texture = asset_server.get_handle("sprites/units/mob.png");
-        let texture_atlas = TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
+        let texture_atlas =
+            TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
         MobBundle {
@@ -46,8 +43,11 @@ impl MobBundle {
             rigid_body: RigidBody::Dynamic,
             sprite_sheet_bundle: SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle,
-                transform: Transform { translation: position, ..Default::default()  },
-                sprite: TextureAtlasSprite{
+                transform: Transform {
+                    translation: position,
+                    ..Default::default()
+                },
+                sprite: TextureAtlasSprite {
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
                     index: 7,
                     ..Default::default()
