@@ -71,6 +71,7 @@ fn main() {
         .with_system(systems::chasers_follow_other_teams)
         .with_system(systems::player_aimables_aim_at_cursor)
         .with_system(systems::chaser_aimables_aim_at_other_teams)
+        .with_system(systems::switch_ammo)
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_change_sprite_index)

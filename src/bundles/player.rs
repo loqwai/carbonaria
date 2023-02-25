@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
+use crate::components::{AmmoType, ActiveAmmo};
 
 use crate::components::{Health, Player, Pocket, Points, RateOfFire, Speed, Team};
 

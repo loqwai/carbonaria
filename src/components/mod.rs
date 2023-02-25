@@ -71,3 +71,14 @@ pub struct Direction(pub Quat);
 
 #[derive(Reflect, Resource)]
 pub struct Tick(pub usize);
+
+
+#[derive(Clone, Copy, Component)]
+pub struct ActiveAmmo(pub AmmoType);
+#[derive(Clone, Copy)]
+pub enum AmmoType {
+    Normal,
+    Poison,
+    RageQuit,
+    Reverser,
+}

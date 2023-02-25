@@ -39,6 +39,7 @@ mod powerup_defaulter;
 mod attach_time_to_live;
 mod poison;
 mod attach_poison;
+mod switch_weapon;
 pub use chaser_aimables_aim_at_other_teams::chaser_aimables_aim_at_other_teams;
 pub use chasers_follow_other_teams::chasers_follow_other_teams;
 pub use consume_despawn_entity_events::consume_despawn_entity_events;
@@ -83,3 +84,5 @@ pub use attach_time_to_live::attach_time_to_live;
 
 pub use poison::poison;
 pub use attach_poison::attach_poison;
+
+pub use switch_weapon::switch_ammo;
