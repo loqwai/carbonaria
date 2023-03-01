@@ -1,5 +1,5 @@
+use crate::components::{ActiveAmmo, AmmoType, Player};
 use bevy::{input::mouse::MouseWheel, prelude::*};
-use crate::components::{ActiveAmmo, Player, AmmoType};
 
 fn next_ammo(current: AmmoType) -> AmmoType {
     match current {
@@ -10,7 +10,7 @@ fn next_ammo(current: AmmoType) -> AmmoType {
     }
 }
 
-fn previous_weapon(current: AmmoType) -> AmmoType {
+fn previous_ammo(current: AmmoType) -> AmmoType {
     match current {
         AmmoType::Normal => AmmoType::Reverser,
         AmmoType::Poison => AmmoType::Normal,
@@ -19,7 +19,7 @@ fn previous_weapon(current: AmmoType) -> AmmoType {
     }
 }
 
-pub fn switch_ammo(
+pub fn on_scroll_wheel_switch_ammo(
     players: Query<&Children, With<Player>>,
     mut guns: Query<&mut ActiveAmmo>,
     mut wheel_events: EventReader<MouseWheel>,
@@ -32,7 +32,7 @@ pub fn switch_ammo(
                         active_weapon.0 = next_ammo(active_weapon.0);
                         return;
                     }
-                    active_weapon.0 = previous_weapon(active_weapon.0);
+                    active_weapon.0 = previous_ammo(active_weapon.0);
                 }
             });
         });

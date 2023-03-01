@@ -1,10 +1,9 @@
-use crate::components::{ActiveAmmo, AmmoType, SpriteAnimation};
+use crate::components::SpriteAnimation;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::components::{Health, Player, Pocket, Points, RateOfFire, Speed, Team};
 
-const BASE_SPEED: f32 = 16.0;
 const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
