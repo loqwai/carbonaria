@@ -117,7 +117,7 @@ fn main() {
             scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 100,
-            mech_spawn_interval: 299, // A weird number so that it gets out of sync with other intervals
+            mech_spawn_interval: 1799, // A weird number so that it gets out of sync with other intervals
             powerup_spawn_interval: 100,
         })
         .insert_resource(Tick(0))

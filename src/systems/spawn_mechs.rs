@@ -29,6 +29,6 @@ pub fn spawn_mechs(
             parent.spawn(LaserGunBundle::new(60));
             parent.spawn(Math::add(RateOfFire(1.0)));
             parent.spawn(Math::add(Speed(1.0)));
-            parent.spawn(Math::add(Health(10.0)));
+            parent.spawn(Math::add(Health(100.0)));
         });
 }
