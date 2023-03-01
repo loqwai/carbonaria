@@ -17,11 +17,12 @@ pub struct Player;
 pub struct SpriteAnimation {
     pub num_angles: usize,
     pub num_frames_per_angle: usize,
+    pub frames_to_advance_per_tick: f32,
 
     /// index of the current angle. Must be set to a value less than num_angles
     pub current_angle: usize,
     /// The current animation frame independent of angle
-    pub current_frame: usize,
+    pub current_frame: f32,
 }
 
 #[derive(Component)]

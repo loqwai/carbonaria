@@ -30,7 +30,7 @@ impl MechBundle {
     ) -> MechBundle {
         let texture = asset_server.get_handle("sprites/units/mech.png");
         let texture_atlas =
-            TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 28, 28, None, None);
+            TextureAtlas::from_grid(texture, Vec2::new(128.0, 128.0), 28, 28, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
         MechBundle {
@@ -58,8 +58,9 @@ impl MechBundle {
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 47,
+                frames_to_advance_per_tick: 0.5,
                 current_angle: 0,
-                current_frame: 0,
+                current_frame: 0.0,
             },
             team: Team(1),
             rate_of_fire: RateOfFire(1.0),

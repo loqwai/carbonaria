@@ -17,7 +17,18 @@ fn set_sprite_index(
 ) -> Option<()> {
     let mut animation = sprite_animations.get_mut(event.who).ok()?;
     animation.current_angle = index_for_direction(event.direction, animation.num_angles);
-    animation.current_frame = (animation.current_frame + 1) % animation.num_frames_per_angle;
+    animation.current_frame = clamp(
+        animation.current_frame + animation.frames_to_advance_per_tick,
+        animation.num_frames_per_angle,
+    );
 
     return None;
+}
+
+fn clamp(value: f32, max: usize) -> f32 {
+    if value < max as f32 {
+        return value;
+    }
+
+    return clamp(value - max as f32, max);
 }

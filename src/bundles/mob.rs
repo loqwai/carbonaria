@@ -58,8 +58,9 @@ impl MobBundle {
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 1,
+                frames_to_advance_per_tick: 1.0,
                 current_angle: 0,
-                current_frame: 0,
+                current_frame: 0.0,
             },
             team: Team(1),
             rate_of_fire: RateOfFire(1.0),
