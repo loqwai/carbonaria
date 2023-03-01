@@ -38,7 +38,7 @@ fn main() {
         .with_system(systems::follow_player_with_camera)
         .with_system(systems::on_no_players_show_game_over)
         .with_system(systems::on_click_and_no_player_reset)
-        .with_system(systems::on_move_event_change_sprite_index);
+        .with_system(systems::update_sprite_index);
 
     let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
         .label("compute_powerups_system_set")
@@ -67,6 +67,7 @@ fn main() {
         .with_system(systems::shoot_poison_gun)
         .with_system(systems::move_bullet)
         // .with_system(systems::spawn_exit)
+        .with_system(systems::spawn_mechs)
         .with_system(systems::spawn_mobs)
         .with_system(systems::chasers_follow_other_teams)
         .with_system(systems::player_aimables_aim_at_cursor)
@@ -74,7 +75,7 @@ fn main() {
         .with_system(systems::switch_ammo)
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
-        .with_system(systems::on_move_event_change_sprite_index)
+        .with_system(systems::on_move_event_update_sprite_animation)
         .with_system(systems::calculate_rate_of_fire)
         .with_system(systems::rotate_thing)
         // .with_system(systems::detect_exit)
@@ -116,6 +117,7 @@ fn main() {
             scale: 0.5, // 1.0 means the player is 256x256 px
             camera_follow_interpolation: 0.05,
             mob_spawn_interval: 100,
+            mech_spawn_interval: 299, // A weird number so that it gets out of sync with other intervals
             powerup_spawn_interval: 100,
         })
         .insert_resource(Tick(0))

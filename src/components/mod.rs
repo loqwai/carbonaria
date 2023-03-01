@@ -8,7 +8,21 @@ pub use powerups::*;
 pub struct Mob;
 
 #[derive(Component)]
+pub struct Mech;
+
+#[derive(Component)]
 pub struct Player;
+
+#[derive(Component)]
+pub struct SpriteAnimation {
+    pub num_angles: usize,
+    pub num_frames_per_angle: usize,
+
+    /// index of the current angle. Must be set to a value less than num_angles
+    pub current_angle: usize,
+    /// The current animation frame independent of angle
+    pub current_frame: usize,
+}
 
 #[derive(Component)]
 pub struct Stick;
@@ -71,7 +85,6 @@ pub struct Direction(pub Quat);
 
 #[derive(Reflect, Resource)]
 pub struct Tick(pub usize);
-
 
 #[derive(Clone, Copy, Component)]
 pub struct ActiveAmmo(pub AmmoType);

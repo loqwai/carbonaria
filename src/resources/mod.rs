@@ -19,6 +19,7 @@ pub struct Config {
     /// cause the camera to have a more natural feeling "bungee" effect
     pub camera_follow_interpolation: f32,
     pub mob_spawn_interval: usize,
+    pub mech_spawn_interval: usize,
     pub powerup_spawn_interval: usize,
 }
 

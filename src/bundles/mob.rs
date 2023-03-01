@@ -1,7 +1,7 @@
 use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Chases, Health, Mob, Pocket, RateOfFire, Speed, Team};
+use crate::components::{Chases, Health, Mob, Pocket, RateOfFire, Speed, SpriteAnimation, Team};
 
 const RADIUS: f32 = 128.0;
 
@@ -16,6 +16,7 @@ pub struct MobBundle {
     pub health: Health,
     pub chases: Chases,
     pub sprite_sheet_bundle: SpriteSheetBundle,
+    pub sprite_animation: SpriteAnimation,
     pub axis_constraints: LockedAxes,
     pub rate_of_fire: RateOfFire,
 }
@@ -53,6 +54,12 @@ impl MobBundle {
                     ..Default::default()
                 },
                 ..Default::default()
+            },
+            sprite_animation: SpriteAnimation {
+                num_angles: 16,
+                num_frames_per_angle: 1,
+                current_angle: 0,
+                current_frame: 0,
             },
             team: Team(1),
             rate_of_fire: RateOfFire(1.0),

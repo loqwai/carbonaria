@@ -1,55 +1,53 @@
-use crate::components::{ActiveAmmo, AmmoType, SpriteAnimation};
-use bevy::prelude::*;
+use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Health, Player, Pocket, Points, RateOfFire, Speed, Team};
+use crate::components::{Chases, Health, Mech, Pocket, RateOfFire, Speed, SpriteAnimation, Team};
 
-const BASE_SPEED: f32 = 16.0;
 const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
-pub struct PlayerBundle {
-    pub player: Player,
-    pub sensor: Sensor,
+pub struct MechBundle {
+    pub mech: Mech,
+    pub rigid_body: RigidBody,
     pub collider: Collider,
-    pub axis_constraints: LockedAxes,
-    pub points: Points,
-    pub health: Health,
     pub speed: Speed,
-    pub name: Name,
     pub pockets: Pocket,
     pub team: Team,
-    pub active_events: ActiveEvents,
+    pub health: Health,
+    pub chases: Chases,
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub sprite_animation: SpriteAnimation,
-    pub rigid_body: RigidBody,
+    pub axis_constraints: LockedAxes,
     pub rate_of_fire: RateOfFire,
 }
 
-impl PlayerBundle {
+impl MechBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        position: Vec3,
         scale: f32,
-    ) -> PlayerBundle {
-        let texture = asset_server.get_handle("sprites/units/player.png");
+    ) -> MechBundle {
+        let texture = asset_server.get_handle("sprites/units/mech.png");
         let texture_atlas =
-            TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
+            TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 28, 28, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-        PlayerBundle {
-            active_events: ActiveEvents::COLLISION_EVENTS,
+        MechBundle {
             axis_constraints: LockedAxes::all(),
-            speed: Speed(0.0),
+            speed: Speed::default(),
+            chases: Chases,
             collider: Collider::ball(RADIUS * scale),
-            health: Health::default(),
-            name: "player".into(),
-            player: Player,
+            health: Health(2.0),
+            mech: Mech,
             pockets: Pocket,
-            points: Points(0),
             rigid_body: RigidBody::Dynamic,
             sprite_sheet_bundle: SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle,
+                transform: Transform {
+                    translation: position,
+                    ..Default::default()
+                },
                 sprite: TextureAtlasSprite {
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
                     index: 7,
@@ -59,12 +57,11 @@ impl PlayerBundle {
             },
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
-                num_frames_per_angle: 1,
+                num_frames_per_angle: 47,
                 current_angle: 0,
                 current_frame: 0,
             },
-            sensor: Sensor,
-            team: Team(0),
+            team: Team(1),
             rate_of_fire: RateOfFire(1.0),
         }
     }
