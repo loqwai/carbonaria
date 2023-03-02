@@ -45,8 +45,6 @@ All modules must be accessable to boarders in order for you to be able to use th
 * [x] A Powerup you can pick up that allows you to smash through walls?
 * [x] Chests you can pick up that give you mods
 * [ ] Mobs should spawn close to the player
-* [ ] Hitting the wall the stick should not count as a point
-* [ ] Those things with sticks can also move around and will chase you if you get close to them
 * [x-ish] The camera is limited to a small circle so you can't see very far.
 * [ ] make pretty via AI.
 * [ ] Figure out why some walls look weird
@@ -110,3 +108,4 @@ Maybe powerups = mods
   - [diff](https://github.com/rust-adventure/2d-platformer-sandbox-youtube-series/commit/cbb6e32f2e5338cbc49d1046b7f4a23a09d339c7) of someone else doing it in [this](https://www.youtube.com/watch?v=zvLWibkWcVg) Youtube vid.
 
 [rust svg/react rendering](https://docs.rs/dioxus-html/0.2.1/dioxus_html/struct.svg.html)
+[Dead Cells Level Editor (that has a Bevy plugin)](https://gamefromscratch.com/led-awesome-new-level-editor-from-dead-cells-creator/)
