@@ -52,17 +52,21 @@ pub fn shoot_gun(
             AmmoType::Reverser => "reverser",
         };
 
+        let model_name = "laser";
+
         // TODO: replace magic numbers
         commands
             .spawn(BulletBundle::new(
                 &asset_server,
                 &mut texture_atlases,
-                &transform.mul_transform(Transform::from_translation(Vec3::new(
-                    250.0 * config.scale,
-                    1.0,
-                    1.0,
-                ))),
+                transform,
+                // &transform.mul_transform(Transform::from_translation(Vec3::new(
+                //     250.0 * config.scale,
+                //     1.0,
+                //     1.0,
+                // ))),
                 texture,
+                model_name,
                 config.scale,
             ))
             .insert(Chest {

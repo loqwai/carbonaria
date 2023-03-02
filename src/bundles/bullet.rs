@@ -1,4 +1,4 @@
-use bevy::{prelude::*, sprite::SpriteSheetBundle};
+use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::{
@@ -12,12 +12,14 @@ const RADIUS: f32 = 64.0;
 #[derive(Bundle)]
 pub struct BulletBundle {
     pub tag: Bullet,
-    pub sprite_sheet_bundle: SpriteSheetBundle,
+    pub scene: SceneBundle,
+    pub sprite: TextureAtlasSprite,
+    pub texture_atlas: Handle<TextureAtlas>,
     pub sprite_animation: SpriteAnimation,
-    pub collider: Collider,
     pub direction: Direction,
-    pub sensor: Sensor,
     pub active_events: ActiveEvents,
+    // pub collider: Collider,
+    pub sensor: Sensor,
     pub speed: Speed,
 }
 
@@ -27,6 +29,7 @@ impl BulletBundle {
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
         transform: &GlobalTransform,
         texture_name: &str,
+        model_name: &str,
         scale: f32,
     ) -> BulletBundle {
         let transform = transform.compute_transform();
@@ -38,23 +41,21 @@ impl BulletBundle {
 
         BulletBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
-            collider: Collider::ball(RADIUS * scale),
-            direction: Direction(transform.rotation),
+            // collider: Collider::ball(RADIUS * scale),
             sensor: Sensor,
+            direction: Direction(transform.rotation),
             speed: Speed(BASE_SPEED * scale),
-            sprite_sheet_bundle: SpriteSheetBundle {
-                texture_atlas: texture_atlas_handle,
-                transform: Transform {
-                    translation: transform.translation,
-                    ..Default::default()
-                },
-                sprite: TextureAtlasSprite {
-                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    index: index_for_direction(transform.rotation * Vec3::X, texture_atlas_len),
-                    ..Default::default()
-                },
+            scene: SceneBundle {
+                scene: asset_server.load(format!("models/bullets/{}.gltf#Scene0", model_name)),
+                transform: Transform::from_translation(transform.translation),
                 ..Default::default()
             },
+            sprite: TextureAtlasSprite {
+                custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                index: index_for_direction(transform.rotation * Vec3::X, texture_atlas_len),
+                ..Default::default()
+            },
+            texture_atlas: texture_atlas_handle,
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 1,

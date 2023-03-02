@@ -35,8 +35,6 @@ impl MobBundle {
             TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-        println!("position: {:?}", position);
-
         MobBundle {
             axis_constraints: LockedAxes::all(),
             speed: Speed::default(),
