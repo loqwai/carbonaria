@@ -18,3 +18,6 @@ pub struct RotateEvent {
 pub struct DespawnEvent {
     pub entity: Entity,
 }
+pub struct ShootEvent {
+    pub gun: Entity,
+}

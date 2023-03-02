@@ -5,20 +5,29 @@ use crate::{
     components::{
         ActiveAmmo, AmmoType, Chest, Health, LaserGun, Math, Poison, RateOfFire, Speed, TimeToLive,
     },
+    events::ShootEvent,
     resources::Config,
 };
 
 pub fn shoot_gun(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
+    mut shoot_events: EventReader<ShootEvent>,
     mut guns: Query<(&mut LaserGun, &ActiveAmmo, &GlobalTransform)>,
     config: Res<Config>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
-    guns.for_each_mut(|(mut gun, active_ammo, transform)| {
+    guns.for_each_mut(|(mut gun, _, _)| {
         if gun.cooldown > 0 {
             gun.cooldown = gun.cooldown.saturating_sub(gun.cooldown_rate);
-            return;
+        }
+    });
+
+    for event in shoot_events.iter() {
+        let Ok((mut gun, active_ammo, transform)) = guns.get_mut(event.gun) else { continue; };
+
+        if gun.cooldown > 0 {
+            continue;
         }
 
         gun.cooldown = gun.cooldown_max;
@@ -81,5 +90,5 @@ pub fn shoot_gun(
                 parent.spawn(Math::add(TimeToLive(200)));
                 parent.spawn(Math::add(Speed(10.0)));
             });
-    })
+    }
 }
