@@ -8,6 +8,7 @@ mod util;
 use bevy::{prelude::*, time::FixedTimestep};
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
+use clap::Parser;
 
 use components::{Health, Poison, RateOfFire, Speed, Tick, TimeToLive};
 use resources::{Config, SmallRng};
@@ -29,6 +30,7 @@ fn load_sprites(mut sprite_handles: ResMut<Sprites>, asset_server: Res<AssetServ
 }
 
 fn main() {
+    let config = Config::parse();
     // group ui systems together bc we want to run them as fast as possible
     let ui_system_set = SystemSet::on_update(AppState::InGame)
         .with_system(systems::update_compass)
@@ -109,15 +111,7 @@ fn main() {
             gravity: Vec2::ZERO,
             ..Default::default()
         })
-        .insert_resource(Config {
-            dimensions: 32,
-            tile_size: 64,
-            scale: 0.5, // 1.0 means the player is 256x256 px
-            camera_follow_interpolation: 0.05,
-            mob_spawn_interval: 100,
-            mech_spawn_interval: 1799, // A weird number so that it gets out of sync with other intervals
-            powerup_spawn_interval: 100,
-        })
+        .insert_resource(config)
         .insert_resource(Tick(0))
         .insert_resource(SmallRng::from_entropy())
         .init_resource::<Sprites>()
