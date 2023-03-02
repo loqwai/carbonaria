@@ -65,7 +65,6 @@ impl PlayerBundle {
             },
             scene: SceneBundle {
                 scene: asset_server.load("models/units/player.gltf#Scene0"),
-                // scene: asset_server.load("models/bullets/laser.gltf#Scene0"),
                 ..default()
             },
             sensor: Sensor,

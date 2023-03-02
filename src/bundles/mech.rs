@@ -15,6 +15,7 @@ pub struct MechBundle {
     pub team: Team,
     pub health: Health,
     pub chases: Chases,
+    pub scene: Handle<Scene>,
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub sprite_animation: SpriteAnimation,
     pub axis_constraints: LockedAxes,
@@ -42,6 +43,7 @@ impl MechBundle {
             mech: Mech,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,
+            scene: asset_server.load("models/units/mech.gltf#Scene0"),
             sprite_sheet_bundle: SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle,
                 transform: Transform {
