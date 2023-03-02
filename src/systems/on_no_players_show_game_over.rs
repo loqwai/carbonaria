@@ -12,7 +12,7 @@ pub fn on_no_players_show_game_over(
         return;
     }
 
-    other_uis.for_each_mut(|ui| commands.entity(ui).despawn_recursive());
+    other_uis.for_each_mut(|ui| commands.entity(ui).despawn());
 
     commands
         .spawn(NodeBundle {
