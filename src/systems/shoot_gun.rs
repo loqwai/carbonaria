@@ -5,7 +5,7 @@ use crate::{
     components::{
         ActiveAmmo, AmmoType, Chest, Health, LaserGun, Math, Poison, RateOfFire, Speed, TimeToLive,
     },
-    resources::Config,
+    resources::{CameraType::*, Config},
 };
 
 pub fn shoot_gun(
@@ -54,17 +54,25 @@ pub fn shoot_gun(
 
         let model_name = "laser";
 
+        let transform = match config.camera_type {
+            Camera2d => transform
+                .mul_transform(Transform::from_translation(Vec3::new(
+                    250.0 * config.scale,
+                    1.0,
+                    1.0,
+                )))
+                .compute_transform(),
+            Camera3d => transform
+                .mul_transform(Transform::from_translation(Vec3::new(2.0, 1.0, 1.0)))
+                .compute_transform(),
+        };
+
         // TODO: replace magic numbers
         commands
             .spawn(BulletBundle::new(
                 &asset_server,
                 &mut texture_atlases,
                 transform,
-                // &transform.mul_transform(Transform::from_translation(Vec3::new(
-                //     250.0 * config.scale,
-                //     1.0,
-                //     1.0,
-                // ))),
                 texture,
                 model_name,
                 config.scale,

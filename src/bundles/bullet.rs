@@ -18,7 +18,7 @@ pub struct BulletBundle {
     pub sprite_animation: SpriteAnimation,
     pub direction: Direction,
     pub active_events: ActiveEvents,
-    // pub collider: Collider,
+    pub collider: Collider,
     pub sensor: Sensor,
     pub speed: Speed,
 }
@@ -27,12 +27,11 @@ impl BulletBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
         texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
-        transform: &GlobalTransform,
+        transform: Transform,
         texture_name: &str,
         model_name: &str,
         scale: f32,
     ) -> BulletBundle {
-        let transform = transform.compute_transform();
         let texture = asset_server.get_handle(format!("sprites/bullets/{}.png", texture_name));
         let texture_atlas =
             TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
@@ -41,7 +40,7 @@ impl BulletBundle {
 
         BulletBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
-            // collider: Collider::ball(RADIUS * scale),
+            collider: Collider::ball(RADIUS * scale),
             sensor: Sensor,
             direction: Direction(transform.rotation),
             speed: Speed(BASE_SPEED * scale),
