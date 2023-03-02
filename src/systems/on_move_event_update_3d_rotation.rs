@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::*;
 
 use crate::{
@@ -20,10 +22,11 @@ pub fn on_move_event_update_3d_rotation(
 }
 
 fn update_3d_rotation(transforms: &mut Query<&mut Transform>, event: &MoveEvent) -> Option<()> {
-    let mut transform = transforms.get_mut(event.who).ok()?;
-    let direction = transform.translation - event.direction;
+    let direction = event.direction;
+    let angle = (PI / 2.0) + direction.y.atan2(direction.x);
 
-    transform.look_at(direction, Vec3::Z);
+    let mut transform = transforms.get_mut(event.who).ok()?;
+    transform.rotation = Quat::from_axis_angle(Vec3::Z, angle);
 
     Some(())
 }
