@@ -1,4 +1,5 @@
 use crate::components::SpriteAnimation;
+use crate::constants::SCALE_FACTOR_3D;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
@@ -17,12 +18,9 @@ pub struct PlayerBundle {
     pub name: Name,
     pub pockets: Pocket,
     pub active_events: ActiveEvents,
-    // pub sprite_sheet_bundle: SpriteSheetBundle,
-    pub sprite: TextureAtlasSprite,
-    pub texture_atlas: Handle<TextureAtlas>,
+    pub sprite: SpriteSheetBundle,
     pub sprite_animation: SpriteAnimation,
     pub rigid_body: RigidBody,
-    pub scene: SceneBundle,
     pub rate_of_fire: RateOfFire,
     pub sensor: Sensor,
     pub team: Team,
@@ -50,12 +48,15 @@ impl PlayerBundle {
             pockets: Pocket,
             points: Points(0),
             rigid_body: RigidBody::Dynamic,
-            sprite: TextureAtlasSprite {
-                custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                index: 7,
+            sprite: SpriteSheetBundle {
+                sprite: TextureAtlasSprite {
+                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                    index: 0,
+                    ..Default::default()
+                },
+                texture_atlas: texture_atlas_handle,
                 ..Default::default()
             },
-            texture_atlas: texture_atlas_handle,
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 1,
@@ -63,13 +64,29 @@ impl PlayerBundle {
                 current_angle: 0,
                 current_frame: 0.0,
             },
-            scene: SceneBundle {
-                scene: asset_server.load("models/units/player.gltf#Scene0"),
-                ..default()
-            },
             sensor: Sensor,
             team: Team(0),
             rate_of_fire: RateOfFire(1.0),
+        }
+    }
+}
+
+#[derive(Bundle)]
+pub struct PlayerModelBundle {
+    pub scene: SceneBundle,
+}
+
+impl PlayerModelBundle {
+    pub fn new(asset_server: &Res<AssetServer>, scale: f32) -> PlayerModelBundle {
+        PlayerModelBundle {
+            scene: SceneBundle {
+                scene: asset_server.load("models/units/player.gltf#Scene0"),
+                transform: Transform {
+                    scale: Vec3::splat(RADIUS * SCALE_FACTOR_3D * scale),
+                    ..default()
+                },
+                ..default()
+            },
         }
     }
 }

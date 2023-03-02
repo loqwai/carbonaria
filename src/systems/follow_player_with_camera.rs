@@ -51,7 +51,7 @@ fn follow_player_with_camera_3d(
 
             let target_translation = Vec3::new(
                 player.translation.x,
-                player.translation.y - 70.,
+                player.translation.y - 700.,
                 camera.translation.z,
             );
 

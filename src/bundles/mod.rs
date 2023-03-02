@@ -14,7 +14,7 @@ pub use health::HealthBundle;
 
 pub use laser_gun::LaserGunBundle;
 pub use mech::MechBundle;
-pub use mob::MobBundle;
-pub use player::PlayerBundle;
+pub use mob::*;
+pub use player::*;
 
 pub use bullet::BulletBundle;

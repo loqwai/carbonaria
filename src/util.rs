@@ -4,7 +4,6 @@ use crate::resources::SmallRng;
 use bevy::prelude::*;
 use rand::Rng;
 
-use crate::resources::CameraType::*;
 use crate::resources::Config;
 
 #[allow(dead_code)]
@@ -21,10 +20,7 @@ pub fn random_position(config: &Res<Config>, rng: &mut ResMut<SmallRng>) -> Vec3
     let max: f32 = (config.dimensions / 2).into();
     let min: f32 = -max;
 
-    let tile_size: f32 = match config.camera_type {
-        Camera2d => config.tile_size.into(),
-        Camera3d => 1.0,
-    };
+    let tile_size: f32 = config.tile_size.into();
 
     let x: f32 = tile_size * rng.gen_range(min..max);
     let y: f32 = tile_size * rng.gen_range(min..max);

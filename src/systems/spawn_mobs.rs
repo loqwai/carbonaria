@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::bundles::{LaserGunBundle, MobBundle};
+use crate::bundles::{LaserGunBundle, MobBundle, MobModelBundle};
 use crate::components::{Health, Math, RateOfFire, Speed, Tick};
 use crate::resources::{Config, SmallRng};
 use crate::util::random_position;
@@ -26,6 +26,7 @@ pub fn spawn_mobs(
             config.scale,
         ))
         .with_children(|parent| {
+            parent.spawn(MobModelBundle::new(&asset_server, config.scale));
             parent.spawn(LaserGunBundle::new(60));
             parent.spawn(Math::add(RateOfFire(1.0)));
             parent.spawn(Math::add(Speed(1.0)));

@@ -11,6 +11,8 @@ pub fn spawn_powerups(
     asset_server: Res<AssetServer>,
     config: Res<Config>,
     mut rng: ResMut<SmallRng>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     let ticks = ticker.0;
     if ticks % config.powerup_spawn_interval != 0 {
@@ -31,6 +33,8 @@ pub fn spawn_powerups(
     let position = random_position(&config, &mut rng);
     commands.spawn(ChestBundle::new(
         &asset_server,
+        &mut meshes,
+        &mut materials,
         position,
         config.scale,
         sprite,

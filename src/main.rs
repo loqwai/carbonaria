@@ -1,5 +1,6 @@
 mod bundles;
 mod components;
+mod constants;
 mod events;
 mod resources;
 mod systems;
@@ -63,7 +64,7 @@ fn main() {
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
         // .with_system(systems::debug_time)
         .with_system(systems::count_ticks) //this may be off by one
-        .with_system(systems::shoot_gun)
+        // .with_system(systems::shoot_gun)
         .with_system(systems::move_bullet)
         .with_system(systems::spawn_mechs)
         .with_system(systems::spawn_mobs)

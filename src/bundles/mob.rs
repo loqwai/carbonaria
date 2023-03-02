@@ -1,7 +1,10 @@
 use bevy::{math::Vec3, prelude::*};
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Chases, Health, Mob, Pocket, RateOfFire, Speed, SpriteAnimation, Team};
+use crate::{
+    components::{Chases, Health, Mob, Pocket, RateOfFire, Speed, SpriteAnimation, Team},
+    constants::SCALE_FACTOR_3D,
+};
 
 const RADIUS: f32 = 128.0;
 
@@ -15,9 +18,7 @@ pub struct MobBundle {
     pub team: Team,
     pub health: Health,
     pub chases: Chases,
-    pub scene: SceneBundle,
-    pub sprite: TextureAtlasSprite,
-    pub texture_atlas: Handle<TextureAtlas>,
+    pub sprite: SpriteSheetBundle,
     pub sprite_animation: SpriteAnimation,
     pub axis_constraints: LockedAxes,
     pub rate_of_fire: RateOfFire,
@@ -44,17 +45,16 @@ impl MobBundle {
             mob: Mob,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,
-            scene: SceneBundle {
-                scene: asset_server.load("models/units/mob.gltf#Scene0"),
+            sprite: SpriteSheetBundle {
+                sprite: TextureAtlasSprite {
+                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                    index: 0,
+                    ..Default::default()
+                },
+                texture_atlas: texture_atlas_handle,
                 transform: Transform::from_translation(position),
                 ..Default::default()
             },
-            sprite: TextureAtlasSprite {
-                custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                index: 7,
-                ..Default::default()
-            },
-            texture_atlas: texture_atlas_handle,
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 1,
@@ -64,6 +64,26 @@ impl MobBundle {
             },
             team: Team(1),
             rate_of_fire: RateOfFire(1.0),
+        }
+    }
+}
+
+#[derive(Bundle)]
+pub struct MobModelBundle {
+    pub scene: SceneBundle,
+}
+
+impl MobModelBundle {
+    pub fn new(asset_server: &Res<AssetServer>, scale: f32) -> MobModelBundle {
+        MobModelBundle {
+            scene: SceneBundle {
+                scene: asset_server.load("models/units/mob.gltf#Scene0"),
+                transform: Transform {
+                    scale: Vec3::splat(RADIUS * SCALE_FACTOR_3D * scale),
+                    ..default()
+                },
+                ..default()
+            },
         }
     }
 }
