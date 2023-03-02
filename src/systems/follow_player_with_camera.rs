@@ -50,7 +50,7 @@ fn follow_player_with_camera_3d(
             let mut camera = q_camera.get_single_mut().unwrap();
 
             let target_translation = Vec3::new(
-                player.translation.x,
+                player.translation.x - 70.,
                 player.translation.y - 70.,
                 camera.translation.z,
             );
