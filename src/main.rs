@@ -74,6 +74,7 @@ fn main() {
         .with_system(systems::on_scroll_wheel_switch_ammo)
         .with_system(systems::on_f_key_switch_ammo)
         .with_system(systems::on_left_click_shoot)
+        .with_system(systems::mob_shoot)
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_update_sprite_animation)
