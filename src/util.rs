@@ -1,9 +1,10 @@
-use std::{time::Instant, f32::consts::PI};
+use std::{f32::consts::PI, time::Instant};
 
 use crate::resources::SmallRng;
 use bevy::prelude::*;
 use rand::Rng;
 
+use crate::resources::CameraType::*;
 use crate::resources::Config;
 
 #[allow(dead_code)]
@@ -19,7 +20,11 @@ where
 pub fn random_position(config: &Res<Config>, rng: &mut ResMut<SmallRng>) -> Vec3 {
     let max: f32 = (config.dimensions / 2).into();
     let min: f32 = -max;
-    let tile_size: f32 = config.tile_size.into();
+
+    let tile_size: f32 = match config.camera_type {
+        Camera2d => config.tile_size.into(),
+        Camera3d => 1.0,
+    };
 
     let x: f32 = tile_size * rng.gen_range(min..max);
     let y: f32 = tile_size * rng.gen_range(min..max);
@@ -38,7 +43,7 @@ pub fn look_at_target(looker: Vec3, target: Vec3) -> (Quat, Vec3) {
 pub fn vector_angle(direction: Vec3) -> f32 {
     let x = direction.x;
     let y = direction.y;
-    
+
     let mut angle = x.atan2(y);
 
     if angle < 0.0 {

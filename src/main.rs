@@ -65,7 +65,6 @@ fn main() {
         .with_system(systems::count_ticks) //this may be off by one
         .with_system(systems::shoot_gun)
         .with_system(systems::move_bullet)
-        // .with_system(systems::spawn_exit)
         .with_system(systems::spawn_mechs)
         .with_system(systems::spawn_mobs)
         .with_system(systems::chasers_follow_other_teams)

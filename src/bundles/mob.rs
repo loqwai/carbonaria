@@ -1,4 +1,4 @@
-use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
+use bevy::{math::Vec3, prelude::*};
 use bevy_rapier2d::prelude::*;
 
 use crate::components::{Chases, Health, Mob, Pocket, RateOfFire, Speed, SpriteAnimation, Team};
@@ -15,7 +15,9 @@ pub struct MobBundle {
     pub team: Team,
     pub health: Health,
     pub chases: Chases,
-    pub sprite_sheet_bundle: SpriteSheetBundle,
+    pub scene: SceneBundle,
+    pub sprite: TextureAtlasSprite,
+    pub texture_atlas: Handle<TextureAtlas>,
     pub sprite_animation: SpriteAnimation,
     pub axis_constraints: LockedAxes,
     pub rate_of_fire: RateOfFire,
@@ -33,6 +35,8 @@ impl MobBundle {
             TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
+        println!("position: {:?}", position);
+
         MobBundle {
             axis_constraints: LockedAxes::all(),
             speed: Speed::default(),
@@ -42,19 +46,17 @@ impl MobBundle {
             mob: Mob,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,
-            sprite_sheet_bundle: SpriteSheetBundle {
-                texture_atlas: texture_atlas_handle,
-                transform: Transform {
-                    translation: position,
-                    ..Default::default()
-                },
-                sprite: TextureAtlasSprite {
-                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    index: 7,
-                    ..Default::default()
-                },
+            scene: SceneBundle {
+                scene: asset_server.load("models/units/mob.gltf#Scene0"),
+                transform: Transform::from_translation(position),
                 ..Default::default()
             },
+            sprite: TextureAtlasSprite {
+                custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                index: 7,
+                ..Default::default()
+            },
+            texture_atlas: texture_atlas_handle,
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 1,
