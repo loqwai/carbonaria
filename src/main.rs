@@ -76,6 +76,7 @@ fn main() {
         .with_system(systems::move_player)
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_update_sprite_animation)
+        .with_system(systems::on_move_event_update_3d_rotation)
         .with_system(systems::calculate_rate_of_fire)
         .with_system(systems::rotate_thing)
         // .with_system(systems::detect_exit)
@@ -97,7 +98,8 @@ fn main() {
         .with_system(systems::spawn_camera)
         .with_system(systems::spawn_player)
         .with_system(systems::spawn_ui)
-        .with_system(systems::spawn_crosshairs);
+        .with_system(systems::spawn_crosshairs)
+        .with_system(systems::spawn_lights);
 
     let cleanup_system_set =
         SystemSet::on_exit(AppState::InGame).with_system(systems::remove_all_entities);
@@ -105,7 +107,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-        // .add_plugin(RapierDebugRenderPlugin::default()) // the physics debug UI
+        .add_plugin(RapierDebugRenderPlugin::default()) // the physics debug UI
         // .add_plugin(WorldInspectorPlugin)
         .insert_resource(RapierConfiguration {
             gravity: Vec2::ZERO,

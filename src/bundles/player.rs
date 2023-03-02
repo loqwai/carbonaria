@@ -9,7 +9,6 @@ const RADIUS: f32 = 128.0;
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
-    pub sensor: Sensor,
     pub collider: Collider,
     pub axis_constraints: LockedAxes,
     pub points: Points,
@@ -17,12 +16,16 @@ pub struct PlayerBundle {
     pub speed: Speed,
     pub name: Name,
     pub pockets: Pocket,
-    pub team: Team,
     pub active_events: ActiveEvents,
-    pub sprite_sheet_bundle: SpriteSheetBundle,
+    // pub sprite_sheet_bundle: SpriteSheetBundle,
+    pub sprite: TextureAtlasSprite,
+    pub texture_atlas: Handle<TextureAtlas>,
     pub sprite_animation: SpriteAnimation,
     pub rigid_body: RigidBody,
+    pub scene: SceneBundle,
     pub rate_of_fire: RateOfFire,
+    pub sensor: Sensor,
+    pub team: Team,
 }
 
 impl PlayerBundle {
@@ -47,21 +50,22 @@ impl PlayerBundle {
             pockets: Pocket,
             points: Points(0),
             rigid_body: RigidBody::Dynamic,
-            sprite_sheet_bundle: SpriteSheetBundle {
-                texture_atlas: texture_atlas_handle,
-                sprite: TextureAtlasSprite {
-                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    index: 7,
-                    ..Default::default()
-                },
+            sprite: TextureAtlasSprite {
+                custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                index: 7,
                 ..Default::default()
             },
+            texture_atlas: texture_atlas_handle,
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
                 num_frames_per_angle: 1,
                 frames_to_advance_per_tick: 1.0,
                 current_angle: 0,
                 current_frame: 0.0,
+            },
+            scene: SceneBundle {
+                scene: asset_server.load("models/units/player.gltf#Scene0"),
+                ..default()
             },
             sensor: Sensor,
             team: Team(0),
