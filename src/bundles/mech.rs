@@ -1,7 +1,10 @@
 use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
 use bevy_rapier2d::prelude::*;
 
-use crate::components::{Chases, Health, Mech, Pocket, RateOfFire, Speed, SpriteAnimation, Team};
+use crate::{
+    components::{Chases, Health, Mech, Pocket, RateOfFire, Speed, SpriteAnimation, Team},
+    constants::SCALE_FACTOR_3D,
+};
 
 const RADIUS: f32 = 128.0;
 
@@ -15,7 +18,6 @@ pub struct MechBundle {
     pub team: Team,
     pub health: Health,
     pub chases: Chases,
-    pub scene: Handle<Scene>,
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub sprite_animation: SpriteAnimation,
     pub axis_constraints: LockedAxes,
@@ -43,7 +45,6 @@ impl MechBundle {
             mech: Mech,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,
-            scene: asset_server.load("models/units/mech.gltf#Scene0"),
             sprite_sheet_bundle: SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle,
                 transform: Transform {
@@ -66,6 +67,26 @@ impl MechBundle {
             },
             team: Team(1),
             rate_of_fire: RateOfFire(1.0),
+        }
+    }
+}
+
+#[derive(Bundle)]
+pub struct MechModelBundle {
+    pub scene: SceneBundle,
+}
+
+impl MechModelBundle {
+    pub fn new(asset_server: &Res<AssetServer>, scale: f32) -> MechModelBundle {
+        MechModelBundle {
+            scene: SceneBundle {
+                scene: asset_server.load("models/units/mech.gltf#Scene0"),
+                transform: Transform {
+                    scale: Vec3::splat(RADIUS * SCALE_FACTOR_3D * scale),
+                    ..default()
+                },
+                ..default()
+            },
         }
     }
 }

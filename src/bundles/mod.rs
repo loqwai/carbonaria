@@ -13,8 +13,8 @@ pub use compass::CompassBundle;
 pub use health::HealthBundle;
 
 pub use laser_gun::LaserGunBundle;
-pub use mech::MechBundle;
+pub use mech::*;
 pub use mob::*;
 pub use player::*;
 
-pub use bullet::BulletBundle;
+pub use bullet::*;
