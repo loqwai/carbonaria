@@ -21,6 +21,8 @@ pub fn player_aimables_aim_at_cursor(
                     let (rotation, _) =
                         look_at_target(aimable_transform.translation(), mouse.translation);
 
+                    println!("rotation: {:?}", rotation);
+
                     rotate_events.send(RotateEvent {
                         who: aimable,
                         rotation,

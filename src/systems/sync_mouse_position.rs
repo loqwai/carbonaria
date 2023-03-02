@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::Windows, render::camera::RenderTarget};
+use bevy::{prelude::*, render::camera::RenderTarget, window::Windows};
 
 use crate::components::MousePos;
 
@@ -7,7 +7,7 @@ pub fn sync_mouse_position(
     wnds: Res<Windows>,
     // query to get camera transform
     q_camera: Query<(&Camera, &GlobalTransform)>,
-    mut q_mouse: Query<&mut Transform, With<MousePos>>
+    mut q_mouse: Query<&mut Transform, With<MousePos>>,
 ) {
     // get the camera info and transform
     // assuming there is exactly one main camera entity, so query::single() is OK
@@ -22,22 +22,27 @@ pub fn sync_mouse_position(
 
     // check if the cursor is inside the window and get its position
     if let Some(screen_pos) = wnd.cursor_position() {
-        // get the size of the window
-        let window_size = Vec2::new(wnd.width() as f32, wnd.height() as f32);
+        let Some(ray) = camera.viewport_to_world(camera_transform, screen_pos) else { return; };
+        let Some(point) = get_point_on_plane(ray, Vec3::ZERO, Vec3::Z) else { return; };
 
-        // convert screen position [0..resolution] to ndc [-1..1] (gpu coordinates)
-        let ndc = (screen_pos / window_size) * 2.0 - Vec2::ONE;
-
-        // matrix for undoing the projection and camera transform
-        let ndc_to_world = camera_transform.compute_matrix() * camera.projection_matrix().inverse();
-
-        // use it to convert ndc to world-dwwspace coordinates
-        let world_pos = ndc_to_world.project_point3(ndc.extend(-1.0));
-
-        // reduce it to a 2D value
-        let world_pos: Vec2 = world_pos.truncate();
         q_mouse.for_each_mut(|mut mouse| {
-            mouse.translation = world_pos.extend(0.0);
+            mouse.translation = point;
         });
     }
+}
+
+fn intersect_plane(ray: Ray, plane_origin: Vec3, plane_normal: Vec3) -> Option<f32> {
+    let denominator = plane_normal.dot(ray.direction);
+    if denominator.abs() > f32::EPSILON {
+        let distance = (plane_origin - ray.origin).dot(plane_normal) / denominator;
+        if distance >= f32::EPSILON {
+            return Some(distance);
+        }
+    }
+    None
+}
+
+fn get_point_on_plane(ray: Ray, plane_origin: Vec3, plane_normal: Vec3) -> Option<Vec3> {
+    let distance = intersect_plane(ray, plane_origin, plane_normal)?;
+    Some(ray.origin + ray.direction * distance)
 }

@@ -2,31 +2,32 @@ use std::f32::consts::PI;
 
 use bevy::prelude::*;
 
-use crate::{
-    events::MoveEvent,
-    resources::{CameraType, Config},
-};
+use crate::events::MoveEvent;
 
 pub fn on_move_event_update_3d_rotation(
-    config: Res<Config>,
     mut move_events: EventReader<MoveEvent>,
-    mut transforms: Query<&mut Transform>,
+    childrens: Query<&Children>,
+    mut models: Query<&mut Transform, With<Handle<Scene>>>,
 ) {
-    if config.camera_type != CameraType::Camera3d {
-        return;
-    }
-
     move_events.iter().for_each(|event| {
-        update_3d_rotation(&mut transforms, event);
+        update_3d_rotation(&childrens, &mut models, event);
     })
 }
 
-fn update_3d_rotation(transforms: &mut Query<&mut Transform>, event: &MoveEvent) -> Option<()> {
+fn update_3d_rotation(
+    childrens: &Query<&Children>,
+    models: &mut Query<&mut Transform, With<Handle<Scene>>>,
+    event: &MoveEvent,
+) -> Option<()> {
     let direction = event.direction;
     let angle = (PI / 2.0) + direction.y.atan2(direction.x);
 
-    let mut transform = transforms.get_mut(event.who).ok()?;
-    transform.rotation = Quat::from_axis_angle(Vec3::Z, angle);
+    let children = childrens.get(event.who).ok()?;
+    for child in children {
+        let Ok(mut transform) = models.get_mut(*child) else { continue; };
+
+        transform.rotation = Quat::from_axis_angle(Vec3::Z, angle);
+    }
 
     Some(())
 }
