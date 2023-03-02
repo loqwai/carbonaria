@@ -2,7 +2,9 @@ use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
 use bevy_rapier2d::prelude::*;
 
 use crate::{
-    components::{Chases, Health, Mech, Pocket, RateOfFire, Speed, SpriteAnimation, Team},
+    components::{
+        AutoShoot, Chases, Health, Mech, Pocket, RateOfFire, Speed, SpriteAnimation, Team,
+    },
     constants::SCALE_FACTOR_3D,
 };
 
@@ -10,6 +12,7 @@ const RADIUS: f32 = 128.0;
 
 #[derive(Bundle)]
 pub struct MechBundle {
+    pub auto_shoot: AutoShoot,
     pub mech: Mech,
     pub rigid_body: RigidBody,
     pub collider: Collider,
@@ -37,6 +40,7 @@ impl MechBundle {
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
         MechBundle {
+            auto_shoot: AutoShoot,
             axis_constraints: LockedAxes::all(),
             speed: Speed::default(),
             chases: Chases,

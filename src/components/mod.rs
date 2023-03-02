@@ -68,6 +68,9 @@ pub struct Chest {
 }
 
 #[derive(Component)]
+pub struct AutoShoot;
+
+#[derive(Component)]
 pub struct MousePos;
 //https://github.com/bevyengine/bevy/discussions/3332
 

@@ -1,11 +1,11 @@
 use crate::{
-    components::{LaserGun, Mob},
+    components::{AutoShoot, LaserGun},
     events::ShootEvent,
 };
 use bevy::prelude::*;
 
 pub fn mob_shoot(
-    mobs: Query<&Children, With<Mob>>,
+    mobs: Query<&Children, With<AutoShoot>>,
     mut shoot_events: EventWriter<ShootEvent>,
     guns: Query<Entity, With<LaserGun>>,
 ) {

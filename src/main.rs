@@ -109,7 +109,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-        .add_plugin(RapierDebugRenderPlugin::default()) // the physics debug UI
+        // .add_plugin(RapierDebugRenderPlugin::default()) // the physics debug UI
         // .add_plugin(WorldInspectorPlugin)
         .insert_resource(RapierConfiguration {
             gravity: Vec2::ZERO,
