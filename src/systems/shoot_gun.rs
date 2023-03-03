@@ -14,7 +14,8 @@ pub fn shoot_gun(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut shoot_events: EventReader<ShootEvent>,
-    mut guns: Query<(&mut LaserGun, &AmmoCount, &ActiveAmmo, &GlobalTransform)>,
+    mut guns: Query<(&mut LaserGun, &Children, &ActiveAmmo, &GlobalTransform)>,
+    mut clips: Query<(Entity, &AmmoCount, With<Parent>)>,
     config: Res<Config>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
@@ -24,20 +25,26 @@ pub fn shoot_gun(
         }
     });
 
+    for (gun, _,_,_) in guns.iter() {
+        if gun.cooldown > 0 {
+            gun.cooldown = gun.cooldown.saturating_sub(gun.cooldown_rate);
+        }
+    }
+
     for event in shoot_events.iter() {
-        let Ok((mut gun, ammo, active_ammo, transform)) = guns.get_mut(event.gun) else { continue; };
+        let Ok((mut gun, children, active_ammo, transform)) = guns.get_mut(event.gun) else { continue; };
 
         if gun.cooldown > 0 {
             continue;
         }
-
-        if ammo.0 <= 0 {
-            continue;
+        for &child in children.iter() {
+            let (clip, count, _) = clips.get(child).unwrap();
+            commands.entity(clip).remove::<Parent>();
+            if count.0 <= 0 {
+                continue;
+            }
+            gun.cooldown = gun.cooldown_max;        gun.cooldown = gun.cooldown_max;
         }
-        commands.entity(event.gun).with_children(|gun| {
-            gun.spawn(Math::add(AmmoCount(-1)));
-        });
-        gun.cooldown = gun.cooldown_max;
 
         let payload = match active_ammo.0 {
             AmmoType::Normal => commands.spawn(Math::add(Health(-10.0))).id(),
