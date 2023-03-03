@@ -147,3 +147,4 @@ impl PartialEq for AmmoCount {
         self.0 == other.0
     }
 }
+

@@ -8,7 +8,7 @@ use crate::components::Math;
 pub fn powerup_mather<T: Component + MulAssign + AddAssign + Clone + fmt::Debug>(
     powerups: Query<(&Parent, &Math<T>)>,
     entities: Query<Entity, (With<Parent>, With<Math<T>>)>,
-    mut powerup_targets: Query<&mut T>,
+    mut powerup_targets: Query<&mut T, With<Children>>,
 ) {
     let mut entities: Vec<Entity> = entities.iter().collect();
     entities.sort();
