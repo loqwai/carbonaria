@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::bundles::{LaserGunBundle, MechBundle, MechModelBundle};
-use crate::components::{Health, Math, RateOfFire, Speed, Tick};
+use crate::components::{AmmoCount, Health, Math, RateOfFire, Speed, Tick};
 use crate::resources::{Config, SmallRng};
 use crate::util::random_position;
 
@@ -27,7 +27,9 @@ pub fn spawn_mechs(
         ))
         .with_children(|parent| {
             parent.spawn(MechModelBundle::new(&asset_server, config.scale));
-            parent.spawn(LaserGunBundle::new(60));
+            parent.spawn(LaserGunBundle::new(60)).with_children(|gun| {
+                gun.spawn(Math::add(AmmoCount(isize::MAX)));
+            });
             parent.spawn(Math::add(RateOfFire(1.0)));
             parent.spawn(Math::add(Speed(1.0)));
             parent.spawn(Math::add(Health(100.0)));

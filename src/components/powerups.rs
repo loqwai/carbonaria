@@ -128,3 +128,22 @@ impl<T: Component + AddAssign + MulAssign + core::fmt::Debug> Math<T> {
         }
     }
 }
+
+#[derive(Component, Clone, Debug, Default)]
+pub struct AmmoCount(pub isize);
+
+impl AddAssign for AmmoCount {
+    fn add_assign(&mut self, other: Self) {
+        self.0 += other.0;
+    }
+}
+impl MulAssign for AmmoCount {
+    fn mul_assign(&mut self, other: Self) {
+        self.0 *= other.0;
+    }
+}
+impl PartialEq for AmmoCount {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}

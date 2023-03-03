@@ -1,11 +1,10 @@
-use bevy::{
-    prelude::*,
-};
+use bevy::prelude::*;
 
-use crate::components::{ActiveAmmo, Aimable, LaserGun, AmmoType};
+use crate::components::{ActiveAmmo, Aimable, AmmoCount, AmmoType, LaserGun};
 
 #[derive(Bundle)]
 pub struct LaserGunBundle {
+    pub ammo: AmmoCount,
     pub aimable: Aimable,
     pub global_transform: GlobalTransform,
     pub active_ammo: ActiveAmmo,
@@ -17,6 +16,7 @@ pub struct LaserGunBundle {
 impl LaserGunBundle {
     pub fn new(cooldown: usize) -> LaserGunBundle {
         LaserGunBundle {
+            ammo: AmmoCount(0),
             aimable: Aimable,
             active_ammo: ActiveAmmo(AmmoType::Normal),
             global_transform: GlobalTransform::default(),

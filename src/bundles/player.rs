@@ -1,4 +1,4 @@
-use crate::components::SpriteAnimation;
+use crate::components::{AmmoCount, SpriteAnimation};
 use crate::constants::SCALE_FACTOR_3D;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
@@ -10,6 +10,7 @@ const RADIUS: f32 = 128.0;
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
+    pub ammo: AmmoCount,
     pub collider: Collider,
     pub axis_constraints: LockedAxes,
     pub points: Points,
@@ -38,11 +39,12 @@ impl PlayerBundle {
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
         PlayerBundle {
+            ammo: AmmoCount(0),
             active_events: ActiveEvents::COLLISION_EVENTS,
             axis_constraints: LockedAxes::all(),
             speed: Speed(0.0),
             collider: Collider::ball(RADIUS * scale),
-            health: Health::default(),
+            health: Health(f32::MAX),
             name: "player".into(),
             player: Player,
             pockets: Pocket,

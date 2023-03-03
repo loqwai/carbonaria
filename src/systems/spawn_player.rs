@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     bundles::{CompassBundle, HealthBundle, LaserGunBundle, PlayerBundle, PlayerModelBundle},
-    components::{Health, Math, RateOfFire, Speed},
+    components::{AmmoCount, Health, Math, RateOfFire, Speed},
     resources::Config,
 };
 
@@ -22,7 +22,10 @@ pub fn spawn_player(
             parent.spawn(PlayerModelBundle::new(&asset_server, config.scale));
             parent.spawn(CompassBundle::new(&asset_server));
             parent.spawn(HealthBundle::new(&asset_server));
-            parent.spawn(LaserGunBundle::new(60));
+            parent.spawn(LaserGunBundle::new(60)).with_children(|gun| {
+                gun.spawn(Math::add(AmmoCount(5)));
+            });
+            parent.spawn(Math::add(AmmoCount(5)));
             parent.spawn(Math::add(RateOfFire(1.0)));
             parent.spawn(Math::add(Speed(7.5)));
             parent.spawn(Math::add(Health(75.0)));

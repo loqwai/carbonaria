@@ -3,7 +3,8 @@ use bevy::prelude::*;
 use crate::{
     bundles::{BulletBundle, BulletModelBundle},
     components::{
-        ActiveAmmo, AmmoType, Chest, Health, LaserGun, Math, Poison, RateOfFire, Speed, TimeToLive,
+        ActiveAmmo, AmmoCount, AmmoType, Chest, Health, LaserGun, Math, Poison, RateOfFire, Speed,
+        TimeToLive,
     },
     events::ShootEvent,
     resources::Config,
@@ -13,23 +14,29 @@ pub fn shoot_gun(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut shoot_events: EventReader<ShootEvent>,
-    mut guns: Query<(&mut LaserGun, &ActiveAmmo, &GlobalTransform)>,
+    mut guns: Query<(&mut LaserGun, &AmmoCount, &ActiveAmmo, &GlobalTransform)>,
     config: Res<Config>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
-    guns.for_each_mut(|(mut gun, _, _)| {
+    guns.for_each_mut(|(mut gun, _, _, _)| {
         if gun.cooldown > 0 {
             gun.cooldown = gun.cooldown.saturating_sub(gun.cooldown_rate);
         }
     });
 
     for event in shoot_events.iter() {
-        let Ok((mut gun, active_ammo, transform)) = guns.get_mut(event.gun) else { continue; };
+        let Ok((mut gun, ammo, active_ammo, transform)) = guns.get_mut(event.gun) else { continue; };
 
         if gun.cooldown > 0 {
             continue;
         }
 
+        if ammo.0 <= 0 {
+            continue;
+        }
+        commands.entity(event.gun).with_children(|gun| {
+            gun.spawn(Math::add(AmmoCount(-1)));
+        });
         gun.cooldown = gun.cooldown_max;
 
         let payload = match active_ammo.0 {

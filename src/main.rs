@@ -11,7 +11,7 @@ use bevy::{prelude::*, time::FixedTimestep};
 use bevy_rapier2d::prelude::*;
 use clap::Parser;
 
-use components::{Health, Poison, RateOfFire, Speed, Tick, TimeToLive};
+use components::{AmmoCount, Health, Poison, RateOfFire, Speed, Tick, TimeToLive};
 use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
@@ -46,19 +46,23 @@ fn main() {
     let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
         .label("compute_powerups_system_set")
         .with_system(systems::powerup_defaulter::<Speed>)
-        .with_system(systems::powerup_defaulter::<Health>)
-        .with_system(systems::powerup_defaulter::<RateOfFire>)
-        .with_system(systems::powerup_defaulter::<TimeToLive>)
-        .with_system(systems::powerup_defaulter::<Poison>)
         .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
+        .with_system(systems::powerup_defaulter::<Health>)
         .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
+        .with_system(systems::powerup_defaulter::<RateOfFire>)
         .with_system(
             systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>),
         )
+        .with_system(systems::powerup_defaulter::<TimeToLive>)
         .with_system(
             systems::powerup_mather::<TimeToLive>.after(systems::powerup_defaulter::<TimeToLive>),
         )
-        .with_system(systems::powerup_mather::<Poison>.after(systems::powerup_defaulter::<Poison>));
+        .with_system(systems::powerup_defaulter::<Poison>)
+        .with_system(systems::powerup_mather::<Poison>.after(systems::powerup_defaulter::<Poison>))
+        .with_system(systems::powerup_defaulter::<AmmoCount>)
+        .with_system(
+            systems::powerup_mather::<AmmoCount>.after(systems::powerup_defaulter::<AmmoCount>),
+        );
 
     let game_loop_system_set = SystemSet::on_update(AppState::InGame)
         .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
