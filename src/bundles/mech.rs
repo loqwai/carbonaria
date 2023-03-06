@@ -34,7 +34,7 @@ impl MechBundle {
         position: Vec3,
         scale: f32,
     ) -> MechBundle {
-        let texture = asset_server.get_handle("sprites/units/mech.png");
+        let texture = asset_server.get_handle("sprites/units/mech2.png");
         let texture_atlas =
             TextureAtlas::from_grid(texture, Vec2::new(128.0, 128.0), 28, 28, None, None);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
@@ -77,12 +77,14 @@ impl MechBundle {
 
 #[derive(Bundle)]
 pub struct MechModelBundle {
+    pub animation_player: AnimationPlayer,
     pub scene: SceneBundle,
 }
 
 impl MechModelBundle {
     pub fn new(asset_server: &Res<AssetServer>, scale: f32) -> MechModelBundle {
         MechModelBundle {
+            animation_player: AnimationPlayer::default(),
             scene: SceneBundle {
                 scene: asset_server.load("models/units/mech.gltf#Scene0"),
                 transform: Transform {

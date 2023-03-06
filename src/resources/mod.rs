@@ -1,6 +1,6 @@
 mod config;
 
-use bevy::prelude::{Deref, DerefMut, Resource};
+use bevy::prelude::*;
 use rand::SeedableRng;
 
 pub use config::*;
@@ -13,3 +13,6 @@ impl SmallRng {
         SmallRng(rand::rngs::SmallRng::from_entropy())
     }
 }
+
+#[derive(Resource)]
+pub struct MechWalkingAnimation(pub Handle<AnimationClip>);

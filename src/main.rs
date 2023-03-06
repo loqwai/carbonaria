@@ -83,6 +83,7 @@ fn main() {
         .with_system(systems::move_thing)
         .with_system(systems::on_move_event_update_sprite_animation)
         .with_system(systems::on_move_event_update_3d_rotation)
+        .with_system(systems::on_move_event_advance_3d_walking_animation)
         .with_system(systems::calculate_rate_of_fire)
         .with_system(systems::rotate_thing)
         // .with_system(systems::detect_exit)
@@ -103,6 +104,7 @@ fn main() {
         .with_system(load_sprites)
         .with_system(systems::spawn_camera)
         .with_system(systems::spawn_player)
+        .with_system(systems::load_mech_walking_animation)
         .with_system(systems::spawn_ui)
         .with_system(systems::spawn_crosshairs)
         .with_system(systems::spawn_lights);

@@ -37,7 +37,7 @@ pub struct Config {
     pub camera_follow_interpolation: f32,
     #[arg(long, default_value_t = 100)]
     pub mob_spawn_interval: usize,
-    #[arg(long, default_value_t = 1799)]
+    #[arg(long, default_value_t = 100)]
     pub mech_spawn_interval: usize,
     #[arg(long, default_value_t = 100)]
     pub powerup_spawn_interval: usize,
