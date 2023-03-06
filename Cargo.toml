@@ -16,7 +16,7 @@ opt-level = 3
 
 # Swap these for productio builds:
 # bevy = { version = "0.9.1", features = ["dynamic"] }
-bevy = { version = "0.9.1" }
+bevy = { version = "0.10.0" }
 # bevy-inspector-egui = "0.17.0"
 derive-error = "0.0.5"
 bevy_rapier2d = "0.20.0"
