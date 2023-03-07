@@ -98,4 +98,5 @@ pub enum AmmoType {
     Poison,
     RageQuit,
     Reverser,
+    BeeSting,
 }

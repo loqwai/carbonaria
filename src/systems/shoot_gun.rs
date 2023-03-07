@@ -66,6 +66,7 @@ pub fn shoot_gun(
             AmmoType::Poison => "poison",
             AmmoType::RageQuit => "ragequit",
             AmmoType::Reverser => "reverser",
+            AmmoType::BeeSting => "beesting",
         };
 
         let model_name = "laser";
