@@ -59,6 +59,13 @@ pub fn shoot_gun(
                     parent.spawn(Math::add(TimeToLive(300)));
                 })
                 .id(),
+            AmmoType::BeeSting => commands
+                .spawn_empty()
+                .insert(Math::add(Health(-10.0)))
+                .with_children(|parent| {
+                    parent.spawn(Math::add(TimeToLive(60 * 5)));
+                })
+                .id(),
         };
 
         let texture = match active_ammo.0 {
