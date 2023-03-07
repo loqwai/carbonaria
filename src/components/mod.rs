@@ -100,3 +100,9 @@ pub enum AmmoType {
     Reverser,
     BeeSting,
 }
+
+#[derive(Component, Debug)]
+pub struct Instigator(pub Entity);
+
+#[derive(Component, Debug)]
+pub struct BeeSting;

@@ -4,7 +4,7 @@ use crate::{
     bundles::{BulletBundle, BulletModelBundle},
     components::{
         ActiveAmmo, AmmoCount, AmmoType, Chest, Health, LaserGun, Math, Poison, RateOfFire, Speed,
-        TimeToLive,
+        TimeToLive, Instigator, BeeSting,
     },
     events::ShootEvent,
     resources::Config,
@@ -62,9 +62,8 @@ pub fn shoot_gun(
             AmmoType::BeeSting => commands
                 .spawn_empty()
                 .insert(Math::add(Health(-10.0)))
-                .with_children(|parent| {
-                    parent.spawn(Math::add(TimeToLive(60 * 5)));
-                })
+                .insert(Instigator(event.gun))
+                .insert(BeeSting)
                 .id(),
         };
 

@@ -6,16 +6,18 @@ fn next_ammo(current: AmmoType) -> AmmoType {
         AmmoType::Normal => AmmoType::Poison,
         AmmoType::Poison => AmmoType::RageQuit,
         AmmoType::RageQuit => AmmoType::Reverser,
-        AmmoType::Reverser => AmmoType::Normal,
+        AmmoType::Reverser => AmmoType::BeeSting,
+        AmmoType::BeeSting => AmmoType::Normal,
     }
 }
 
 fn previous_ammo(current: AmmoType) -> AmmoType {
     match current {
-        AmmoType::Normal => AmmoType::Reverser,
+        AmmoType::Normal => AmmoType::BeeSting,
         AmmoType::Poison => AmmoType::Normal,
         AmmoType::RageQuit => AmmoType::Poison,
         AmmoType::Reverser => AmmoType::RageQuit,
+        AmmoType::BeeSting => AmmoType::Reverser,
     }
 }
 

@@ -20,5 +20,4 @@ pub struct DespawnEvent {
 }
 pub struct ShootEvent {
     pub gun: Entity,
-    pub shot_by: Entity,
 }
