@@ -86,7 +86,7 @@ impl MechModelBundle {
         MechModelBundle {
             animation_player: AnimationPlayer::default(),
             scene: SceneBundle {
-                scene: asset_server.load("models/units/mech.gltf#Scene0"),
+                scene: asset_server.load("models/units/mech2.gltf#Scene0"),
                 transform: Transform {
                     scale: Vec3::splat(RADIUS * SCALE_FACTOR_3D * scale),
                     ..default()
