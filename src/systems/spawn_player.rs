@@ -28,6 +28,6 @@ pub fn spawn_player(
             parent.spawn(Math::add(AmmoCount(5)));
             parent.spawn(Math::add(RateOfFire(1.0)));
             parent.spawn(Math::add(Speed(7.5)));
-            parent.spawn(Math::add(Health(75.0)));
+            parent.spawn(Math::add(Health(750.0)));
         });
 }

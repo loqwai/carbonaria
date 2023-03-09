@@ -31,7 +31,7 @@ pub fn spawn_mobs(
                 gun.spawn(Math::add(AmmoCount(isize::MAX)));
             });
             parent.spawn(Math::add(RateOfFire(1.0)));
-            parent.spawn(Math::add(Speed(1.0)));
+            parent.spawn(Math::add(Speed(1.5)));
             parent.spawn(Math::add(Health(10.0)));
         });
 }
