@@ -41,6 +41,7 @@ fn main() {
         .with_system(systems::follow_player_with_camera)
         .with_system(systems::on_no_players_show_game_over)
         .with_system(systems::on_click_and_no_player_reset)
+        .with_system(systems::update_sprite_animation_for_always_animate)
         .with_system(systems::update_sprite_index);
 
     let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)

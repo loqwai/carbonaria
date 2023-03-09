@@ -43,6 +43,7 @@ mod time_to_live;
 mod update_compass;
 mod update_health_ui;
 mod update_score_ui;
+mod update_sprite_animation_for_always_animate;
 mod update_sprite_index;
 
 pub use attach_poison::attach_poison;
@@ -90,4 +91,5 @@ pub use time_to_live::time_to_live;
 pub use update_compass::update_compass;
 pub use update_health_ui::update_health_ui;
 pub use update_score_ui::update_score_ui;
+pub use update_sprite_animation_for_always_animate::update_sprite_animation_for_always_animate;
 pub use update_sprite_index::update_sprite_index;
