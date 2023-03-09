@@ -34,6 +34,9 @@ pub struct Wall;
 #[derive(Component)]
 pub struct AlwaysAnimate;
 
+#[derive(Component)]
+pub struct SpinMe(pub f32);
+
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 pub struct Points(pub usize);

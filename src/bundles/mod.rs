@@ -8,7 +8,7 @@ mod mech;
 mod mob;
 mod player;
 
-pub use chest::ChestBundle;
+pub use chest::*;
 pub use compass::CompassBundle;
 pub use health::HealthBundle;
 
