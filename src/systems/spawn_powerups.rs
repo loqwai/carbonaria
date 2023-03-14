@@ -24,10 +24,10 @@ pub fn spawn_powerups(
             0 => (
                 commands.spawn(Math::add(Speed(1.0))).id(),
                 "fast",
-                Vec2::new(512.0, 512.0),
-                (1, 1),
-                1,
-                None,
+                Vec2::new(128.0, 128.0),
+                (8, 8),
+                63,
+                Some("fast"),
             ),
             1 => (
                 commands.spawn(Math::add(Speed(-1.0))).id(),
