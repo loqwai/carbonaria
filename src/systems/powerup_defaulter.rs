@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 pub fn powerup_defaulter<T: Component + Default>(mut powerup_target: Query<&mut T>) {
-    powerup_target.for_each_mut(|mut target| {
+    for mut target in powerup_target.iter_mut() {
         *target = T::default();
-    });
+    }
 }

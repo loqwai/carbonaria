@@ -27,9 +27,9 @@ pub fn sync_mouse_position(
         let Some(ray) = camera.viewport_to_world(camera_transform, screen_pos) else { return; };
         let Some(point) = get_point_on_plane(&ray, Vec3::ZERO, Vec3::Z) else { return; };
 
-        q_mouse.for_each_mut(|mut mouse| {
+        for mut mouse in q_mouse.iter_mut() {
             mouse.translation = point;
-        });
+        }
     }
 }
 

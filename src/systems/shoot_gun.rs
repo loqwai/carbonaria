@@ -18,13 +18,13 @@ pub fn shoot_gun(
     config: Res<Config>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    guns.for_each_mut(|(mut gun, _, _, _)| {
+    for (mut gun, _, _, _) in guns.iter_mut() {
         if gun.cooldown > 0 {
             gun.cooldown = gun.cooldown.saturating_sub(gun.cooldown_rate);
         }
-    });
+    }
 
-    for event in shoot_events.iter() {
+    for event in shoot_events.read() {
         let Ok((mut gun, ammo, active_ammo, transform)) = guns.get_mut(event.gun) else { continue; };
 
         if gun.cooldown > 0 {
