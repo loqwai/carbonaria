@@ -10,12 +10,12 @@ pub fn spawn_player(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     config: Res<Config>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
     commands
         .spawn(PlayerBundle::new(
             &asset_server,
-            &mut texture_atlases,
+            &mut texture_atlas_layouts,
             config.scale,
         ))
         .with_children(|parent| {

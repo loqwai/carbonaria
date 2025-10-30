@@ -16,7 +16,7 @@ pub fn shoot_gun(
     mut shoot_events: EventReader<ShootEvent>,
     mut guns: Query<(&mut LaserGun, &AmmoCount, &ActiveAmmo, &GlobalTransform)>,
     config: Res<Config>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
     guns.for_each_mut(|(mut gun, _, _, _)| {
         if gun.cooldown > 0 {
@@ -74,7 +74,7 @@ pub fn shoot_gun(
         commands
             .spawn(BulletBundle::new(
                 &asset_server,
-                &mut texture_atlases,
+                &mut texture_atlas_layouts,
                 transform
                     .mul_transform(Transform::from_translation(Vec3::new(
                         250.0 * config.scale,

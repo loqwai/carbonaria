@@ -13,22 +13,16 @@ impl HealthBundle {
         HealthBundle {
             target: HealthTarget,
             text_2d_bundle: Text2dBundle {
-                text: Text {
-                    sections: vec![TextSection {
-                        value: "asdsad".to_string(),
-                        style: TextStyle {
-                            font: asset_server.load("fonts/10100.otf"),
-                            font_size: 72.0,
-                            color: Color::WHITE,
-                        },
-                    }],
-                    alignment: TextAlignment {
-                        vertical: VerticalAlign::Bottom,
-                        horizontal: HorizontalAlign::Center,
+                text: Text::from_section(
+                    "asdsad",
+                    TextStyle {
+                        font: asset_server.load("fonts/10100.otf"),
+                        font_size: 72.0,
+                        color: Color::WHITE,
                     },
-                    ..Default::default()
-                },
-            transform: Transform {
+                ),
+                text_anchor: bevy::sprite::Anchor::Center,
+                transform: Transform {
                     translation: Vec3::new(0.0, -150.0, 0.0),
                     ..Default::default()
                 },

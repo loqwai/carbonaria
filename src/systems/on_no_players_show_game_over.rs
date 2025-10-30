@@ -12,22 +12,20 @@ pub fn on_no_players_show_game_over(
         return;
     }
 
-    other_uis.for_each_mut(|ui| commands.entity(ui).despawn());
+    for ui in other_uis.iter_mut() {
+        commands.entity(ui).despawn();
+    }
 
     commands
         .spawn(NodeBundle {
             style: Style {
-                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+                width: Val::Percent(100.0),
+                height: Val::Percent(100.0),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 ..Default::default()
             },
-            background_color: BackgroundColor(Color::Rgba {
-                red: 0.0,
-                green: 0.0,
-                blue: 0.0,
-                alpha: 0.9,
-            }),
+            background_color: BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.9)),
             ..Default::default()
         })
         .with_children(|parent| {
@@ -37,31 +35,24 @@ pub fn on_no_players_show_game_over(
                         flex_grow: 0.0,
                         ..Default::default()
                     },
-                    text: Text {
-                        alignment: TextAlignment {
-                            vertical: VerticalAlign::Center,
-                            horizontal: HorizontalAlign::Center,
+                    text: Text::from_sections([
+                        TextSection {
+                            value: "Game Over\n".to_string(),
+                            style: TextStyle {
+                                font: asset_server.load("fonts/10100.otf"),
+                                font_size: 100.0,
+                                color: Color::WHITE,
+                            },
                         },
-                        sections: vec![
-                            TextSection {
-                                value: "Game Over\n".to_string(),
-                                style: TextStyle {
-                                    font: asset_server.load("fonts/10100.otf"),
-                                    font_size: 100.0,
-                                    color: Color::WHITE,
-                                },
+                        TextSection {
+                            value: "Click to reset".to_string(),
+                            style: TextStyle {
+                                font: asset_server.load("fonts/10100.otf"),
+                                font_size: 50.0,
+                                color: Color::WHITE,
                             },
-                            TextSection {
-                                value: "Click to reset".to_string(),
-                                style: TextStyle {
-                                    font: asset_server.load("fonts/10100.otf"),
-                                    font_size: 50.0,
-                                    color: Color::WHITE,
-                                },
-                            },
-                        ],
-                        ..Default::default()
-                    },
+                        },
+                    ]),
                     ..Default::default()
                 })
                 .insert(GameOverUI);

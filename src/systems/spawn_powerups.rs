@@ -7,7 +7,7 @@ use rand::Rng;
 
 pub fn spawn_powerups(
     mut commands: Commands,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
     ticker: Res<Tick>,
     asset_server: Res<AssetServer>,
     config: Res<Config>,
@@ -68,7 +68,7 @@ pub fn spawn_powerups(
     commands
         .spawn(ChestBundle::new(
             &asset_server,
-            &mut texture_atlases,
+            &mut texture_atlas_layouts,
             position,
             config.scale,
             sprite,

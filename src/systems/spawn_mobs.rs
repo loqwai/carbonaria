@@ -11,7 +11,7 @@ pub fn spawn_mobs(
     asset_server: Res<AssetServer>,
     config: Res<Config>,
     mut rng: ResMut<SmallRng>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
     let ticks = ticker.0;
     if ticks % config.mob_spawn_interval != 0 {
@@ -21,7 +21,7 @@ pub fn spawn_mobs(
     commands
         .spawn(MobBundle::new(
             &asset_server,
-            &mut texture_atlases,
+            &mut texture_atlas_layouts,
             position,
             config.scale,
         ))

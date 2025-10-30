@@ -11,7 +11,7 @@ pub fn spawn_mechs(
     asset_server: Res<AssetServer>,
     config: Res<Config>,
     mut rng: ResMut<SmallRng>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
     let ticks = ticker.0;
     if ticks % config.mech_spawn_interval != 0 {
@@ -21,7 +21,7 @@ pub fn spawn_mechs(
     commands
         .spawn(MechBundle::new(
             &asset_server,
-            &mut texture_atlases,
+            &mut texture_atlas_layouts,
             position,
             config.scale,
         ))
