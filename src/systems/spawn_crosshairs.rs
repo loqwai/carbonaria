@@ -3,10 +3,12 @@ use crate::{
     resources::{CameraType, Config},
 };
 use bevy::prelude::*;
+use bevy::window::CursorGrabMode;
+
 pub fn spawn_crosshairs(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut windows: ResMut<Windows>,
+    mut q_window: Query<&mut Window>,
     config: Res<Config>,
 ) {
     if config.camera_type != CameraType::Camera2d {
@@ -20,6 +22,8 @@ pub fn spawn_crosshairs(
             ..Default::default()
         })
         .insert(MousePos);
-    let window = windows.get_primary_mut().unwrap();
-    window.set_cursor_visibility(false);
+
+    if let Ok(mut window) = q_window.get_single_mut() {
+        window.cursor.visible = false;
+    }
 }

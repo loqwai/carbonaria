@@ -14,15 +14,14 @@ opt-level = 3
 
 [dependencies]
 
-# Swap these for productio builds:
-# bevy = { version = "0.9.1", features = ["dynamic"] }
-bevy = { version = "0.9.1" }
-# bevy-inspector-egui = "0.17.0"
+# Swap these for production builds:
+# bevy = { version = "0.14", features = ["dynamic"] }
+bevy = { version = "0.14" }
 derive-error = "0.0.5"
-bevy_rapier2d = "0.20.0"
-rand = { version = "0.8.5",  features = ["small_rng"] }
-bevy-inspector-egui = "0.17.0"
-clap = { version = "4.1.8", features = ["derive"] }
+bevy_rapier2d = "0.27"
+rand = { version = "0.8.5", features = ["small_rng"] }
+bevy-inspector-egui = "0.25"
+clap = { version = "4.5", features = ["derive"] }
 
 
 [[bin]]
