@@ -16,8 +16,9 @@ use resources::{Config, SmallRng};
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
 
-#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq, States, Default)]
 pub enum AppState {
+    #[default]
     InGame,
 }
 
