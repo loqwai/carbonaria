@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     components::Player,
-    resources::{CameraType::*, Config},
+    resources::{CameraType, Config},
 };
 
 pub fn follow_player_with_camera(
@@ -11,8 +11,8 @@ pub fn follow_player_with_camera(
     q_camera: Query<&mut Transform, (With<Camera>, Without<Player>)>,
 ) {
     match config.camera_type {
-        Camera2d => follow_player_with_camera_2d(config, q_player, q_camera),
-        Camera3d => follow_player_with_camera_3d(config, q_player, q_camera),
+        CameraType::Camera2d => follow_player_with_camera_2d(config, q_player, q_camera),
+        CameraType::Camera3d => follow_player_with_camera_3d(config, q_player, q_camera),
     }
 }
 

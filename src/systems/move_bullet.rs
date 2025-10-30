@@ -9,12 +9,12 @@ pub fn move_bullet(
     bullets: Query<(Entity, &Direction), With<Bullet>>,
     mut move_events: EventWriter<MoveEvent>,
 ) {
-    bullets.for_each(|(entity, direction)| {
+    for (entity, direction) in bullets.iter() {
         let direction = direction.0 * Vec3::X;
 
         move_events.send(MoveEvent {
             who: entity,
             direction,
         });
-    });
+    }
 }

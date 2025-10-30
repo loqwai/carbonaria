@@ -6,7 +6,7 @@ mod resources;
 mod systems;
 mod util;
 
-use bevy::{prelude::*, time::FixedTimestep};
+use bevy::prelude::*;
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 use clap::Parser;
@@ -24,102 +24,31 @@ pub enum AppState {
 
 #[derive(Resource, Default)]
 struct Sprites {
-    handles: Vec<HandleUntyped>,
+    handles: Vec<UntypedHandle>,
 }
 
 fn load_sprites(mut sprite_handles: ResMut<Sprites>, asset_server: Res<AssetServer>) {
     sprite_handles.handles = asset_server.load_folder("sprites").unwrap();
 }
 
+// System sets for ordering
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+struct ComputePowerupsSet;
+
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+struct GameLoopSet;
+
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+struct GameLoopCleanupSet;
+
 fn main() {
     let config = Config::parse();
-    // group ui systems together bc we want to run them as fast as possible
-    let ui_system_set = SystemSet::on_update(AppState::InGame)
-        .with_system(systems::update_compass)
-        .with_system(systems::update_score_ui)
-        .with_system(systems::update_health_ui)
-        .with_system(systems::sync_mouse_position)
-        .with_system(systems::follow_player_with_camera)
-        .with_system(systems::on_no_players_show_game_over)
-        .with_system(systems::on_click_and_no_player_reset)
-        .with_system(systems::spin_spin_me)
-        .with_system(systems::update_sprite_animation_for_always_animate)
-        .with_system(systems::update_sprite_index);
-
-    let compute_powerups_system_set = SystemSet::on_update(AppState::InGame)
-        .label("compute_powerups_system_set")
-        .with_system(systems::powerup_defaulter::<Speed>)
-        .with_system(systems::powerup_mather::<Speed>.after(systems::powerup_defaulter::<Speed>))
-        .with_system(systems::powerup_defaulter::<Health>)
-        .with_system(systems::powerup_mather::<Health>.after(systems::powerup_defaulter::<Health>))
-        .with_system(systems::powerup_defaulter::<RateOfFire>)
-        .with_system(
-            systems::powerup_mather::<RateOfFire>.after(systems::powerup_defaulter::<RateOfFire>),
-        )
-        .with_system(systems::powerup_defaulter::<TimeToLive>)
-        .with_system(
-            systems::powerup_mather::<TimeToLive>.after(systems::powerup_defaulter::<TimeToLive>),
-        )
-        .with_system(systems::powerup_defaulter::<Poison>)
-        .with_system(systems::powerup_mather::<Poison>.after(systems::powerup_defaulter::<Poison>))
-        .with_system(systems::powerup_defaulter::<AmmoCount>)
-        .with_system(
-            systems::powerup_mather::<AmmoCount>.after(systems::powerup_defaulter::<AmmoCount>),
-        );
-
-    let game_loop_system_set = SystemSet::on_update(AppState::InGame)
-        .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-        // .with_system(systems::debug_time)
-        .with_system(systems::count_ticks) //this may be off by one
-        .with_system(systems::shoot_gun)
-        .with_system(systems::move_bullet)
-        .with_system(systems::spawn_mechs)
-        .with_system(systems::spawn_mobs)
-        .with_system(systems::chasers_follow_other_teams)
-        .with_system(systems::player_aimables_aim_at_cursor)
-        .with_system(systems::chaser_aimables_aim_at_other_teams)
-        .with_system(systems::on_scroll_wheel_switch_ammo)
-        .with_system(systems::on_f_key_switch_ammo)
-        .with_system(systems::on_left_click_shoot)
-        .with_system(systems::mob_shoot)
-        .with_system(systems::move_player)
-        .with_system(systems::move_thing)
-        .with_system(systems::on_move_event_update_sprite_animation)
-        .with_system(systems::on_move_event_update_3d_rotation)
-        .with_system(systems::on_move_event_advance_3d_walking_animation)
-        .with_system(systems::calculate_rate_of_fire)
-        .with_system(systems::rotate_thing)
-        // .with_system(systems::detect_exit)
-        .with_system(systems::team_powerup_assigns_team)
-        .with_system(systems::on_chest_hit_pickup)
-        .with_system(systems::spawn_powerups)
-        .with_system(systems::attach_time_to_live)
-        .with_system(systems::time_to_live)
-        .with_system(systems::on_0_health_kill)
-        .with_system(systems::poison)
-        .with_system(systems::attach_poison)
-        .label("game_loop_system_set");
-
-    let game_loop_cleanup_system_set =
-        SystemSet::on_update(AppState::InGame).with_system(systems::consume_despawn_entity_events);
-
-    let startup_system_set = SystemSet::on_enter(AppState::InGame)
-        .with_system(load_sprites)
-        .with_system(systems::spawn_camera)
-        .with_system(systems::spawn_player)
-        .with_system(systems::load_mech_walking_animation)
-        .with_system(systems::spawn_ui)
-        .with_system(systems::spawn_crosshairs)
-        .with_system(systems::spawn_lights);
-
-    let cleanup_system_set =
-        SystemSet::on_exit(AppState::InGame).with_system(systems::remove_all_entities);
 
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
-        .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-        // .add_plugin(RapierDebugRenderPlugin::default()) // the physics debug UI
-        // .add_plugin(WorldInspectorPlugin)
+        .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
+        // .add_plugins(RapierDebugRenderPlugin::default()) // the physics debug UI
+        // .add_plugins(WorldInspectorPlugin)
         .insert_resource(RapierConfiguration {
             gravity: Vec2::ZERO,
             ..Default::default()
@@ -133,13 +62,124 @@ fn main() {
         .add_event::<events::DamagerHitEvent>()
         .add_event::<events::DespawnEvent>()
         .add_event::<events::ShootEvent>()
-        .add_state(AppState::InGame)
-        .add_startup_system(systems::resize_window)
-        .add_system_set(startup_system_set)
-        .add_system_set(ui_system_set)
-        .add_system_set(compute_powerups_system_set)
-        .add_system_set(game_loop_system_set.after("compute_powerups_system_set"))
-        .add_system_set(game_loop_cleanup_system_set.after("game_loop_system_set"))
-        .add_system_set(cleanup_system_set)
+        .init_state::<AppState>()
+        // Startup systems
+        .add_systems(Startup, systems::resize_window)
+        // OnEnter(AppState::InGame) systems
+        .add_systems(
+            OnEnter(AppState::InGame),
+            (
+                load_sprites,
+                systems::spawn_camera,
+                systems::spawn_player,
+                systems::load_mech_walking_animation,
+                systems::spawn_ui,
+                systems::spawn_crosshairs,
+                systems::spawn_lights,
+            ),
+        )
+        // OnExit(AppState::InGame) systems
+        .add_systems(OnExit(AppState::InGame), systems::remove_all_entities)
+        // UI systems - run every frame
+        .add_systems(
+            Update,
+            (
+                systems::update_compass,
+                systems::update_score_ui,
+                systems::update_health_ui,
+                systems::sync_mouse_position,
+                systems::follow_player_with_camera,
+                systems::on_no_players_show_game_over,
+                systems::on_click_and_no_player_reset,
+                systems::spin_spin_me,
+                systems::update_sprite_animation_for_always_animate,
+                systems::update_sprite_index,
+            )
+                .run_if(in_state(AppState::InGame)),
+        )
+        // Powerup computation systems - run in FixedUpdate
+        .add_systems(
+            FixedUpdate,
+            (
+                (
+                    systems::powerup_defaulter::<Speed>,
+                    systems::powerup_mather::<Speed>,
+                )
+                    .chain(),
+                (
+                    systems::powerup_defaulter::<Health>,
+                    systems::powerup_mather::<Health>,
+                )
+                    .chain(),
+                (
+                    systems::powerup_defaulter::<RateOfFire>,
+                    systems::powerup_mather::<RateOfFire>,
+                )
+                    .chain(),
+                (
+                    systems::powerup_defaulter::<TimeToLive>,
+                    systems::powerup_mather::<TimeToLive>,
+                )
+                    .chain(),
+                (
+                    systems::powerup_defaulter::<Poison>,
+                    systems::powerup_mather::<Poison>,
+                )
+                    .chain(),
+                (
+                    systems::powerup_defaulter::<AmmoCount>,
+                    systems::powerup_mather::<AmmoCount>,
+                )
+                    .chain(),
+            )
+                .in_set(ComputePowerupsSet)
+                .run_if(in_state(AppState::InGame)),
+        )
+        // Game loop systems - run in FixedUpdate after powerups
+        .add_systems(
+            FixedUpdate,
+            (
+                systems::count_ticks,
+                systems::shoot_gun,
+                systems::move_bullet,
+                systems::spawn_mechs,
+                systems::spawn_mobs,
+                systems::chasers_follow_other_teams,
+                systems::player_aimables_aim_at_cursor,
+                systems::chaser_aimables_aim_at_other_teams,
+                systems::on_scroll_wheel_switch_ammo,
+                systems::on_f_key_switch_ammo,
+                systems::on_left_click_shoot,
+                systems::mob_shoot,
+                systems::move_player,
+                systems::move_thing,
+                systems::on_move_event_update_sprite_animation,
+                systems::on_move_event_update_3d_rotation,
+                systems::on_move_event_advance_3d_walking_animation,
+                systems::calculate_rate_of_fire,
+                systems::rotate_thing,
+                systems::team_powerup_assigns_team,
+                systems::on_chest_hit_pickup,
+                systems::spawn_powerups,
+                systems::attach_time_to_live,
+                systems::time_to_live,
+                systems::on_0_health_kill,
+                systems::poison,
+                systems::attach_poison,
+            )
+                .in_set(GameLoopSet)
+                .after(ComputePowerupsSet)
+                .run_if(in_state(AppState::InGame)),
+        )
+        // Cleanup systems - run in FixedUpdate after game loop
+        .add_systems(
+            FixedUpdate,
+            systems::consume_despawn_entity_events
+                .in_set(GameLoopCleanupSet)
+                .after(GameLoopSet)
+                .run_if(in_state(AppState::InGame)),
+        )
+        .configure_sets(FixedUpdate, (ComputePowerupsSet, GameLoopSet, GameLoopCleanupSet).chain())
+        .insert_resource(Time::<Fixed>::from_seconds(TIME_STEP as f64))
         .run();
 }

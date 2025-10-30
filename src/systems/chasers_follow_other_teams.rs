@@ -11,7 +11,7 @@ pub fn chasers_follow_other_teams(
     targets: Query<(&Team, &Transform)>,
     mut move_events: EventWriter<MoveEvent>,
 ) {
-    chasers.for_each(|(chaser_entity, chaser_team, chaser_transform)| {
+    chasers.iter().for_each(|(chaser_entity, chaser_team, chaser_transform)| {
         match targets.iter().find(|(team, _)| team != &chaser_team) {
             None => return,
             Some((_, target_transform)) => {
