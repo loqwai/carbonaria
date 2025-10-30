@@ -1,4 +1,4 @@
-use bevy::{math::Vec3, prelude::*, sprite::SpriteSheetBundle};
+use bevy::{math::Vec3, prelude::*};
 use bevy_rapier2d::prelude::*;
 
 use crate::{
@@ -21,7 +21,8 @@ pub struct MechBundle {
     pub team: Team,
     pub health: Health,
     pub chases: Chases,
-    pub sprite_sheet_bundle: SpriteSheetBundle,
+    pub sprite: SpriteBundle,
+    pub texture_atlas: TextureAtlas,
     pub sprite_animation: SpriteAnimation,
     pub axis_constraints: LockedAxes,
     pub rate_of_fire: RateOfFire,
@@ -30,14 +31,19 @@ pub struct MechBundle {
 impl MechBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
-        texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        texture_atlas_layouts: &mut ResMut<Assets<TextureAtlasLayout>>,
         position: Vec3,
         scale: f32,
     ) -> MechBundle {
         let texture = asset_server.get_handle("sprites/units/mech2.png");
-        let texture_atlas =
-            TextureAtlas::from_grid(texture, Vec2::new(128.0, 128.0), 28, 28, None, None);
-        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+        let layout = TextureAtlasLayout::from_grid(
+            UVec2::new(128, 128),
+            28,
+            28,
+            None,
+            None,
+        );
+        let texture_atlas_layout = texture_atlas_layouts.add(layout);
 
         MechBundle {
             auto_shoot: AutoShoot,
@@ -49,18 +55,21 @@ impl MechBundle {
             mech: Mech,
             pockets: Pocket,
             rigid_body: RigidBody::Dynamic,
-            sprite_sheet_bundle: SpriteSheetBundle {
-                texture_atlas: texture_atlas_handle,
+            sprite: SpriteBundle {
+                sprite: Sprite {
+                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
+                    ..Default::default()
+                },
+                texture,
                 transform: Transform {
                     translation: position,
                     ..Default::default()
                 },
-                sprite: TextureAtlasSprite {
-                    custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    index: 7,
-                    ..Default::default()
-                },
                 ..Default::default()
+            },
+            texture_atlas: TextureAtlas {
+                layout: texture_atlas_layout,
+                index: 7,
             },
             sprite_animation: SpriteAnimation {
                 num_angles: 16,

@@ -19,7 +19,8 @@ pub struct PlayerBundle {
     pub name: Name,
     pub pockets: Pocket,
     pub active_events: ActiveEvents,
-    pub sprite: SpriteSheetBundle,
+    pub sprite: SpriteBundle,
+    pub texture_atlas: TextureAtlas,
     pub sprite_animation: SpriteAnimation,
     pub rigid_body: RigidBody,
     pub rate_of_fire: RateOfFire,
@@ -30,13 +31,18 @@ pub struct PlayerBundle {
 impl PlayerBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
-        texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        texture_atlas_layouts: &mut ResMut<Assets<TextureAtlasLayout>>,
         scale: f32,
     ) -> PlayerBundle {
         let texture = asset_server.get_handle("sprites/units/player.png");
-        let texture_atlas =
-            TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
-        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+        let layout = TextureAtlasLayout::from_grid(
+            UVec2::new(512, 512),
+            4,
+            4,
+            None,
+            None,
+        );
+        let texture_atlas_layout = texture_atlas_layouts.add(layout);
 
         PlayerBundle {
             ammo: AmmoCount(0),
@@ -50,14 +56,17 @@ impl PlayerBundle {
             pockets: Pocket,
             points: Points(0),
             rigid_body: RigidBody::Dynamic,
-            sprite: SpriteSheetBundle {
-                sprite: TextureAtlasSprite {
+            sprite: SpriteBundle {
+                sprite: Sprite {
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    index: 0,
                     ..Default::default()
                 },
-                texture_atlas: texture_atlas_handle,
+                texture,
                 ..Default::default()
+            },
+            texture_atlas: TextureAtlas {
+                layout: texture_atlas_layout,
+                index: 0,
             },
             sprite_animation: SpriteAnimation {
                 num_angles: 16,

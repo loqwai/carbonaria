@@ -13,7 +13,8 @@ const RADIUS: f32 = 64.0;
 #[derive(Bundle)]
 pub struct BulletBundle {
     pub tag: Bullet,
-    pub sprite: SpriteSheetBundle,
+    pub sprite: SpriteBundle,
+    pub texture_atlas: TextureAtlas,
     pub sprite_animation: SpriteAnimation,
     pub direction: Direction,
     pub active_events: ActiveEvents,
@@ -25,16 +26,21 @@ pub struct BulletBundle {
 impl BulletBundle {
     pub fn new(
         asset_server: &Res<AssetServer>,
-        texture_atlases: &mut ResMut<Assets<TextureAtlas>>,
+        texture_atlas_layouts: &mut ResMut<Assets<TextureAtlasLayout>>,
         transform: Transform,
         texture_name: &str,
         scale: f32,
     ) -> BulletBundle {
         let texture = asset_server.get_handle(format!("sprites/bullets/{}.png", texture_name));
-        let texture_atlas =
-            TextureAtlas::from_grid(texture, Vec2::new(512.0, 512.0), 4, 4, None, None);
-        let texture_atlas_len = texture_atlas.len();
-        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+        let layout = TextureAtlasLayout::from_grid(
+            UVec2::new(512, 512),
+            4,
+            4,
+            None,
+            None,
+        );
+        let texture_atlas_len = layout.len();
+        let texture_atlas_layout = texture_atlas_layouts.add(layout);
 
         BulletBundle {
             active_events: ActiveEvents::COLLISION_EVENTS,
@@ -42,15 +48,18 @@ impl BulletBundle {
             sensor: Sensor,
             direction: Direction(transform.rotation),
             speed: Speed(BASE_SPEED * scale),
-            sprite: SpriteSheetBundle {
-                sprite: TextureAtlasSprite {
+            sprite: SpriteBundle {
+                sprite: Sprite {
                     custom_size: Some(Vec2::new(RADIUS * scale * 2.0, RADIUS * scale * 2.0)),
-                    index: index_for_direction(transform.rotation * Vec3::X, texture_atlas_len),
                     ..Default::default()
                 },
-                texture_atlas: texture_atlas_handle,
+                texture,
                 transform: Transform::from_translation(transform.translation),
                 ..Default::default()
+            },
+            texture_atlas: TextureAtlas {
+                layout: texture_atlas_layout,
+                index: index_for_direction(transform.rotation * Vec3::X, texture_atlas_len),
             },
             sprite_animation: SpriteAnimation {
                 num_angles: 16,
