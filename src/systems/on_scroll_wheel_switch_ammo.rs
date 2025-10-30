@@ -24,7 +24,7 @@ pub fn on_scroll_wheel_switch_ammo(
     mut guns: Query<&mut ActiveAmmo>,
     mut wheel_events: EventReader<MouseWheel>,
 ) {
-    for event in wheel_events.iter() {
+    for event in wheel_events.read() {
         players.iter().for_each(|player_children| {
             player_children.iter().for_each(|&child| {
                 if let Ok(mut active_weapon) = guns.get_mut(child) {

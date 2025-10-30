@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
 pub fn remove_all_entities(mut commands: Commands, entities: Query<Entity>) {
-    entities.for_each(|e| commands.entity(e).despawn())
+    for e in entities.iter() {
+        commands.entity(e).despawn();
+    }
 }

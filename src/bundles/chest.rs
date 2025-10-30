@@ -33,7 +33,7 @@ impl ChestBundle {
         num_frames: usize,
         contents: Vec<Entity>,
     ) -> ChestBundle {
-        let texture_handle = asset_server.get_handle(format!("sprites/chests/{}.png", texture));
+        let texture_handle = asset_server.load(format!("sprites/chests/{}.png", texture));
         let layout = TextureAtlasLayout::from_grid(
             tile_size.as_uvec2(),
             num_cols as u32,

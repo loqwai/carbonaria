@@ -12,20 +12,21 @@ pub fn player_aimables_aim_at_cursor(
     aimables: Query<(Entity, &GlobalTransform), With<Aimable>>,
     mut rotate_events: EventWriter<RotateEvent>,
 ) {
-    mouses.iter().for_each(|mouse| {
-        players.for_each(|player_children| {
-            player_children
-                .iter()
-                .filter_map(|&child| aimables.get(child).ok())
-                .for_each(|(aimable, aimable_transform)| {
-                    let (rotation, _) =
-                        look_at_target(aimable_transform.translation(), mouse.translation);
+    for mouse in mouses.iter() {
+        for player_children in players.iter() {
+            for &child in player_children.iter() {
+                let Ok((aimable, aimable_transform)) = aimables.get(child) else {
+                    continue;
+                };
 
-                    rotate_events.send(RotateEvent {
-                        who: aimable,
-                        rotation,
-                    })
-                })
-        })
-    })
+                let (rotation, _) =
+                    look_at_target(aimable_transform.translation(), mouse.translation);
+
+                rotate_events.send(RotateEvent {
+                    who: aimable,
+                    rotation,
+                });
+            }
+        }
+    }
 }

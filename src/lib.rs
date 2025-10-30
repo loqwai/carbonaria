@@ -6,7 +6,10 @@ pub mod resources;
 pub mod systems;
 pub mod util;
 
-#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+use bevy::prelude::States;
+
+#[derive(Clone, Debug, Hash, Eq, PartialEq, States, Default)]
 pub enum AppState {
+    #[default]
     InGame,
 }

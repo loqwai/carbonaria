@@ -7,20 +7,21 @@ pub fn chaser_aimables_aim_at_other_teams(
     targets: Query<(&Team, &Transform)>,
     mut rotate_events: EventWriter<RotateEvent>,
 ) {
-    chasers.iter().for_each(|(chaser_children, chaser_team)| {
+    for (chaser_children, chaser_team) in chasers.iter() {
         if let Some((_, target_transform)) = targets.iter().find(|(team, _)| team != &chaser_team) {
-          chaser_children
-              .iter()
-              .filter_map(|&child| aimables.get(child).ok())
-              .iter().for_each(|(aimable, aimable_transform)| {
-                  let (rotation, _) =
-                      look_at_target(aimable_transform.translation(), target_transform.translation);
+            for &child in chaser_children.iter() {
+                let Ok((aimable, aimable_transform)) = aimables.get(child) else {
+                    continue;
+                };
 
-                  rotate_events.send(RotateEvent {
-                      who: aimable,
-                      rotation,
-                  })
-              })
+                let (rotation, _) =
+                    look_at_target(aimable_transform.translation(), target_transform.translation);
+
+                rotate_events.send(RotateEvent {
+                    who: aimable,
+                    rotation,
+                });
+            }
         }
-    })
+    }
 }

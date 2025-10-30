@@ -10,7 +10,7 @@ pub fn on_left_click_shoot(
     mut shoot_events: EventWriter<ShootEvent>,
     guns: Query<Entity, With<LaserGun>>,
 ) {
-    for _event in mouse_button_events.iter() {
+    for _event in mouse_button_events.read() {
         players.iter().for_each(|player_children| {
             player_children.iter().for_each(|&child| {
                 let Ok(gun) = guns.get(child) else { return; };

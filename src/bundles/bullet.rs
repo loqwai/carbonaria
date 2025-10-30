@@ -31,7 +31,7 @@ impl BulletBundle {
         texture_name: &str,
         scale: f32,
     ) -> BulletBundle {
-        let texture = asset_server.get_handle(format!("sprites/bullets/{}.png", texture_name));
+        let texture = asset_server.load(format!("sprites/bullets/{}.png", texture_name));
         let layout = TextureAtlasLayout::from_grid(
             UVec2::new(512, 512),
             4,

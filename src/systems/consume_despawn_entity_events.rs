@@ -6,8 +6,9 @@ pub fn consume_despawn_entity_events(
     mut commands: Commands,
     entities: Query<Entity>,
 ) {
-    despawn_events
-        .iter()
-        .filter_map(|event| entities.get(event.entity).ok())
-        .for_each(|entity| commands.entity(entity).despawn_recursive())
+    for event in despawn_events.read() {
+        if let Ok(entity) = entities.get(event.entity) {
+            commands.entity(entity).despawn_recursive();
+        }
+    }
 }

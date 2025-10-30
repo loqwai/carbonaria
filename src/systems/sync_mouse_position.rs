@@ -13,14 +13,8 @@ pub fn sync_mouse_position(
     let (camera, camera_transform) = q_camera.single();
 
     // get the window that the camera is displaying to
-    let window = match camera.target {
-        RenderTarget::Window(window_ref) => {
-            q_window.get(window_ref.entity()).ok()
-        }
-        _ => q_window.iter().next(),
-    };
-
-    let Some(window) = window else { return; };
+    // Assuming there's only one window
+    let window = q_window.single();
 
     // check if the cursor is inside the window and get its position
     if let Some(screen_pos) = window.cursor_position() {

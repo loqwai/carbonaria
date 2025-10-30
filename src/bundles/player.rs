@@ -34,7 +34,7 @@ impl PlayerBundle {
         texture_atlas_layouts: &mut ResMut<Assets<TextureAtlasLayout>>,
         scale: f32,
     ) -> PlayerBundle {
-        let texture = asset_server.get_handle("sprites/units/player.png");
+        let texture = asset_server.load("sprites/units/player.png");
         let layout = TextureAtlasLayout::from_grid(
             UVec2::new(512, 512),
             4,

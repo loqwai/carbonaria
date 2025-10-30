@@ -6,9 +6,9 @@ pub fn on_move_event_update_sprite_animation(
     mut move_events: EventReader<MoveEvent>,
     mut sprite_animations: Query<&mut SpriteAnimation>,
 ) {
-    move_events.iter().for_each(|event| {
+    for event in move_events.read() {
         set_sprite_index(&mut sprite_animations, event);
-    })
+    }
 }
 
 fn set_sprite_index(

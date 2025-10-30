@@ -9,9 +9,9 @@ pub fn on_move_event_update_3d_rotation(
     childrens: Query<&Children>,
     mut models: Query<&mut Transform, With<Handle<Scene>>>,
 ) {
-    move_events.iter().for_each(|event| {
+    for event in move_events.read() {
         update_3d_rotation(&childrens, &mut models, event);
-    })
+    }
 }
 
 fn update_3d_rotation(

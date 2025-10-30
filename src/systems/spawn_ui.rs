@@ -7,7 +7,8 @@ pub fn spawn_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn(NodeBundle {
             style: Style {
-                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+                width: Val::Percent(100.0),
+                height: Val::Percent(100.0),
                 align_items: AlignItems::FlexEnd,
                 ..Default::default()
             },
@@ -30,11 +31,8 @@ pub fn spawn_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
                     },
                     style: Style {
                         position_type: PositionType::Relative,
-                        position: UiRect {
-                            bottom: Val::Px(5.0),
-                            left: Val::Px(15.0),
-                            ..default()
-                        },
+                        bottom: Val::Px(5.0),
+                        left: Val::Px(15.0),
                         ..Default::default()
                     },
                     ..Default::default()

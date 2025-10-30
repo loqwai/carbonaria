@@ -35,7 +35,7 @@ impl MobBundle {
         position: Vec3,
         scale: f32,
     ) -> MobBundle {
-        let texture = asset_server.get_handle("sprites/units/mob.png");
+        let texture = asset_server.load("sprites/units/mob.png");
         let layout = TextureAtlasLayout::from_grid(
             UVec2::new(512, 512),
             4,

@@ -2,14 +2,14 @@ use bevy::prelude::*;
 
 use crate::components::{Health, Math, Poison};
 pub fn poison(mut commands: Commands, poisons: Query<(Entity, &Poison)>) {
-    poisons.for_each(|(entity, poison)| {
+    for (entity, poison) in poisons.iter() {
         if poison.0 <= 0.0 {
-            return;
+            continue;
         }
 
         let damage = commands.spawn(Math::add(Health(-poison.0))).id();
         commands.entity(entity).push_children(&[damage]);
-    });
+    }
 }
 
 #[cfg(test)]

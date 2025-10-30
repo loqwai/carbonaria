@@ -28,7 +28,8 @@ struct Sprites {
 }
 
 fn load_sprites(mut sprite_handles: ResMut<Sprites>, asset_server: Res<AssetServer>) {
-    sprite_handles.handles = asset_server.load_folder("sprites").unwrap();
+    let handle = asset_server.load_folder("sprites");
+    sprite_handles.handles = vec![handle.untyped()];
 }
 
 // System sets for ordering
@@ -51,7 +52,15 @@ fn main() {
         // .add_plugins(WorldInspectorPlugin)
         .insert_resource(RapierConfiguration {
             gravity: Vec2::ZERO,
-            ..Default::default()
+            physics_pipeline_active: true,
+            query_pipeline_active: true,
+            timestep_mode: TimestepMode::Variable {
+                max_dt: 1.0 / 60.0,
+                time_scale: 1.0,
+                substeps: 1,
+            },
+            scaled_shape_subdivision: 10,
+            force_update_from_transform_changes: false,
         })
         .insert_resource(config)
         .insert_resource(Tick(0))
@@ -152,6 +161,14 @@ fn main() {
                 systems::on_left_click_shoot,
                 systems::mob_shoot,
                 systems::move_player,
+            )
+                .in_set(GameLoopSet)
+                .after(ComputePowerupsSet)
+                .run_if(in_state(AppState::InGame)),
+        )
+        .add_systems(
+            FixedUpdate,
+            (
                 systems::move_thing,
                 systems::on_move_event_update_sprite_animation,
                 systems::on_move_event_update_3d_rotation,

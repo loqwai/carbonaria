@@ -35,7 +35,7 @@ impl MechBundle {
         position: Vec3,
         scale: f32,
     ) -> MechBundle {
-        let texture = asset_server.get_handle("sprites/units/mech2.png");
+        let texture = asset_server.load("sprites/units/mech2.png");
         let layout = TextureAtlasLayout::from_grid(
             UVec2::new(128, 128),
             28,

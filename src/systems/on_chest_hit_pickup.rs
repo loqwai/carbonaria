@@ -15,30 +15,31 @@ pub fn on_chest_hit_pickup(
     q_pockets: Query<Entity, With<Pocket>>,
     q_chests: Query<&Chest>,
 ) {
-    collision_events
-        .iter()
-        .filter_map(|collision| match collision {
+    for collision in collision_events.read() {
+        let entities = match collision {
             CollisionEvent::Started(a, b, _) => {
                 if q_pockets.contains(*a) && q_chests.contains(*b) {
-                    return Some((a, b));
+                    Some((*a, *b))
+                } else if q_pockets.contains(*b) && q_chests.contains(*a) {
+                    Some((*b, *a))
+                } else {
+                    None
                 }
-
-                if q_pockets.contains(*b) && q_chests.contains(*a) {
-                    return Some((b, a));
-                }
-
-                return None;
             }
             CollisionEvent::Stopped(_, _, _) => None,
-        })
-        .for_each(|(&pocket_entity, &chest_entity)| {
-            let chest = q_chests.get(chest_entity).unwrap();
+        };
 
-            commands
-                .entity(pocket_entity)
-                .push_children(&chest.contents);
-            despawn_events.send(DespawnEvent {
-                entity: chest_entity,
-            });
+        let Some((pocket_entity, chest_entity)) = entities else {
+            continue;
+        };
+
+        let chest = q_chests.get(chest_entity).unwrap();
+
+        commands
+            .entity(pocket_entity)
+            .push_children(&chest.contents);
+        despawn_events.send(DespawnEvent {
+            entity: chest_entity,
         });
+    }
 }
