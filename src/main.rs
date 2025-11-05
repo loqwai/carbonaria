@@ -1,26 +1,15 @@
-mod bundles;
-mod components;
-mod constants;
-mod events;
-mod resources;
-mod systems;
-mod util;
-
 use bevy::prelude::*;
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::prelude::*;
 use clap::Parser;
 
-use components::{AmmoCount, Health, Poison, RateOfFire, Speed, Tick, TimeToLive};
-use resources::{Config, SmallRng};
+use carbonaria::AppState;
+use carbonaria::components::{AmmoCount, Health, Poison, RateOfFire, Speed, Tick, TimeToLive};
+use carbonaria::events;
+use carbonaria::resources::{Config, SmallRng};
+use carbonaria::systems;
 
 const TIME_STEP: f32 = 1.0 / 60.0; //rapier runs at 60fps by default.
-
-#[derive(Clone, Debug, Hash, Eq, PartialEq, States, Default)]
-pub enum AppState {
-    #[default]
-    InGame,
-}
 
 #[derive(Resource, Default)]
 struct Sprites {

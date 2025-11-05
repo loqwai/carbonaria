@@ -2,21 +2,21 @@ use crate::{
     components::{LaserGun, Player},
     events::ShootEvent,
 };
-use bevy::{input::mouse::MouseButtonInput, prelude::*};
+use bevy::{input::ButtonState, prelude::*};
 
 pub fn on_left_click_shoot(
     players: Query<&Children, With<Player>>,
-    mut mouse_button_events: EventReader<MouseButtonInput>,
+    buttons: Res<ButtonInput<MouseButton>>,
     mut shoot_events: EventWriter<ShootEvent>,
     guns: Query<Entity, With<LaserGun>>,
 ) {
-    for _event in mouse_button_events.read() {
-        players.iter().for_each(|player_children| {
-            player_children.iter().for_each(|&child| {
-                let Ok(gun) = guns.get(child) else { return; };
+    if buttons.just_pressed(MouseButton::Left) {
+        for player_children in players.iter() {
+            for &child in player_children.iter() {
+                let Ok(gun) = guns.get(child) else { continue };
 
                 shoot_events.send(ShootEvent { gun });
-            });
-        });
+            }
+        }
     }
 }
